@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:uia="http://message.uia/model/xml"
+        targetNamespace="http://message.uia/model/xml"
+        elementFormDefault="qualified"
+        version="1.0">
+    
+    <element name="DataEx" type="uia:DataExType" nillable="true" />
+    <complexType name="DataExType" mixed="false">
+        <sequence>
+            <element name="BlockSpace" type="uia:BlockSpaceType"></element>
+            <element name="MessageSpace" type="uia:MessageSpaceType"></element>
+            <element name="BlockCodecSpace" type="uia:BlockCodecSpaceType"></element>
+        </sequence>
+    </complexType>
+    
+     <!-- BodySpace -->
+    <complexType name="BlockSpaceType">
+        <sequence>
+            <choice maxOccurs="unbounded">
+                <element name="Block" type="uia:BitBlockType"></element>
+                <element name="BlockSeq" type="uia:BitBlockSeqType"></element>
+                <element name="BlockList" type="uia:BitBlockListType"></element>
+            </choice>
+        </sequence>
+    </complexType>
+
+    <!-- MessageSpace -->
+    <complexType name="MessageSpaceType">
+        <sequence>
+            <element name="Message" type="uia:MessageType" maxOccurs="unbounded" minOccurs="0"></element>
+        </sequence>
+    </complexType>
+    <complexType name="MessageType">
+        <sequence>
+            <element name="Name" type="string"></element>
+            <element name="Desc" type="string"></element>
+            <element name="Body" type="uia:BitBlockSeqType"></element>
+        </sequence>
+    </complexType>
+    
+    <!-- Block -->
+    <complexType name="BlockBaseType" abstract="true">
+        <attribute name="name" type="string" use="required" />
+        <attribute name="desc" type="string" default="no description" />
+    </complexType>
+    <complexType name="BitBlockSeqType">
+        <complexContent>
+            <extension base="uia:BlockBaseType">
+                <sequence>
+                    <choice maxOccurs="unbounded">
+                        <element name="Block" type="uia:BitBlockType"></element>
+                        <element name="BlockSeq" type="uia:BitBlockSeqType"></element>
+                        <element name="BlockList" type="uia:BitBlockListType"></element>
+                        <element name="BlockRef" type="uia:BitBlockRefType"></element>
+                    </choice>
+                </sequence>
+                <attribute name="className" type="string" use="required" />
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="BitBlockRefType">
+        <complexContent>
+            <extension base="uia:BlockBaseType">
+		        <attribute name="reference" type="string" />
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="BitBlockType">
+        <complexContent>
+            <extension base="uia:BlockBaseType">
+                <sequence>
+                    <element name="CodecPropSet" type="uia:CodecPropSetType"></element>
+                </sequence>
+                <attribute name="dataType" type="string" use="required" />
+                <attribute name="sizeUnit" type="string" default="byte" />
+                <attribute name="size" type="int" default="1" />
+                <attribute name="sizeBlock" type="string" />
+                <attribute name="sizeFactor" type="int" default="1" />
+                <attribute name="sizeFactorOp" type="string" default="*" />
+		        <attribute name="readonly" type="boolean" default="false" />
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="BitBlockListType">
+        <complexContent>
+            <extension base="uia:BitBlockSeqType">
+                <attribute name="count" type="int" default="1" />
+                <attribute name="countBlock" type="string" />
+                <attribute name="countFactor" type="int" default="1" />
+                <attribute name="countFactorOp" type="string" default="/" />
+            </extension>
+        </complexContent>
+    </complexType>
+	
+    <complexType name="CodecPropSetType">
+        <sequence>
+            <element name="Prop" maxOccurs="unbounded" minOccurs="0" type="uia:PropType"></element>
+        </sequence>
+    </complexType>
+
+    <complexType name="PropType">
+        <simpleContent>
+            <extension base="string">
+                <attribute name="name" type="string" use="required" />
+            </extension>
+        </simpleContent>
+    </complexType>                
+
+    <!-- BlockCodecSpace -->
+    <complexType name="BlockCodecSpaceType">
+        <sequence>
+            <element name="BlockCodec" type="uia:BlockCodecType" maxOccurs="unbounded" minOccurs="0"></element>
+        </sequence>
+    </complexType>
+    <complexType name="BlockCodecType">
+        <sequence>
+            <element name="DataType" type="string"></element>
+            <element name="Driver" type="string"></element>
+        </sequence>
+    </complexType>
+</schema>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataEx>
+	<BlockSpace />
+	<MessageSpace>
+		<Message>
+			<Name>Hello</Name>
+			<Body name="root" className="cases.Hello">
+				<Block name="header" dataType="ByteArray" size="8" />
+				<Block name="number" dataType="Int" size="4" />
+				<Block name="tailer" dataType="Byte" size="1" />
+			</Body>
+		</Message>
+	</MessageSpace>
+	<BlockCodecSpace />
+</DataEx>

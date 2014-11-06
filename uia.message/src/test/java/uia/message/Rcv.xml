@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataEx>
+    <BlockSpace>
+        <Block name="a" size="6" dataType="ByteArray" desc="" />
+        <Block name="b" size="14" dataType="DateTimeString" desc="">
+            <CodecPropSet>
+                <Prop name="format">yyyyMMddHHmmss</Prop>
+            </CodecPropSet>
+        </Block>
+    </BlockSpace>
+    <!--  -->
+    <MessageSpace>
+        <Message>
+            <Name>Rcv1</Name>
+            <Desc></Desc>
+            <Body name="root" className="uia.message.Rcv1">
+                <BlockRef name="header" reference="a" />
+                <BlockRef name="time" reference="b" />
+                <BlockSeq name="powerStatus" className="uia.message.Rcv1$PowerStatus">
+                    <Block name="power1" size="4" dataType="Int" />
+                    <Block name="power2" size="2" dataType="IntString" />
+                    <Block name="power3" size="8" dataType="Double" />
+                </BlockSeq>
+                <Block name="voltCount" size="1" dataType="Int" />
+                <Block name="footer" size="1" dataType="String" />
+                <BlockList name="volts" className="uia.message.Rcv1$Volt" countBlock="voltCount">
+                    <Block name="volt" size="6" sizeUnit="bit" dataType="Int" />
+                </BlockList>
+                <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
+            </Body>
+        </Message>
+        <Message>
+            <Name>Rcv2</Name>
+            <Body name="root" className="uia.message.Rcv2">
+                <BlockRef name="header" reference="a" />
+                <BlockRef name="time" reference="b" />
+                <Block name="footer" size="1" dataType="String" />
+            </Body>
+        </Message>
+        <Message>
+            <Name>Rcv3</Name>
+            <Body name="root" className="uia.message.Rcv3">
+                <BlockRef name="header" reference="a" />
+                <Block name="dataLength" size="1" dataType="Int" readonly="true" />
+                <Block name="data" sizeBlock="dataLength" dataType="ByteArray" />
+                <Block name="footer" size="8" sizeUnit="bit" dataType="String" />
+            </Body>
+        </Message>
+        <Message>
+            <Name>Rcv4</Name>
+            <Body name="root" className="uia.message.Rcv4">
+                <Block name="mask" size="2" dataType="ByteArray" />
+                <Block name="data" size="-1" dataType="ByteArray" />
+            </Body>
+        </Message>
+        <Message>
+            <Name>Rcv5</Name>
+            <Desc></Desc>
+            <Body name="root" className="uia.message.Rcv1">
+                <BlockRef name="header" reference="a" />
+                <BlockRef name="time" reference="b" />
+                <BlockSeq name="powerStatus" className="uia.message.Rcv1$PowerStatus">
+                    <Block name="power1" size="4" dataType="Int" />
+                    <Block name="power2" size="2" dataType="IntString" />
+                    <Block name="power3" size="8" dataType="Double" />
+                </BlockSeq>
+                <Block name="voltCount" size="1" dataType="Int" />
+                <Block name="footer" size="1" dataType="String" />
+                <BlockList name="volts" className="uia.message.Rcv1$Volt" count="3">
+                    <Block name="volt" size="6" sizeUnit="bit" dataType="Int" />
+                </BlockList>
+                <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
+            </Body>
+        </Message>
+    </MessageSpace>
+    <!--  -->
+    <BlockCodecSpace>
+        <BlockCodec>
+            <DataType>DateTime</DataType>
+            <Driver>uia.message.codec.DateTimeCodec</Driver>
+        </BlockCodec>
+    </BlockCodecSpace>
+</DataEx>
