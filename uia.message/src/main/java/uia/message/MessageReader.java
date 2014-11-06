@@ -86,7 +86,7 @@ public class MessageReader {
         BlockSeq blockSeq = new BlockSeq(name);
 
         boolean ignore = false;
-        List<BlockBaseType> blockTypes = blockSeqType.getBlockOrBlockSeqOrBlockSeqList();
+        List<BlockBaseType> blockTypes = blockSeqType.getBlockOrBlockListOrBlockSeq();
         for (BlockBaseType blockType : blockTypes) {
             String subName = blockType.getName();
 

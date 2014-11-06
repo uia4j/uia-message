@@ -19,6 +19,7 @@
         <sequence>
             <choice maxOccurs="unbounded">
                 <element name="Block" type="uia:BitBlockType"></element>
+                <element name="BlockList" type="uia:BitBlockListType"></element>
                 <element name="BlockSeq" type="uia:BitBlockSeqType"></element>
                 <element name="BlockSeqList" type="uia:BitBlockSeqListType"></element>
             </choice>
@@ -50,6 +51,7 @@
                 <sequence>
                     <choice maxOccurs="unbounded">
                         <element name="Block" type="uia:BitBlockType"></element>
+                        <element name="BlockList" type="uia:BitBlockListType"></element>
                         <element name="BlockSeq" type="uia:BitBlockSeqType"></element>
                         <element name="BlockSeqList" type="uia:BitBlockSeqListType"></element>
                         <element name="BlockRef" type="uia:BitBlockRefType"></element>
@@ -79,6 +81,16 @@
                 <attribute name="sizeFactor" type="int" default="1" />
                 <attribute name="sizeFactorOp" type="string" default="*" />
 		        <attribute name="readonly" type="boolean" default="false" />
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="BitBlockListType">
+        <complexContent>
+            <extension base="uia:BitBlockType">
+                <attribute name="count" type="int" default="1" />
+                <attribute name="countBlock" type="string" />
+                <attribute name="countFactor" type="int" default="1" />
+                <attribute name="countFactorOp" type="string" default="/" />
             </extension>
         </complexContent>
     </complexType>

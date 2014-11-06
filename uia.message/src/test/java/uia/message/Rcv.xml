@@ -56,19 +56,17 @@
         <Message>
             <Name>Rcv5</Name>
             <Desc></Desc>
-            <Body name="root" className="uia.message.Rcv1">
+            <Body name="root" className="uia.message.Rcv5">
                 <BlockRef name="header" reference="a" />
                 <BlockRef name="time" reference="b" />
-                <BlockSeq name="powerStatus" className="uia.message.Rcv1$PowerStatus">
+                <BlockSeq name="powerStatus" className="uia.message.Rcv5$PowerStatus">
                     <Block name="power1" size="4" dataType="Int" />
                     <Block name="power2" size="2" dataType="IntString" />
                     <Block name="power3" size="8" dataType="Double" />
                 </BlockSeq>
                 <Block name="voltCount" size="1" dataType="Int" />
                 <Block name="footer" size="1" dataType="String" />
-                <BlockSeqList name="volts" className="uia.message.Rcv1$Volt" count="3">
-                    <Block name="volt" size="6" sizeUnit="bit" dataType="Int" />
-                </BlockSeqList>
+                <BlockList name="volts" size="6" sizeUnit="bit" dataType="Int" countBlock="voltCount" />
                 <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
             </Body>
         </Message>

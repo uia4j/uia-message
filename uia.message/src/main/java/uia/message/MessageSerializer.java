@@ -32,6 +32,7 @@ import java.util.List;
 
 import uia.message.codec.BlockCodec;
 import uia.message.codec.BlockCodecException;
+import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
 import uia.message.model.xml.BitBlockSeqListType;
 import uia.message.model.xml.BitBlockSeqType;
@@ -102,7 +103,7 @@ public class MessageSerializer {
                 throw new BlockCodecException("encode failure. " + seqName + " is null");
             }
 
-            for (BlockBaseType blockType : seqType.getBlockOrBlockSeqOrBlockSeqList()) {
+            for (BlockBaseType blockType : seqType.getBlockOrBlockListOrBlockSeq()) {
                 String name = blockType.getName();
                 if (blockType instanceof BitBlockRefType) {
                     String referenceName = ((BitBlockRefType) blockType).getReference();
@@ -117,6 +118,9 @@ public class MessageSerializer {
                     if (blockType instanceof BitBlockSeqListType) {
                         Object value = PropertyUtils.read(obj, name);
                         encode(name, (BitBlockSeqListType) blockType, (List<Object>) value);
+                    } else if (blockType instanceof BitBlockListType) {
+                        Object value = PropertyUtils.read(obj, name);
+                        encode(name, (BitBlockListType) blockType, (List<Object>) value);
                     } else if (blockType instanceof BitBlockSeqType) {
                         String cn = ((BitBlockSeqType) blockType).getClassName();
                         Object value = (cn != null && cn.length() > 0) ?
@@ -226,6 +230,18 @@ public class MessageSerializer {
             this.indexByte++;
             this.indexBit -= 8;
         }
+    }
+
+    private void encode(String listName, BitBlockListType listType, List<Object> objs) throws BlockCodecException {
+        this.factory.listTouched(listName, true, this.indexByte * 8 + this.indexBit);
+
+        if (objs != null) {
+            // body
+            for (int i = 0; i < objs.size(); i++) {
+                encode(listName, listType, objs.get(i));
+            }
+        }
+        this.factory.listTouched(listName, false, this.indexByte * 8 + this.indexBit);
     }
 
     private void encode(String listName, BitBlockSeqListType listType, List<Object> objs) throws BlockCodecException {

@@ -67,7 +67,7 @@ public class DataExCodecTest {
 
     private void print(BlockSpaceType bsType) {
         System.out.println("BlockSpace>");
-        for (BlockBaseType block : bsType.getBlockOrBlockSeqOrBlockSeqList()) {
+        for (BlockBaseType block : bsType.getBlockOrBlockListOrBlockSeq()) {
             if (block instanceof BitBlockRefType) {
                 print((BitBlockRefType) block);
             } else if (block instanceof BitBlockSeqListType) {
@@ -98,7 +98,7 @@ public class DataExCodecTest {
     }
 
     private void print(BitBlockSeqType seq) {
-        for (BlockBaseType block : seq.getBlockOrBlockSeqOrBlockSeqList()) {
+        for (BlockBaseType block : seq.getBlockOrBlockListOrBlockSeq()) {
             if (block instanceof BitBlockRefType) {
                 print((BitBlockRefType) block);
             } else if (block instanceof BitBlockSeqListType) {

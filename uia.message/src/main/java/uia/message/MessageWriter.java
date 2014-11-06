@@ -92,7 +92,7 @@ public class MessageWriter {
     }
 
     private void encode(BitBlockSeqType seqType, BlockSeq block) throws BlockCodecException {
-        for (BlockBaseType blockType : seqType.getBlockOrBlockSeqOrBlockSeqList()) {
+        for (BlockBaseType blockType : seqType.getBlockOrBlockListOrBlockSeq()) {
             String name = blockType.getName();
             if (blockType instanceof BitBlockRefType) {
                 blockType = this.factory.getReferenceBlock(((BitBlockRefType) blockType).getReference());

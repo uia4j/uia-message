@@ -32,6 +32,7 @@ import java.util.List;
 
 import uia.message.codec.BlockCodec;
 import uia.message.codec.BlockCodecException;
+import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
 import uia.message.model.xml.BitBlockSeqListType;
 import uia.message.model.xml.BitBlockSeqType;
@@ -92,7 +93,7 @@ public class MessageDeserializer {
                         parent;
 
                     //
-                    List<BlockBaseType> blockTypes = seqType.getBlockOrBlockSeqOrBlockSeqList();
+                    List<BlockBaseType> blockTypes = seqType.getBlockOrBlockListOrBlockSeq();
                     for (BlockBaseType blockType : blockTypes) {
                         String name = blockType.getName(); // name of property
 
@@ -109,6 +110,8 @@ public class MessageDeserializer {
                         Object blockValue = null;
                         if (blockType instanceof BitBlockSeqListType) {
                             blockValue = decode(name, (BitBlockSeqListType) blockType, data);
+                        } else if (blockType instanceof BitBlockListType) {
+                            blockValue = decode(name, (BitBlockListType) blockType, data);
                         } else if (blockType instanceof BitBlockSeqType) {
                             blockValue = decode(name, (BitBlockSeqType) blockType, data, seqObj);
                             cn = ((BitBlockSeqType) blockType).getClassName();
@@ -216,6 +219,41 @@ public class MessageDeserializer {
         }
 
         return value;
+    }
+
+    private List<Object> decode(String listName, BitBlockListType listType, byte[] data) throws BlockCodecException {
+        this.factory.listTouched(listName, true, this.byteStart * 8 + this.bitStart);
+
+        Integer count;
+        String countBlock = listType.getCountBlock();
+        if (countBlock != null && countBlock.length() > 0) {
+            Object lenObject = this.blockValues.get(countBlock);
+            if (lenObject == null) {
+                throw new BlockCodecException("countBlock failure. block:" +
+                        listName + " countBlock:" + listType.getCountBlock());
+            }
+
+            count = (Integer) lenObject;
+            if ("+".equals(listType.getCountFactorOp())) {
+                count += listType.getCountFactor();
+            } else if ("-".equals(listType.getCountFactorOp())) {
+                count -= listType.getCountFactor();
+            } else if ("*".equals(listType.getCountFactorOp())) {
+                count *= listType.getCountFactor();
+            } else if ("/".equals(listType.getCountFactorOp())) {
+                count /= listType.getCountFactor();
+            }
+        } else {
+            count = listType.getCount();
+        }
+
+        ArrayList<Object> objs = new ArrayList<Object>();
+        for (int i = 0; i < count; i++) {
+            objs.add(decode(listName, (BitBlockType)listType, data));
+        }
+
+        this.factory.listTouched(listName, false, this.byteStart * 8 + this.bitStart);
+        return objs;
     }
 
     private List<Object> decode(String listName, BitBlockSeqListType listType, byte[] data) throws BlockCodecException {

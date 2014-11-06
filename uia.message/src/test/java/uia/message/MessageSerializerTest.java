@@ -41,127 +41,168 @@ import uia.utils.ByteUtils;
  */
 public class MessageSerializerTest {
 
-	public MessageSerializerTest() {
-	}
+    public MessageSerializerTest() {
+    }
 
-	@BeforeClass
-	public static void startup() throws Exception {
-		URL url = MessageDeserializerTest.class.getResource("Rcv.xml");
-		System.out.println("xml:" + url);
-		DataExFactory.register("Test", new File(url.toURI()));
-	}
+    @BeforeClass
+    public static void startup() throws Exception {
+        URL url = MessageDeserializerTest.class.getResource("Rcv.xml");
+        System.out.println("xml:" + url);
+        DataExFactory.register("Test", new File(url.toURI()));
+    }
 
-	@Test
-	public void testRcv1() throws Exception {
-		// message
-		Rcv1 rcv1 = new Rcv1();
-		rcv1.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
-		rcv1.setTime(new Date());
-		rcv1.getPowerStatus().setPower1(7809);
-		rcv1.getPowerStatus().setPower2(2);
-		rcv1.getPowerStatus().setPower3(-12.298d);
-		rcv1.setFooter("f");
-		rcv1.setVoltCount(3);
-		rcv1.getVolts().add(new Rcv1.Volt(1));
-		rcv1.getVolts().add(new Rcv1.Volt(32));
-		rcv1.getVolts().add(new Rcv1.Volt(-32));
-		rcv1.setId(15);
+    @Test
+    public void testRcv1() throws Exception {
+        // message
+        Rcv1 rcv1 = new Rcv1();
+        rcv1.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
+        rcv1.setTime(new Date());
+        rcv1.getPowerStatus().setPower1(7809);
+        rcv1.getPowerStatus().setPower2(2);
+        rcv1.getPowerStatus().setPower3(-12.298d);
+        rcv1.setFooter("f");
+        rcv1.setVoltCount(3);
+        rcv1.getVolts().add(new Rcv1.Volt(1));
+        rcv1.getVolts().add(new Rcv1.Volt(32));
+        rcv1.getVolts().add(new Rcv1.Volt(-32));
+        rcv1.setId(15);
 
-		try {
-			// encode
-			MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv1");
-			byte[] data = writer.write(rcv1);
-			System.out.println(ByteUtils.toHexString(data));
+        try {
+            // encode
+            MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv1");
+            byte[] data = writer.write(rcv1);
+            System.out.println(ByteUtils.toHexString(data));
 
-			// decode
-			MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv1");
-			rcv1 = (Rcv1) reader.read(data);
-			System.out.println("header   : " + ByteUtils.toHexString(rcv1.getHeader()));
-			System.out.println("time     : " + rcv1.getTime());
-			System.out.println("power1   : " + rcv1.getPowerStatus().getPower1());
-			System.out.println("power2   : " + rcv1.getPowerStatus().getPower2());
-			System.out.println("power3   : " + rcv1.getPowerStatus().getPower3());
-			System.out.println("footer   : " + rcv1.getFooter());
-			System.out.println("voltCount: " + rcv1.getVoltCount());
-			for (int i = 0; i < rcv1.getVolts().size(); i++) {
-				System.out.println("  Volt    : " + rcv1.getVolts().get(i).getVolt());
-			}
-			System.out.println("Id        : " + rcv1.getId());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+            // decode
+            MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv1");
+            rcv1 = (Rcv1) reader.read(data);
+            System.out.println("header   : " + ByteUtils.toHexString(rcv1.getHeader()));
+            System.out.println("time     : " + rcv1.getTime());
+            System.out.println("power1   : " + rcv1.getPowerStatus().getPower1());
+            System.out.println("power2   : " + rcv1.getPowerStatus().getPower2());
+            System.out.println("power3   : " + rcv1.getPowerStatus().getPower3());
+            System.out.println("footer   : " + rcv1.getFooter());
+            System.out.println("voltCount: " + rcv1.getVoltCount());
+            for (int i = 0; i < rcv1.getVolts().size(); i++) {
+                System.out.println("  Volt    : " + rcv1.getVolts().get(i).getVolt());
+            }
+            System.out.println("Id        : " + rcv1.getId());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	@Test
-	public void testRcv2() throws Exception {
-		// message
-		Rcv2 rcv2 = new Rcv2();
-		rcv2.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
-		rcv2.setTime(new Date());
-		rcv2.setFooter("##");
+    @Test
+    public void testRcv2() throws Exception {
+        // message
+        Rcv2 rcv2 = new Rcv2();
+        rcv2.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
+        rcv2.setTime(new Date());
+        rcv2.setFooter("##");
 
-		try {
-			// encode
-			MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv2");
-			byte[] data = writer.write(rcv2);
-			System.out.println(ByteUtils.toHexString(data));
+        try {
+            // encode
+            MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv2");
+            byte[] data = writer.write(rcv2);
+            System.out.println(ByteUtils.toHexString(data));
 
-			// decode
-			MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv2");
-			rcv2 = (Rcv2) reader.read(data);
-			System.out.println("header: " + ByteUtils.toHexString(rcv2.getHeader()));
-			System.out.println("time  : " + rcv2.getTime());
-			System.out.println("footer: " + rcv2.getFooter());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+            // decode
+            MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv2");
+            rcv2 = (Rcv2) reader.read(data);
+            System.out.println("header: " + ByteUtils.toHexString(rcv2.getHeader()));
+            System.out.println("time  : " + rcv2.getTime());
+            System.out.println("footer: " + rcv2.getFooter());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	@Test
-	public void testRcv3() throws Exception {
-		// message
-		Rcv3 rcv3 = new Rcv3();
-		rcv3.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
-		rcv3.setData(new byte[] { (byte) 0x41, (byte) 0x42 });
-		rcv3.setFooter("##");
+    @Test
+    public void testRcv3() throws Exception {
+        // message
+        Rcv3 rcv3 = new Rcv3();
+        rcv3.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
+        rcv3.setData(new byte[] { (byte) 0x41, (byte) 0x42 });
+        rcv3.setFooter("##");
 
-		try {
-			// encode
-			MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv3");
-			byte[] data = writer.write(rcv3);
-			System.out.println(ByteUtils.toHexString(data));
+        try {
+            // encode
+            MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv3");
+            byte[] data = writer.write(rcv3);
+            System.out.println(ByteUtils.toHexString(data));
 
-			// decode
-			MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3");
-			rcv3 = (Rcv3) reader.read(data);
-			System.out.println("header: " + ByteUtils.toHexString(rcv3.getHeader()));
-			System.out.println("data  : " + ByteUtils.toHexString(rcv3.getData()));
-			System.out.println("footer: " + rcv3.getFooter());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+            // decode
+            MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3");
+            rcv3 = (Rcv3) reader.read(data);
+            System.out.println("header: " + ByteUtils.toHexString(rcv3.getHeader()));
+            System.out.println("data  : " + ByteUtils.toHexString(rcv3.getData()));
+            System.out.println("footer: " + rcv3.getFooter());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	@Test
-	public void testRcv4() throws Exception {
-		// message
-		Rcv4 rcv4 = new Rcv4();
-		rcv4.setMask(new byte[] { (byte) 0x41, (byte) 0x42 });
-		rcv4.setData(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
+    @Test
+    public void testRcv4() throws Exception {
+        // message
+        Rcv4 rcv4 = new Rcv4();
+        rcv4.setMask(new byte[] { (byte) 0x41, (byte) 0x42 });
+        rcv4.setData(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
 
-		try {
-			// encode
-			MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv4");
-			byte[] data = writer.write(rcv4);
-			System.out.println(ByteUtils.toHexString(data));
+        try {
+            // encode
+            MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv4");
+            byte[] data = writer.write(rcv4);
+            System.out.println(ByteUtils.toHexString(data));
 
-			// decode
-			MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv4");
-			rcv4 = (Rcv4) reader.read(data);
-			System.out.println("mask: " + ByteUtils.toHexString(rcv4.getMask()));
-			System.out.println("data: " + ByteUtils.toHexString(rcv4.getData()));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+            // decode
+            MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv4");
+            rcv4 = (Rcv4) reader.read(data);
+            System.out.println("mask: " + ByteUtils.toHexString(rcv4.getMask()));
+            System.out.println("data: " + ByteUtils.toHexString(rcv4.getData()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testRcv5() throws Exception {
+        // message
+        Rcv5 rcv1 = new Rcv5();
+        rcv1.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
+        rcv1.setTime(new Date());
+        rcv1.getPowerStatus().setPower1(7809);
+        rcv1.getPowerStatus().setPower2(2);
+        rcv1.getPowerStatus().setPower3(-12.298d);
+        rcv1.setFooter("f");
+        rcv1.setVoltCount(3);
+        rcv1.getVolts().add(1);
+        rcv1.getVolts().add(32);
+        rcv1.getVolts().add(-32);
+        rcv1.setId(15);
+
+        try {
+            // encode
+            MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv5");
+            byte[] data = writer.write(rcv1);
+            System.out.println(ByteUtils.toHexString(data));
+
+            // decode
+            MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv5");
+            rcv1 = (Rcv5) reader.read(data);
+            System.out.println("header   : " + ByteUtils.toHexString(rcv1.getHeader()));
+            System.out.println("time     : " + rcv1.getTime());
+            System.out.println("power1   : " + rcv1.getPowerStatus().getPower1());
+            System.out.println("power2   : " + rcv1.getPowerStatus().getPower2());
+            System.out.println("power3   : " + rcv1.getPowerStatus().getPower3());
+            System.out.println("footer   : " + rcv1.getFooter());
+            System.out.println("voltCount: " + rcv1.getVoltCount());
+            for (int i = 0; i < rcv1.getVolts().size(); i++) {
+                System.out.println("  Volt    : " + rcv1.getVolts().get(i));
+            }
+            System.out.println("Id        : " + rcv1.getId());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
