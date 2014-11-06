@@ -281,7 +281,7 @@ public class DataExFactory {
 
     private void loadBodySpace() {
         this.bodySpace = new HashMap<String, BlockBaseType>();
-        for (BlockBaseType block : this.dataEx.getBlockSpace().getBlockOrBlockSeqOrBlockList()) {
+        for (BlockBaseType block : this.dataEx.getBlockSpace().getBlockOrBlockSeqOrBlockSeqList()) {
             this.bodySpace.put(block.getName(), block);
         }
     }

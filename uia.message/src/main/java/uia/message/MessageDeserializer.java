@@ -32,8 +32,8 @@ import java.util.List;
 
 import uia.message.codec.BlockCodec;
 import uia.message.codec.BlockCodecException;
-import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
+import uia.message.model.xml.BitBlockSeqListType;
 import uia.message.model.xml.BitBlockSeqType;
 import uia.message.model.xml.BitBlockType;
 import uia.message.model.xml.BlockBaseType;
@@ -89,54 +89,54 @@ public class MessageDeserializer {
             String cn = seqType.getClassName();
             Object seqObj = cn != null && cn.length() > 0 ?
                     Class.forName(seqType.getClassName()).newInstance() :
-                    parent;
+                        parent;
 
-            //
-            List<BlockBaseType> blockTypes = seqType.getBlockOrBlockSeqOrBlockList();
-            for (BlockBaseType blockType : blockTypes) {
-                String name = blockType.getName(); // name of property
+                    //
+                    List<BlockBaseType> blockTypes = seqType.getBlockOrBlockSeqOrBlockSeqList();
+                    for (BlockBaseType blockType : blockTypes) {
+                        String name = blockType.getName(); // name of property
 
-                if (blockType instanceof BitBlockRefType) {
-                    String referenceName = ((BitBlockRefType) blockType).getReference();
-                    blockType = this.factory.getReferenceBlock(referenceName); // change to reference type.
-                    if (blockType == null) {
-                        throw new BlockCodecException("blockRef failure. \'" +
-                                referenceName + "\' " + seqType.getName() + "." + name + " references is not defined.");
-                    }
-                }
-
-                boolean readonly = false;
-                Object blockValue = null;
-                if (blockType instanceof BitBlockListType) {
-                    blockValue = decode(name, (BitBlockListType) blockType, data);
-                } else if (blockType instanceof BitBlockSeqType) {
-                    blockValue = decode(name, (BitBlockSeqType) blockType, data, seqObj);
-                    cn = ((BitBlockSeqType) blockType).getClassName();
-                    readonly = cn == null || cn.length() == 0;
-                } else {
-                    blockValue = decode(name, (BitBlockType) blockType, data);
-                    readonly = ((BitBlockType) blockType).isReadonly();
-                }
-
-                try {
-                    if (!readonly) {
-                        if (!PropertyUtils.write(seqObj, name, blockValue)) {
-                            throw new BlockCodecException("property failure. " +
-                                    seqType.getName() + "." + name + " is null");
+                        if (blockType instanceof BitBlockRefType) {
+                            String referenceName = ((BitBlockRefType) blockType).getReference();
+                            blockType = this.factory.getReferenceBlock(referenceName); // change to reference type.
+                            if (blockType == null) {
+                                throw new BlockCodecException("blockRef failure. \'" +
+                                        referenceName + "\' " + seqType.getName() + "." + name + " references is not defined.");
+                            }
                         }
+
+                        boolean readonly = false;
+                        Object blockValue = null;
+                        if (blockType instanceof BitBlockSeqListType) {
+                            blockValue = decode(name, (BitBlockSeqListType) blockType, data);
+                        } else if (blockType instanceof BitBlockSeqType) {
+                            blockValue = decode(name, (BitBlockSeqType) blockType, data, seqObj);
+                            cn = ((BitBlockSeqType) blockType).getClassName();
+                            readonly = cn == null || cn.length() == 0;
+                        } else {
+                            blockValue = decode(name, (BitBlockType) blockType, data);
+                            readonly = ((BitBlockType) blockType).isReadonly();
+                        }
+
+                        try {
+                            if (!readonly) {
+                                if (!PropertyUtils.write(seqObj, name, blockValue)) {
+                                    throw new BlockCodecException("property failure. " +
+                                            seqType.getName() + "." + name + " is null");
+                                }
+                            }
+                        } catch (BlockCodecException ex1) {
+                            throw ex1;
+                        } catch (Exception ex2) {
+                            throw new BlockCodecException("decode failure. " +
+                                    seqType.getName() + "." + name + ". ex:" + ex2.getMessage(),
+                                    ex2);
+                        }
+
+                        this.blockValues.put(name, blockValue);
                     }
-                } catch (BlockCodecException ex1) {
-                    throw ex1;
-                } catch (Exception ex2) {
-                    throw new BlockCodecException("decode failure. " +
-                            seqType.getName() + "." + name + ". ex:" + ex2.getMessage(),
-                            ex2);
-                }
 
-                this.blockValues.put(name, blockValue);
-            }
-
-            return seqObj;
+                    return seqObj;
         } catch (BlockCodecException ex1) {
             throw ex1;
         } catch (Exception ex2) {
@@ -218,7 +218,7 @@ public class MessageDeserializer {
         return value;
     }
 
-    private List<Object> decode(String listName, BitBlockListType listType, byte[] data) throws BlockCodecException {
+    private List<Object> decode(String listName, BitBlockSeqListType listType, byte[] data) throws BlockCodecException {
         this.factory.listTouched(listName, true, this.byteStart * 8 + this.bitStart);
 
         Integer count;

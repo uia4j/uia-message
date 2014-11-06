@@ -32,8 +32,8 @@ import java.util.List;
 
 import uia.message.codec.BlockCodec;
 import uia.message.codec.BlockCodecException;
-import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
+import uia.message.model.xml.BitBlockSeqListType;
 import uia.message.model.xml.BitBlockSeqType;
 import uia.message.model.xml.BitBlockType;
 import uia.message.model.xml.BlockBaseType;
@@ -102,7 +102,7 @@ public class MessageSerializer {
                 throw new BlockCodecException("encode failure. " + seqName + " is null");
             }
 
-            for (BlockBaseType blockType : seqType.getBlockOrBlockSeqOrBlockList()) {
+            for (BlockBaseType blockType : seqType.getBlockOrBlockSeqOrBlockSeqList()) {
                 String name = blockType.getName();
                 if (blockType instanceof BitBlockRefType) {
                     String referenceName = ((BitBlockRefType) blockType).getReference();
@@ -114,19 +114,19 @@ public class MessageSerializer {
                 }
 
                 try {
-                    if (blockType instanceof BitBlockListType) {
+                    if (blockType instanceof BitBlockSeqListType) {
                         Object value = PropertyUtils.read(obj, name);
-                        encode(name, (BitBlockListType) blockType, (List<Object>) value);
+                        encode(name, (BitBlockSeqListType) blockType, (List<Object>) value);
                     } else if (blockType instanceof BitBlockSeqType) {
                         String cn = ((BitBlockSeqType) blockType).getClassName();
                         Object value = (cn != null && cn.length() > 0) ?
                                 PropertyUtils.read(obj, name) :
-                                obj;
-                        if (value == null) {
-                            throw new BlockCodecException("property failure. " +
-                                    seqType.getName() + "." + name + " is null");
-                        }
-                        encode(name, (BitBlockSeqType) blockType, value);
+                                    obj;
+                                if (value == null) {
+                                    throw new BlockCodecException("property failure. " +
+                                            seqType.getName() + "." + name + " is null");
+                                }
+                                encode(name, (BitBlockSeqType) blockType, value);
                     } else {
                         Object value = PropertyUtils.read(obj, name);
                         if (value == null) {
@@ -228,7 +228,7 @@ public class MessageSerializer {
         }
     }
 
-    private void encode(String listName, BitBlockListType listType, List<Object> objs) throws BlockCodecException {
+    private void encode(String listName, BitBlockSeqListType listType, List<Object> objs) throws BlockCodecException {
         this.factory.listTouched(listName, true, this.indexByte * 8 + this.indexBit);
 
         if (objs != null) {

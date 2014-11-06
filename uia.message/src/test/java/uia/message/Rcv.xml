@@ -23,9 +23,9 @@
                 </BlockSeq>
                 <Block name="voltCount" size="1" dataType="Int" />
                 <Block name="footer" size="1" dataType="String" />
-                <BlockList name="volts" className="uia.message.Rcv1$Volt" countBlock="voltCount">
+                <BlockSeqList name="volts" className="uia.message.Rcv1$Volt" countBlock="voltCount">
                     <Block name="volt" size="6" sizeUnit="bit" dataType="Int" />
-                </BlockList>
+                </BlockSeqList>
                 <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
             </Body>
         </Message>
@@ -66,9 +66,9 @@
                 </BlockSeq>
                 <Block name="voltCount" size="1" dataType="Int" />
                 <Block name="footer" size="1" dataType="String" />
-                <BlockList name="volts" className="uia.message.Rcv1$Volt" count="3">
+                <BlockSeqList name="volts" className="uia.message.Rcv1$Volt" count="3">
                     <Block name="volt" size="6" sizeUnit="bit" dataType="Int" />
-                </BlockList>
+                </BlockSeqList>
                 <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
             </Body>
         </Message>

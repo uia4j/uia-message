@@ -35,8 +35,8 @@ import uia.message.codec.BlockCodecException;
 import uia.message.model.Block;
 import uia.message.model.BlockList;
 import uia.message.model.BlockSeq;
-import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
+import uia.message.model.xml.BitBlockSeqListType;
 import uia.message.model.xml.BitBlockSeqType;
 import uia.message.model.xml.BitBlockType;
 import uia.message.model.xml.BlockBaseType;
@@ -92,15 +92,15 @@ public class MessageWriter {
     }
 
     private void encode(BitBlockSeqType seqType, BlockSeq block) throws BlockCodecException {
-        for (BlockBaseType blockType : seqType.getBlockOrBlockSeqOrBlockList()) {
+        for (BlockBaseType blockType : seqType.getBlockOrBlockSeqOrBlockSeqList()) {
             String name = blockType.getName();
             if (blockType instanceof BitBlockRefType) {
                 blockType = this.factory.getReferenceBlock(((BitBlockRefType) blockType).getReference());
             }
 
-            if (blockType instanceof BitBlockListType) {
+            if (blockType instanceof BitBlockSeqListType) {
                 BlockList list = (BlockList) block.getSubBlock(blockType.getName());
-                encode((BitBlockListType) blockType, list);
+                encode((BitBlockSeqListType) blockType, list);
             } else if (blockType instanceof BitBlockSeqType) {
                 BlockSeq seq = (BlockSeq) block.getSubBlock(blockType.getName());
                 encode((BitBlockSeqType) blockType, seq);
@@ -172,7 +172,7 @@ public class MessageWriter {
         }
     }
 
-    private void encode(BitBlockListType listType, BlockList block) throws BlockCodecException {
+    private void encode(BitBlockSeqListType listType, BlockList block) throws BlockCodecException {
         block.setCountBlock(listType.getCountBlock());
         List<BlockSeq> items = block.getList();
         // body

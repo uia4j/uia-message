@@ -34,8 +34,8 @@ import uia.message.codec.BlockCodecException;
 import uia.message.model.Block;
 import uia.message.model.BlockList;
 import uia.message.model.BlockSeq;
-import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
+import uia.message.model.xml.BitBlockSeqListType;
 import uia.message.model.xml.BitBlockSeqType;
 import uia.message.model.xml.BitBlockType;
 import uia.message.model.xml.BlockBaseType;
@@ -86,7 +86,7 @@ public class MessageReader {
         BlockSeq blockSeq = new BlockSeq(name);
 
         boolean ignore = false;
-        List<BlockBaseType> blockTypes = blockSeqType.getBlockOrBlockSeqOrBlockList();
+        List<BlockBaseType> blockTypes = blockSeqType.getBlockOrBlockSeqOrBlockSeqList();
         for (BlockBaseType blockType : blockTypes) {
             String subName = blockType.getName();
 
@@ -95,8 +95,8 @@ public class MessageReader {
             }
 
             Block block;
-            if (blockType instanceof BitBlockListType) {
-                block = decode((BitBlockListType) blockType, data, subName);
+            if (blockType instanceof BitBlockSeqListType) {
+                block = decode((BitBlockSeqListType) blockType, data, subName);
             } else if (blockType instanceof BitBlockSeqType) {
                 block = decode((BitBlockSeqType) blockType, data, false, subName);
             } else {
@@ -172,7 +172,7 @@ public class MessageReader {
         return block;
     }
 
-    private BlockList decode(BitBlockListType blockListType, byte[] data, String name) throws BlockCodecException {
+    private BlockList decode(BitBlockSeqListType blockListType, byte[] data, String name) throws BlockCodecException {
         int bytePt = this.byteStart;
         int bitPt = this.bitStart;
 

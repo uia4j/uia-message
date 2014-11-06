@@ -30,8 +30,8 @@ import java.io.File;
 
 import org.junit.Test;
 
-import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
+import uia.message.model.xml.BitBlockSeqListType;
 import uia.message.model.xml.BitBlockSeqType;
 import uia.message.model.xml.BitBlockType;
 import uia.message.model.xml.BlockBaseType;
@@ -49,84 +49,84 @@ import uia.message.model.xml.PropType;
  */
 public class DataExCodecTest {
 
-	public DataExCodecTest() {
-	}
+    public DataExCodecTest() {
+    }
 
-	@Test
-	public void testDecode() throws Exception {
-		File f = new File(DataExCodecTest.class.getResource("Rcv.xml").toURI());
+    @Test
+    public void testDecode() throws Exception {
+        File f = new File(DataExCodecTest.class.getResource("Rcv.xml").toURI());
 
-		DataExType dxType = DataExCodec.decode(f);
-		print(dxType.getBlockSpace());
-		System.out.println();
-		print(dxType.getMessageSpace());
-		System.out.println();
-		print(dxType.getBlockCodecSpace());
-		System.out.println();
-	}
+        DataExType dxType = DataExCodec.decode(f);
+        print(dxType.getBlockSpace());
+        System.out.println();
+        print(dxType.getMessageSpace());
+        System.out.println();
+        print(dxType.getBlockCodecSpace());
+        System.out.println();
+    }
 
-	private void print(BlockSpaceType bsType) {
-		System.out.println("BlockSpace>");
-		for (BlockBaseType block : bsType.getBlockOrBlockSeqOrBlockList()) {
-			if (block instanceof BitBlockRefType) {
-				print((BitBlockRefType) block);
-			} else if (block instanceof BitBlockListType) {
-				print((BitBlockListType) block);
-			} else if (block instanceof BitBlockSeqType) {
-				print((BitBlockSeqType) block);
-			} else {
-				print((BitBlockType) block);
-			}
-		}
-	}
+    private void print(BlockSpaceType bsType) {
+        System.out.println("BlockSpace>");
+        for (BlockBaseType block : bsType.getBlockOrBlockSeqOrBlockSeqList()) {
+            if (block instanceof BitBlockRefType) {
+                print((BitBlockRefType) block);
+            } else if (block instanceof BitBlockSeqListType) {
+                print((BitBlockSeqListType) block);
+            } else if (block instanceof BitBlockSeqType) {
+                print((BitBlockSeqType) block);
+            } else {
+                print((BitBlockType) block);
+            }
+        }
+    }
 
-	private void print(MessageSpaceType msType) {
-		System.out.println("MessageSpace>");
-		for (MessageType mt : msType.getMessage()) {
-			System.out.println(mt.getName());
-			print(mt.getBody());
-		}
-	}
+    private void print(MessageSpaceType msType) {
+        System.out.println("MessageSpace>");
+        for (MessageType mt : msType.getMessage()) {
+            System.out.println(mt.getName());
+            print(mt.getBody());
+        }
+    }
 
-	private void print(BlockCodecSpaceType dsType) {
-		System.out.println("CodecSpace>");
-		for (BlockCodecType decoder : dsType.getBlockCodec()) {
-			System.out.println(String.format("  %1$-10s> %2$s",
-			        decoder.getDataType(),
-			        decoder.getDriver()));
-		}
-	}
+    private void print(BlockCodecSpaceType dsType) {
+        System.out.println("CodecSpace>");
+        for (BlockCodecType decoder : dsType.getBlockCodec()) {
+            System.out.println(String.format("  %1$-10s> %2$s",
+                    decoder.getDataType(),
+                    decoder.getDriver()));
+        }
+    }
 
-	private void print(BitBlockSeqType seq) {
-		for (BlockBaseType block : seq.getBlockOrBlockSeqOrBlockList()) {
-			if (block instanceof BitBlockRefType) {
-				print((BitBlockRefType) block);
-			} else if (block instanceof BitBlockListType) {
-				print((BitBlockListType) block);
-			} else if (block instanceof BitBlockSeqType) {
-				print((BitBlockSeqType) block);
-			} else {
-				print((BitBlockType) block);
-			}
-		}
-	}
+    private void print(BitBlockSeqType seq) {
+        for (BlockBaseType block : seq.getBlockOrBlockSeqOrBlockSeqList()) {
+            if (block instanceof BitBlockRefType) {
+                print((BitBlockRefType) block);
+            } else if (block instanceof BitBlockSeqListType) {
+                print((BitBlockSeqListType) block);
+            } else if (block instanceof BitBlockSeqType) {
+                print((BitBlockSeqType) block);
+            } else {
+                print((BitBlockType) block);
+            }
+        }
+    }
 
-	private void print(BitBlockRefType block) {
-		System.out.println(String.format("  %1$-10s> (ref)",
-		        block.getName()));
-	}
+    private void print(BitBlockRefType block) {
+        System.out.println(String.format("  %1$-10s> (ref)",
+                block.getName()));
+    }
 
-	private void print(BitBlockType block) {
-		System.out.println(String.format("  %1$-10s> %2$s(%3$s)",
-		        block.getName(),
-		        block.getDataType(),
-		        block.getSize()));
-		if (block.getCodecPropSet() != null) {
-			for (PropType prop : block.getCodecPropSet().getProp()) {
-				System.out.println(String.format("   .%1$-8s= %2$s",
-				        prop.getName(),
-				        prop.getValue()));
-			}
-		}
-	}
+    private void print(BitBlockType block) {
+        System.out.println(String.format("  %1$-10s> %2$s(%3$s)",
+                block.getName(),
+                block.getDataType(),
+                block.getSize()));
+        if (block.getCodecPropSet() != null) {
+            for (PropType prop : block.getCodecPropSet().getProp()) {
+                System.out.println(String.format("   .%1$-8s= %2$s",
+                        prop.getName(),
+                        prop.getValue()));
+            }
+        }
+    }
 }
