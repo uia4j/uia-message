@@ -77,4 +77,12 @@ public class IntegerLSBCodecTest {
         System.out.println(ByteUtils.toBitString(codec.encode(511, 10)));
         System.out.println();
     }
+
+    @Test
+    public void testEncodeFull() throws Exception {
+        System.out.println("encode");
+        IntegerLSBCodec codec = new IntegerLSBCodec(true);
+        System.out.println(ByteUtils.toBitString(codec.encode(Integer.MAX_VALUE, 32)));
+        System.out.println();
+    }
 }

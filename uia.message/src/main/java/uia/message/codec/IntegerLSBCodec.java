@@ -87,21 +87,21 @@ public class IntegerLSBCodec implements BlockCodec<Integer> {
                     (byte) value,
                     (byte) (value >>> 8),
                     (byte) (value >>> 16),
-                    (byte) (value >>> 24)
-            } :
-                new byte[]{
+                    (byte) (value >>> 24) } :
+                        new byte[]{
                             (byte) value,
                             (byte) (value >> 8),
                             (byte) (value >> 16),
-                            (byte) (value >> 24)
-                    };
+                            (byte) (value >> 24) };
 
                     int byteStart = bitLength / 8;
                     int bitStart = bitLength % 8;
                     if (bitStart != 0) {
                         bitStart = 8 - bitStart;
                     }
-                    temp[byteStart] = (byte)(temp[byteStart] << bitStart);
+                    if(byteStart < 4) {
+                        temp[byteStart] = (byte)(temp[byteStart] << bitStart);
+                    }
                     return ByteUtils.copyBits(temp, 0, bitLength);
         } catch (Exception ex) {
             throw new BlockCodecException("integer(LSB) encode failure. " + ex.getMessage(), ex);

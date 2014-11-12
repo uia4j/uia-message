@@ -123,4 +123,13 @@ public class IntegerCodecTest {
         System.out.println();
     }
 
+
+    @Test
+    public void testEncodeFull() throws Exception {
+        System.out.println("encode");
+        IntegerCodec codec = new IntegerCodec(true);
+        System.out.println(ByteUtils.toBitString(codec.encode(Integer.MAX_VALUE, 32)));
+        System.out.println();
+    }
+
 }
