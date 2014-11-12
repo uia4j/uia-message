@@ -41,7 +41,7 @@ public class IntegerLSBCodecTest {
 
     @Test
     public void testDecode() throws Exception {
-    	System.out.println("decode");
+        System.out.println("decode");
         IntegerLSBCodec codec = new IntegerLSBCodec();
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x7f, (byte) 0xff}, 7));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x7f, (byte) 0xff}, 8));
@@ -49,26 +49,25 @@ public class IntegerLSBCodecTest {
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x7f, (byte) 0xff}, 10));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x7f, (byte) 0xff}, 11));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x7f, (byte) 0xff}, 12));
-    	System.out.println();
+        System.out.println();
     }
-    
+
     @Test
     public void testDecodeUnsigned() throws Exception {
-    	System.out.println("decodeUnsigned");
-        IntegerLSBCodec codec = new IntegerLSBCodec();
-        codec.setUnsigned("Y");
+        System.out.println("decodeUnsigned");
+        IntegerLSBCodec codec = new IntegerLSBCodec(true);
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x80, (byte) 0xff}, 7));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x80, (byte) 0xff}, 8));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x80, (byte) 0xff}, 9));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x80, (byte) 0xff}, 10));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x80, (byte) 0xff}, 11));
         System.out.println(codec.decode(new byte[]{(byte) 0xff, (byte) 0x80, (byte) 0xff}, 12));
-    	System.out.println();
+        System.out.println();
     }
 
     @Test
     public void testEncode() throws Exception {
-    	System.out.println("encode");
+        System.out.println("encode");
         IntegerLSBCodec codec = new IntegerLSBCodec();
         System.out.println(ByteUtils.toBitString(codec.encode(100, 7)));
         System.out.println(ByteUtils.toBitString(codec.encode(100, 8)));
@@ -76,6 +75,6 @@ public class IntegerLSBCodecTest {
         System.out.println(ByteUtils.toBitString(codec.encode(255, 9)));
         System.out.println(ByteUtils.toBitString(codec.encode(-1, 10)));
         System.out.println(ByteUtils.toBitString(codec.encode(511, 10)));
-    	System.out.println();
+        System.out.println();
     }
 }

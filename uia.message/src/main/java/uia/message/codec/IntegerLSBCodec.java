@@ -36,10 +36,18 @@ import uia.utils.StringUtils;
  */
 public class IntegerLSBCodec implements BlockCodec<Integer> {
 
+
+    private final boolean orig;
+
     private boolean unsigned;
 
     public IntegerLSBCodec() {
-    	this.unsigned = false;
+        this(false);
+    }
+
+    public IntegerLSBCodec(boolean unsigned) {
+        this.unsigned = unsigned;
+        this.orig = this.unsigned;
     }
 
     public void setUnsigned(String yn) {
@@ -57,8 +65,8 @@ public class IntegerLSBCodec implements BlockCodec<Integer> {
             value = ByteUtils.reverse(value);
             int bitStart = bitLength % 8;
             if(bitStart != 0) {
-            	bitStart = 8 - bitStart;
-        		value[0] = (byte)(value[0] >>> bitStart);
+                bitStart = 8 - bitStart;
+                value[0] = (byte)(value[0] >>> bitStart);
                 value = ByteUtils.copyBits(value, 0, bitStart, bitLength);
             }
             return new Integer(ByteUtils.intValue(value, bitLength, this.unsigned));
@@ -74,34 +82,34 @@ public class IntegerLSBCodec implements BlockCodec<Integer> {
             throw new BlockCodecException("integer(LSB,unsigned) encode failure. value(" + value + ") is less than zero.");
         }
         try {
-            byte[] temp = this.unsigned ? 
-            		new byte[]{
-		                (byte) value,
-		                (byte) (value >>> 8),
-		                (byte) (value >>> 16),
-		                (byte) (value >>> 24)
-		            } :
-            		new byte[]{
-		                (byte) value,
-		                (byte) (value >> 8),
-		                (byte) (value >> 16),
-		                (byte) (value >> 24)
-		            };
+            byte[] temp = this.unsigned ?
+                    new byte[]{
+                    (byte) value,
+                    (byte) (value >>> 8),
+                    (byte) (value >>> 16),
+                    (byte) (value >>> 24)
+            } :
+                new byte[]{
+                            (byte) value,
+                            (byte) (value >> 8),
+                            (byte) (value >> 16),
+                            (byte) (value >> 24)
+                    };
 
-            int byteStart = bitLength / 8;
-            int bitStart = bitLength % 8;
-            if (bitStart != 0) {
-                bitStart = 8 - bitStart;
-            }
-            temp[byteStart] = (byte)(temp[byteStart] << bitStart);
-            return ByteUtils.copyBits(temp, 0, bitLength);
+                    int byteStart = bitLength / 8;
+                    int bitStart = bitLength % 8;
+                    if (bitStart != 0) {
+                        bitStart = 8 - bitStart;
+                    }
+                    temp[byteStart] = (byte)(temp[byteStart] << bitStart);
+                    return ByteUtils.copyBits(temp, 0, bitLength);
         } catch (Exception ex) {
             throw new BlockCodecException("integer(LSB) encode failure. " + ex.getMessage(), ex);
         }
     }
-    
+
     @Override
     public void reset() {
-    	this.unsigned = false;
+        this.unsigned = this.orig;
     }
 }
