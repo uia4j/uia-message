@@ -42,7 +42,9 @@ import uia.message.codec.DateTimeCodec;
 import uia.message.codec.DateTimeStringCodec;
 import uia.message.codec.DoubleCodec;
 import uia.message.codec.IntegerBCDCodec;
+import uia.message.codec.IntegerBCDLSBCodec;
 import uia.message.codec.IntegerCodec;
+import uia.message.codec.IntegerLSBCodec;
 import uia.message.codec.IntegerStringCodec;
 import uia.message.codec.LongCodec;
 import uia.message.codec.StringCodec;
@@ -332,12 +334,24 @@ public class DataExFactory {
             this.codecSpace.put("Bcd", new IntegerBCDCodec());
         }
 
+        if (!this.codecSpace.containsKey("BcdL")) {
+            this.codecSpace.put("BcdLSB", new IntegerBCDLSBCodec());
+        }
+
         if (!this.codecSpace.containsKey("Int")) {
             this.codecSpace.put("Int", new IntegerCodec(false));
         }
 
         if (!this.codecSpace.containsKey("UInt")) {
             this.codecSpace.put("UInt", new IntegerCodec(true));
+        }
+
+        if (!this.codecSpace.containsKey("IntL")) {
+            this.codecSpace.put("IntLSB", new IntegerLSBCodec(false));
+        }
+
+        if (!this.codecSpace.containsKey("UIntL")) {
+            this.codecSpace.put("UIntLSB", new IntegerLSBCodec(true));
         }
 
         if (!this.codecSpace.containsKey("IntString")) {
