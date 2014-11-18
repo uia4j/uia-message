@@ -57,15 +57,8 @@
             <Name>Rcv5</Name>
             <Desc></Desc>
             <Body name="root" className="uia.message.Rcv5">
-                <BlockRef name="header" reference="a" />
-                <BlockRef name="time" reference="b" />
-                <BlockSeq name="powerStatus" className="uia.message.Rcv5$PowerStatus">
-                    <Block name="power1" size="4" dataType="Int" />
-                    <Block name="power2" size="2" dataType="IntString" />
-                    <Block name="power3" size="8" dataType="Double" />
-                </BlockSeq>
-                <Block name="voltCount" size="1" dataType="Int" />
-                <Block name="footer" size="1" dataType="String" />
+                <Block name="voltCount" size="2" dataType="BcdL" readonly="true" />
+                <Block name="footer" size="2" dataType="IntL" />
                 <BlockList name="volts" size="6" sizeUnit="bit" dataType="Int" countBlock="voltCount" />
                 <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
             </Body>

@@ -169,13 +169,7 @@ public class MessageSerializerTest {
     public void testRcv5() throws Exception {
         // message
         Rcv5 rcv1 = new Rcv5();
-        rcv1.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
-        rcv1.setTime(new Date());
-        rcv1.getPowerStatus().setPower1(7809);
-        rcv1.getPowerStatus().setPower2(2);
-        rcv1.getPowerStatus().setPower3(-12.298d);
-        rcv1.setFooter("f");
-        rcv1.setVoltCount(3);
+        rcv1.setFooter(255);
         rcv1.getVolts().add(1);
         rcv1.getVolts().add(32);
         rcv1.getVolts().add(-32);
@@ -190,11 +184,6 @@ public class MessageSerializerTest {
             // decode
             MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv5");
             rcv1 = (Rcv5) reader.read(data);
-            System.out.println("header   : " + ByteUtils.toHexString(rcv1.getHeader()));
-            System.out.println("time     : " + rcv1.getTime());
-            System.out.println("power1   : " + rcv1.getPowerStatus().getPower1());
-            System.out.println("power2   : " + rcv1.getPowerStatus().getPower2());
-            System.out.println("power3   : " + rcv1.getPowerStatus().getPower3());
             System.out.println("footer   : " + rcv1.getFooter());
             System.out.println("voltCount: " + rcv1.getVoltCount());
             for (int i = 0; i < rcv1.getVolts().size(); i++) {

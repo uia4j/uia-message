@@ -52,7 +52,7 @@ public class IntegerBCDLSBCodec implements BlockCodec<Integer> {
 
     @Override
     public byte[] encode(Integer data, int bitLength) throws BlockCodecException {
-        byte[] value = ByteUtils.reverse(IntegerUtils.bcdValue(data));
+        byte[] value = IntegerUtils.bcdValue(data);
 
         int cnt = bitLength / 8;
         if (value.length > cnt) {
@@ -64,7 +64,7 @@ public class IntegerBCDLSBCodec implements BlockCodec<Integer> {
         for (int i = 0; i < value.length; i++) {
             result[offset + i] = value[i];
         }
-        return result;
+        return ByteUtils.reverse(result);
     }
 
     @Override

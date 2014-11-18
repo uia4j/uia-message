@@ -27,65 +27,32 @@
 package uia.message;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
  * @author Kyle
  */
 public class Rcv5 {
+    private int footer;
 
-    private byte[] header;
-    private Date time;
-    private String footer;
-    private int voltCount;
-    private Rcv5.PowerStatus status;
     private ArrayList<Integer> volts;
+
     private Integer id;
 
     public Rcv5() {
-        this.status = new Rcv5.PowerStatus();
         this.volts = new ArrayList<Integer>();
     }
 
-    public byte[] getHeader() {
-        return this.header;
-    }
-
-    public void setHeader(byte[] header) {
-        this.header = header;
-    }
-
-    public Date getTime() {
-        return this.time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    public Rcv5.PowerStatus getPowerStatus() {
-        return this.status;
-    }
-
-    public void setPowerStatus(Rcv5.PowerStatus status) {
-        this.status = status;
-    }
-
-    public String getFooter() {
+    public int getFooter() {
         return this.footer;
     }
 
-    public void setFooter(String footer) {
+    public void setFooter(int footer) {
         this.footer = footer;
     }
 
     public int getVoltCount() {
-        return this.voltCount;
-    }
-
-    public void setVoltCount(int voltCount) {
-        this.voltCount = voltCount;
+        return this.volts.size();
     }
 
     public ArrayList<Integer> getVolts() {

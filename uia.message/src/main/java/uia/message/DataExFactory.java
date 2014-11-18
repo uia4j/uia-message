@@ -335,7 +335,7 @@ public class DataExFactory {
         }
 
         if (!this.codecSpace.containsKey("BcdL")) {
-            this.codecSpace.put("BcdLSB", new IntegerBCDLSBCodec());
+            this.codecSpace.put("BcdL", new IntegerBCDLSBCodec());
         }
 
         if (!this.codecSpace.containsKey("Int")) {
@@ -347,11 +347,11 @@ public class DataExFactory {
         }
 
         if (!this.codecSpace.containsKey("IntL")) {
-            this.codecSpace.put("IntLSB", new IntegerLSBCodec(false));
+            this.codecSpace.put("IntL", new IntegerLSBCodec(false));
         }
 
         if (!this.codecSpace.containsKey("UIntL")) {
-            this.codecSpace.put("UIntLSB", new IntegerLSBCodec(true));
+            this.codecSpace.put("UIntL", new IntegerLSBCodec(true));
         }
 
         if (!this.codecSpace.containsKey("IntString")) {
