@@ -105,6 +105,12 @@ public class MessageSerializer {
 
             for (BlockBaseType blockType : seqType.getBlockOrBlockListOrBlockSeq()) {
                 String name = blockType.getName();
+
+                // exists check
+                if(!exists(name, blockType.getExistsProp(), obj)) {
+                    continue;
+                }
+
                 if (blockType instanceof BitBlockRefType) {
                     String referenceName = ((BitBlockRefType) blockType).getReference();
                     blockType = this.factory.getReferenceBlock(referenceName);
@@ -265,6 +271,21 @@ public class MessageSerializer {
             byte value = this.result.get(this.indexByte + i).byteValue();
             this.result.remove(this.indexByte + i);
             this.result.add(this.indexByte + i, (byte) (value + data[i]));
+        }
+    }
+
+    private boolean exists(String blockName, String existsProp, Object obj) throws BlockCodecException {
+        if(existsProp != null && existsProp.length() > 0) {
+            try {
+                Boolean bool = (Boolean)PropertyUtils.read(obj, existsProp);
+                return bool.booleanValue();
+            } catch(Exception ex) {
+                throw new BlockCodecException("existsProp failure. " +
+                        blockName + " ex:" + ex.getMessage(),
+                        ex);
+            }
+        } else {
+            return true;
         }
     }
 }

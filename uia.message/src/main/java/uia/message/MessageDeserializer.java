@@ -89,13 +89,16 @@ public class MessageDeserializer {
 
             String cn = seqType.getClassName();
             Object seqObj = cn != null && cn.length() > 0 ?
-                    Class.forName(seqType.getClassName()).newInstance() :
-                        parent;
+                    Class.forName(seqType.getClassName()).newInstance() : parent;
 
-                    //
                     List<BlockBaseType> blockTypes = seqType.getBlockOrBlockListOrBlockSeq();
                     for (BlockBaseType blockType : blockTypes) {
                         String name = blockType.getName(); // name of property
+
+                        // exists check
+                        if(!exists(name, blockType.getExistsProp(), seqObj)) {
+                            continue;
+                        }
 
                         if (blockType instanceof BitBlockRefType) {
                             String referenceName = ((BitBlockRefType) blockType).getReference();
@@ -289,5 +292,20 @@ public class MessageDeserializer {
 
         this.factory.listTouched(listName, false, this.byteStart * 8 + this.bitStart);
         return objs;
+    }
+
+    private boolean exists(String blockName, String existsProp, Object obj) throws BlockCodecException {
+        if(existsProp != null && existsProp.length() > 0) {
+            try {
+                Boolean bool = (Boolean)PropertyUtils.read(obj, existsProp);
+                return bool.booleanValue();
+            } catch(Exception ex) {
+                throw new BlockCodecException("existsProp failure. " +
+                        blockName + " ex:" + ex.getMessage(),
+                        ex);
+            }
+        } else {
+            return true;
+        }
     }
 }

@@ -32,23 +32,55 @@ package uia.message;
  */
 public class Rcv4 {
 
-	public byte[] mask;
+    public byte[] mask;
 
-	private byte[] data;
+    private byte[] something1;
 
-	public byte[] getMask() {
-		return this.mask;
-	}
+    private byte[] something2;
 
-	public void setMask(byte[] mask) {
-		this.mask = mask;
-	}
+    private byte[] data;
 
-	public byte[] getData() {
-		return this.data;
-	}
+    public byte[] getMask() {
+        return this.mask;
+    }
 
-	public void setData(byte[] data) {
-		this.data = data;
-	}
+    public boolean isOk1() {
+        return false;
+    }
+
+    public boolean isOk2() {
+        return true;
+    }
+
+    public void setMask(byte[] mask) {
+        this.mask = mask;
+    }
+
+    public byte[] getData() {
+        return this.data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public byte[] getSomething1() {
+        return this.something1;
+    }
+
+
+    public void setSomething1(byte[] something1) {
+        this.something1 = something1;
+    }
+
+
+    public byte[] getSomething2() {
+        return this.something2;
+    }
+
+
+    public void setSomething2(byte[] something2) {
+        this.something2 = something2;
+    }
+
 }

@@ -44,73 +44,73 @@ import uia.utils.ByteUtils;
  */
 public class MessageWriterTest {
 
-	public MessageWriterTest() {
-	}
+    public MessageWriterTest() {
+    }
 
-	@BeforeClass
-	public static void startup() throws Exception {
-		URL url = MessageDeserializerTest.class.getResource("Rcv.xml");
-		System.out.println("xml:" + url);
-		DataExFactory.register("Test", new File(url.toURI()));
-	}
+    @BeforeClass
+    public static void startup() throws Exception {
+        URL url = MessageDeserializerTest.class.getResource("Rcv.xml");
+        System.out.println("xml:" + url);
+        DataExFactory.register("Test", new File(url.toURI()));
+    }
 
-	/**
-	 * Test of getBlockValue method, of class Message.
-	 */
-	@Test
-	public void testRcv1() throws Exception {
-		// message, structure based on definition of sammple.xml.
-		BlockSeq body = new BlockSeq("dev");
-		body.putSubBlock(new Block("header", new byte[] { 0x41, 0x42, 0x41, 0x43, 0x41, 0x44, 0x41, 0x45 }));
-		body.putSubBlock(new Block("time", new Date()));
+    /**
+     * Test of getBlockValue method, of class Message.
+     */
+    @Test
+    public void testRcv1() throws Exception {
+        // message, structure based on definition of sammple.xml.
+        BlockSeq body = new BlockSeq("dev");
+        body.putSubBlock(new Block("header", new byte[] { 0x41, 0x42, 0x41, 0x43, 0x41, 0x44, 0x41, 0x45 }));
+        body.putSubBlock(new Block("time", new Date()));
 
-		BlockSeq powerStatus = new BlockSeq("powerStatus");
-		powerStatus.putSubBlock(new Block("power1", -16));
-		powerStatus.putSubBlock(new Block("power2", 12));
-		powerStatus.putSubBlock(new Block("power3", -12.34));
-		body.putSubBlock(powerStatus);
+        BlockSeq powerStatus = new BlockSeq("powerStatus");
+        powerStatus.putSubBlock(new Block("power1", -16));
+        powerStatus.putSubBlock(new Block("power2", 12));
+        powerStatus.putSubBlock(new Block("power3", -12.34));
+        body.putSubBlock(powerStatus);
 
-		body.putSubBlock(new Block("voltCount", 3));
-		body.putSubBlock(new Block("footer", "A"));
+        body.putSubBlock(new Block("voltCount", 3));
+        body.putSubBlock(new Block("footer", "A"));
 
-		BlockSeq volt1 = new BlockSeq("body");
-		volt1.putSubBlock(new Block("volt", 3));
-		BlockSeq volt2 = new BlockSeq("body");
-		volt2.putSubBlock(new Block("volt", -32));
-		BlockSeq volt3 = new BlockSeq("body");
-		volt3.putSubBlock(new Block("volt", 32));
+        BlockSeq volt1 = new BlockSeq("body");
+        volt1.putSubBlock(new Block("volt", 3));
+        BlockSeq volt2 = new BlockSeq("body");
+        volt2.putSubBlock(new Block("volt", -32));
+        BlockSeq volt3 = new BlockSeq("body");
+        volt3.putSubBlock(new Block("volt", 32));
 
-		BlockList list = new BlockList("volts");
-		list.getList().add(volt1);
-		list.getList().add(volt2);
-		list.getList().add(volt3);
+        BlockList list = new BlockList("volts");
+        list.getList().add(volt1);
+        list.getList().add(volt2);
+        list.getList().add(volt3);
 
-		body.putSubBlock(new Block("id", 15));
-		body.putSubBlock(list);
+        body.putSubBlock(new Block("id", 15));
+        body.putSubBlock(list);
 
-		try {
-			// encode
-			MessageWriter writer = DataExFactory.getFactory("Test").createWriter("Rcv1");
-			byte[] data = writer.write(body);
-			System.out.println(ByteUtils.toHexString(data));
+        try {
+            // encode
+            MessageWriter writer = DataExFactory.getFactory("Test").createWriter("Rcv1");
+            byte[] data = writer.write(body);
+            System.out.println(ByteUtils.toHexString(data));
 
-			MessageReader reader = DataExFactory.getFactory("Test").createReader("Rcv1");
-			body = reader.read(data);
-			System.out.println("header     : " + ByteUtils.toHexString((byte[]) body.getSubBlock("header").getValue()));
-			System.out.println("time       : " + body.getSubBlock("time").getValue());
-			System.out.println("powerStatus: " + ByteUtils.toHexString((byte[]) body.getSubBlock("powerStatus").getValue()));
-			System.out.println("power1     : " + body.getSubBlock("powerStatus").getSubBlock("power1").getValue());
-			System.out.println("power2     : " + body.getSubBlock("powerStatus").getSubBlock("power2").getValue());
-			System.out.println("power3     : " + body.getSubBlock("powerStatus").getSubBlock("power3").getValue());
-			System.out.println("footer     : " + body.getSubBlock("footer").getValue());
-			System.out.println("voltCount  : " + body.getSubBlock("voltCount").getValue());
-			BlockList volts = (BlockList) body.getSubBlock("volts");
-			for (BlockSeq item : volts.getList()) {
-				System.out.println("volts> volt: " + item.getSubBlock("volt").getValue());
-			}
-			System.out.println("id         : " + body.getSubBlock("id").getValue());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+            MessageReader reader = DataExFactory.getFactory("Test").createReader("Rcv1");
+            body = reader.read(data);
+            System.out.println("header     : " + ByteUtils.toHexString((byte[]) body.getSubBlock("header").getValue()));
+            System.out.println("time       : " + body.getSubBlock("time").getValue());
+            System.out.println("powerStatus: " + ByteUtils.toHexString((byte[]) body.getSubBlock("powerStatus").getValue()));
+            System.out.println("power1     : " + body.getSubBlock("powerStatus").getSubBlock("power1").getValue());
+            System.out.println("power2     : " + body.getSubBlock("powerStatus").getSubBlock("power2").getValue());
+            System.out.println("power3     : " + body.getSubBlock("powerStatus").getSubBlock("power3").getValue());
+            System.out.println("footer     : " + body.getSubBlock("footer").getValue());
+            System.out.println("voltCount  : " + body.getSubBlock("voltCount").getValue());
+            BlockList volts = (BlockList) body.getSubBlock("volts");
+            for (BlockSeq item : volts.getList()) {
+                System.out.println("volts> volt: " + item.getSubBlock("volt").getValue());
+            }
+            System.out.println("id         : " + body.getSubBlock("id").getValue());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
