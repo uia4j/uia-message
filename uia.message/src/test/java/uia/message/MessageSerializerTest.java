@@ -146,10 +146,11 @@ public class MessageSerializerTest {
     public void testRcv4() throws Exception {
         // message
         Rcv4 rcv4 = new Rcv4();
-        rcv4.setMask(new byte[] { (byte) 0x41, (byte) 0x42 });
-        rcv4.setData(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
+        rcv4.setMask1(new byte[] { (byte) 0x31, (byte) 0x32 });
+        rcv4.setMask2(2);
         rcv4.setSomething1(new byte[] { (byte) 0x61, (byte) 0x62 });
         rcv4.setSomething2(new byte[] { (byte) 0x71, (byte) 0x72 });
+        rcv4.setData(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
 
         try {
             // encode
@@ -160,7 +161,8 @@ public class MessageSerializerTest {
             // decode
             MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv4");
             rcv4 = (Rcv4) reader.read(data);
-            System.out.println("mask: " + ByteUtils.toHexString(rcv4.getMask()));
+            System.out.println("mask1: " + ByteUtils.toHexString(rcv4.getMask1()));
+            System.out.println("mask2: " + rcv4.getMask2());
             System.out.println("something1: " + ByteUtils.toHexString(rcv4.getSomething1()));
             System.out.println("something2: " + ByteUtils.toHexString(rcv4.getSomething2()));
             System.out.println("data: " + ByteUtils.toHexString(rcv4.getData()));

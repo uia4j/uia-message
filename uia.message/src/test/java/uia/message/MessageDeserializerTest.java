@@ -199,8 +199,10 @@ public class MessageDeserializerTest {
     public void testRcv4() throws Exception {
         System.out.println("Rcv4");
         byte[] data = new byte[] {
-                (byte) 0x31, // mask
+                (byte) 0x31, // mask1
                 (byte) 0x32,
+                (byte) 0x00, // mask 2
+                (byte) 0x01,
                 (byte) 0x92, // ??
                 (byte) 0x91,
                 (byte) 0x41, // data
@@ -215,7 +217,8 @@ public class MessageDeserializerTest {
 
         try {
             Rcv4 rcv4 = (Rcv4) DataExFactory.deserialize("Test", "Rcv4", data);
-            System.out.println("mask: " + ByteUtils.toHexString(rcv4.getMask()));
+            System.out.println("mask1: " + ByteUtils.toHexString(rcv4.getMask1()));
+            System.out.println("mask2: " + rcv4.getMask2());
             System.out.println("something1: " + ByteUtils.toHexString(rcv4.getSomething1()));
             System.out.println("something2: " + ByteUtils.toHexString(rcv4.getSomething2()));
             System.out.println("data: " + ByteUtils.toHexString(rcv4.getData()));

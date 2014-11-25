@@ -32,7 +32,9 @@ package uia.message;
  */
 public class Rcv4 {
 
-    public byte[] mask;
+    public byte[] mask1;
+
+    public int mask2;
 
     private byte[] something1;
 
@@ -40,20 +42,20 @@ public class Rcv4 {
 
     private byte[] data;
 
-    public byte[] getMask() {
-        return this.mask;
+    public byte[] getMask1() {
+        return this.mask1;
     }
 
-    public boolean isOk1() {
-        return false;
+    public void setMask1(byte[] mask1) {
+        this.mask1 = mask1;
     }
 
-    public boolean isOk2() {
-        return true;
+    public int getMask2() {
+        return this.mask2;
     }
 
-    public void setMask(byte[] mask) {
-        this.mask = mask;
+    public void setMask2(int mask2) {
+        this.mask2 = mask2;
     }
 
     public byte[] getData() {

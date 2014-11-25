@@ -107,7 +107,7 @@ public class MessageSerializer {
                 String name = blockType.getName();
 
                 // exists check
-                if(!exists(name, blockType.getExistsProp(), obj)) {
+                if(!exists(name, blockType.getOptionBlock(), blockType.getOptionValue(), obj)) {
                     continue;
                 }
 
@@ -274,11 +274,12 @@ public class MessageSerializer {
         }
     }
 
-    private boolean exists(String blockName, String existsProp, Object obj) throws BlockCodecException {
-        if(existsProp != null && existsProp.length() > 0) {
+    private boolean exists(String blockName, String optionBlock, String optionValue, Object obj) throws BlockCodecException {
+        if(optionBlock != null && optionBlock.length() > 0) {
             try {
-                Boolean bool = (Boolean)PropertyUtils.read(obj, existsProp);
-                return bool.booleanValue();
+                Object option = PropertyUtils.read(obj, optionBlock);
+                String v = option.getClass() == byte[].class ? ByteUtils.toHexString((byte[])option, "") : option.toString();
+                return optionValue.equals(v);
             } catch(Exception ex) {
                 throw new BlockCodecException("existsProp failure. " +
                         blockName + " ex:" + ex.getMessage(),

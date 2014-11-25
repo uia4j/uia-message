@@ -49,9 +49,10 @@
         <Message>
             <Name>Rcv4</Name>
             <Body name="root" className="uia.message.Rcv4">
-                <Block name="mask" size="2" dataType="ByteArray" />
-                <Block name="something1" size="2" dataType="ByteArray" existsProp="ok1" />
-                <Block name="something2" size="2" dataType="ByteArray" existsProp="ok2" />
+                <Block name="mask1" size="2" dataType="ByteArray" />
+                <Block name="mask2" size="2" dataType="Int" />
+                <Block name="something1" size="2" dataType="ByteArray" optionBlock="mask1" optionValue="3132" />
+                <Block name="something2" size="2" dataType="ByteArray" optionBlock="mask2" optionValue="2" />
                 <Block name="data" size="-1" dataType="ByteArray" />
             </Body>
         </Message>

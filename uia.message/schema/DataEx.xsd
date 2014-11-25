@@ -44,7 +44,8 @@
     <complexType name="BlockBaseType" abstract="true">
         <attribute name="name" type="string" use="required" />
         <attribute name="desc" type="string" default="no description" />
-        <attribute name="existsProp" type="string" />
+        <attribute name="optionBlock" type="string" />
+        <attribute name="optionValue" type="string" />
     </complexType>
     <complexType name="BitBlockSeqType">
         <complexContent>
