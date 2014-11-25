@@ -46,6 +46,7 @@
         <attribute name="desc" type="string" default="no description" />
         <attribute name="optionBlock" type="string" />
         <attribute name="optionValue" type="string" />
+        <attribute name="optionEq" type="boolean" default="true" />
     </complexType>
     <complexType name="BitBlockSeqType">
         <complexContent>

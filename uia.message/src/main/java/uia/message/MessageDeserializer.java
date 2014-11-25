@@ -96,7 +96,7 @@ public class MessageDeserializer {
                         String name = blockType.getName(); // name of property
 
                         // exists check
-                        if(!exists(name, blockType.getOptionBlock(), blockType.getOptionValue(), seqObj)) {
+                        if(!exists(name, blockType, seqObj)) {
                             continue;
                         }
 
@@ -294,12 +294,13 @@ public class MessageDeserializer {
         return objs;
     }
 
-    private boolean exists(String blockName, String optionBlock, String optionValue, Object obj) throws BlockCodecException {
-        if(optionBlock != null && optionBlock.length() > 0) {
+    private boolean exists(String blockName, BlockBaseType block, Object obj) throws BlockCodecException {
+        if(block.getOptionBlock() != null && block.getOptionBlock().length() > 0) {
             try {
-                Object option = PropertyUtils.read(obj, optionBlock);
+                Object option = PropertyUtils.read(obj, block.getOptionBlock());
                 String v = option.getClass() == byte[].class ? ByteUtils.toHexString((byte[])option, "") : option.toString();
-                return optionValue.equals(v);
+                return block.isOptionEq() ?
+                        block.getOptionValue().equals(v) : !block.getOptionValue().equals(v) ;
             } catch(Exception ex) {
                 throw new BlockCodecException("existsProp failure. " +
                         blockName + " ex:" + ex.getMessage(),
