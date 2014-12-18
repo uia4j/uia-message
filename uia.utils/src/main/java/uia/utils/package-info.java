@@ -24,41 +24,7 @@
  * * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package uia.message.codec;
-
-import org.junit.Test;
-
-import uia.utils.ByteUtils;
-
 /**
- * 
- * @author Kyle
+ * uia.utils is helper API for uia.message.
  */
-public class IntegerBCDCodecTest {
-
-    public IntegerBCDCodecTest() {
-    }
-
-    @Test
-    public void testDecode() throws Exception {
-        System.out.println("decode");
-        IntegerBCDCodec codec = new IntegerBCDCodec();
-        System.out.println(codec.decode(new byte[] { (byte) 0x91, (byte) 0x82 }, 16));
-    }
-
-    @Test
-    public void testEncode() throws Exception {
-        System.out.println("encode");
-        IntegerBCDCodec codec = new IntegerBCDCodec();
-        System.out.println(ByteUtils.toHexString(codec.encode(9182, 16)));
-        System.out.println(ByteUtils.toHexString(codec.encode(9281, 16)));
-    }
-
-    @Test
-    public void testZero() throws Exception {
-        System.out.println("zero");
-        IntegerBCDCodec codec = new IntegerBCDCodec();
-        System.out.println(ByteUtils.toHexString(codec.encode(191, 24)));
-        System.out.println(codec.decode(new byte[] { (byte) 0x00, (byte) 0x82 }, 16));
-    }
-}
+package uia.utils;
