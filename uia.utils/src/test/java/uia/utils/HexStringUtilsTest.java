@@ -26,40 +26,22 @@
  *******************************************************************************/
 package uia.utils;
 
+import org.junit.Test;
+
 /**
- * 
+ *
  * @author Kyle
  */
-public class HexStringUtils {
+public class HexStringUtilsTest {
 
-
-    public static byte[] toBytes(String hex) {
-        String data = hex.length() % 2 == 1 ? "0" + hex : hex;
-        byte[] result = new byte[data.length() / 2];
-        for (int i = 0; i <result.length; i++) {
-            result[i] = (byte) Integer.parseInt(data.substring(2 * i, 2 * i + 2), 16);
-        }
-        return result;
+    public HexStringUtilsTest() {
     }
-    
 
-    public static byte[] toBytes(String hex, boolean headFix) {
-        String data = hex.length() % 2 == 1 ? 
-                headFix ? "0" + hex : hex + "0" :  
-                hex;
-        byte[] result = new byte[data.length() / 2];
-        for (int i = 0; i <result.length; i++) {
-            result[i] = (byte) Integer.parseInt(data.substring(2 * i, 2 * i + 2), 16);
-        }
-        return result;
+    @Test
+    public void test() throws Exception {
+        System.out.println(ByteUtils.toHexString(HexStringUtils.toBytes("23456789abcdef")));
+        System.out.println(ByteUtils.toHexString(HexStringUtils.toBytes("23456789abcdefA")));
+        System.out.println(ByteUtils.toHexString(HexStringUtils.toBytes("23456789abcdefe", true)));
+        System.out.println(ByteUtils.toHexString(HexStringUtils.toBytes("23456789abcdefe", false)));
     }
-    
-	public static byte[] toBytes(String hex, String split) {
-		String[] value = hex.split(split);
-		byte[] result = new byte[value.length];
-		for (int i = 0; i < value.length; i++) {
-			result[i] = (byte) Integer.parseInt(value[i], 16);
-		}
-		return result;
-	}
 }
