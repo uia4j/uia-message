@@ -1,5 +1,5 @@
 /*******************************************************************************
- * * Copyright (c) 2014, UIA
+ * * Copyright (c) 2015, UIA
  * * All rights reserved.
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
@@ -205,6 +205,13 @@ public class ByteUtils {
         return bytes;
     }
 
+    /**
+     * 
+     * @param data
+     * @param from
+     * @param length
+     * @return
+     */
     public static String toString(byte[] data, int from, int length) {
         return new String(Arrays.copyOfRange(data, from, from + length));
     }
@@ -214,19 +221,31 @@ public class ByteUtils {
     }
 
     /**
-     * ex. data=[0xf3,0x82] >> "f3 82"
+     * ex. data=[0xf3,0x82] >> "f3-82"
      * 
-     * @param data
-     * @return
+     * @param data byte array.
+     * @return hex string.
      */
     public static String toHexString(byte[] data) {
         return toHexString(data, "-");
     }
 
     /**
+     * ex. data=[0xf3,0x82] >> "f3-82"
+     * 
+     * @param data byte array.
+     * @param max Max bytes converted to string.
+     * @return hex string.
+     */
+    public static String toHexString(byte[] data, int max) {
+        return toHexString(data, "-", max);
+    }
+
+    /**
      * ex. data=[0xf3,0x82], split=";" >> "f3;82"
      * 
-     * @param data
+     * @param data byte array.
+     * @param split split string.
      * @return
      */
     public static String toHexString(byte[] data, String split) {
@@ -243,9 +262,33 @@ public class ByteUtils {
     }
 
     /**
+     * ex. data=[0xf3,0x82], split=";" >> "f3;82"
+     * 
+     * @param data byte array.
+     * @param split split string.
+     * @param max Max bytes converted to string.
+     * @return hex string.
+     */
+    public static String toHexString(byte[] data, String split, int max) {
+        if (data == null || data.length == 0) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append(toHexString(data[0]));
+        for (int i = 1; i < Math.min(max, data.length); i++) {
+            result.append(split).append(toHexString(data[i]));
+        }
+        if(data.length > max) {
+            result.append(" ... total:" + data.length);
+        }
+        return result.toString();
+    }
+
+    /**
      * ex. data=0x83 >> "10000011"
      * 
-     * @param data
+     * @param data one byte.
      * @return
      */
     public static String toBitString(byte data) {
@@ -263,7 +306,7 @@ public class ByteUtils {
     /**
      * ex. data=[0x82,0xf0] >> "1000001011110000"
      * 
-     * @param data
+     * @param data byte array.
      * @return
      */
     public static String toBitString(byte[] data) {

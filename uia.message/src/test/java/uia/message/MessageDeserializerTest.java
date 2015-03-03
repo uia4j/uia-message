@@ -96,21 +96,10 @@ public class MessageDeserializerTest {
         };
 
         try {
-            Rcv1 rcv1 = (Rcv1) DataExFactory.deserialize("Test", "Rcv1", data);
-            System.out.println("header    : " + ByteUtils.toHexString(rcv1.getHeader()));
-            System.out.println("time      : " + rcv1.getTime());
-            System.out.println("power1    : " + rcv1.getPowerStatus().getPower1());
-            System.out.println("power2    : " + rcv1.getPowerStatus().getPower2());
-            System.out.println("power3    : " + rcv1.getPowerStatus().getPower3());
-            System.out.println("footer    : " + rcv1.getFooter());
-            System.out.println("voltCount : " + rcv1.getVoltCount());
-            for (int i = 0; i < rcv1.getVolts().size(); i++) {
-                System.out.println("Volt      : " + rcv1.getVolts().get(i).getVolt());
-            }
-            System.out.println("Id        : " + rcv1.getId());
-
-            System.out.println("Rcv5");
-            rcv1 = (Rcv1) DataExFactory.deserialize("Test", "Rcv5", data);
+            DataExFactory factory = DataExFactory.getFactory("Test");
+            MessageDeserializer des = factory.createDeserializer("Rcv1");
+            Rcv1 rcv1 = (Rcv1) des.read(data);
+            System.out.println("B:" + des.currBytes() + "b:" + des.currBits());
             System.out.println("header    : " + ByteUtils.toHexString(rcv1.getHeader()));
             System.out.println("time      : " + rcv1.getTime());
             System.out.println("power1    : " + rcv1.getPowerStatus().getPower1());

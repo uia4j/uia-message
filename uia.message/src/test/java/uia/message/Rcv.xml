@@ -59,7 +59,7 @@
         <Message>
             <Name>Rcv5</Name>
             <Desc></Desc>
-            <Body name="root" className="uia.message.Rcv5">
+            <Body name="root" className="uia.message.Rcv1">
                 <Block name="voltCount" size="2" dataType="BcdL" readonly="true" />
                 <Block name="footer" size="2" dataType="IntL" />
                 <BlockList name="volts" size="6" sizeUnit="bit" dataType="Int" countBlock="voltCount" />

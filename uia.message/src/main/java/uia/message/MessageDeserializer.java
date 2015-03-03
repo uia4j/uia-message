@@ -1,5 +1,5 @@
 /*******************************************************************************
- * * Copyright (c) 2014, UIA
+ * * Copyright (c) 2015, UIA
  * * All rights reserved.
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
@@ -64,6 +64,14 @@ public class MessageDeserializer {
         this.factory = factory;
         this.mt = mt;
         this.blockValues = new HashMap<String, Object>();
+    }
+
+    public int currBytes() {
+        return this.byteStart;
+    }
+
+    public int currBits() {
+        return this.bitStart;
     }
 
     /**

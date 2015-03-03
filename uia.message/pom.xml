@@ -60,12 +60,12 @@
 		<repository>
 			<id>uia</id>
 			<name>uia</name>
-			<url>http://192.168.0.100:8080/nexus/content/repositories/uia/</url>
+			<url>http://192.168.1.100:8080/nexus/content/repositories/uia/</url>
 		</repository>
 		<snapshotRepository>
 			<id>uia-snapshot</id>
 			<name>uia-snapshot</name>
-			<url>http://192.168.0.100:8080/nexus/content/repositories/uia-snapshot/</url>
+			<url>http://192.168.1.100:8080/nexus/content/repositories/uia-snapshot/</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 	</distributionManagement>
