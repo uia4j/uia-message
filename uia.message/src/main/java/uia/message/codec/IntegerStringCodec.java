@@ -29,7 +29,7 @@ package uia.message.codec;
 import java.util.Arrays;
 
 /**
- * Convert data between string of integer and byte array. <br />
+ * Convert data between string of integer and byte array. <br>
  * 
  * @author Kyle
  */

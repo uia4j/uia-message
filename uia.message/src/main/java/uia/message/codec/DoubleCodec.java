@@ -29,32 +29,32 @@ package uia.message.codec;
 import java.nio.ByteBuffer;
 
 /**
- * Convert data between double and byte array. <br />
+ * Convert data between double and byte array. <br>
  * 
  * @author Kyle
  */
 public class DoubleCodec implements BlockCodec<Double> {
 
-	@Override
-	public Double decode(byte[] data, int bitLength) throws BlockCodecException {
-		try {
-			return Double.valueOf(ByteBuffer.wrap(data).getDouble());
-		} catch (Exception ex) {
-			throw new BlockCodecException("double codec failure. " + ex.getMessage(), ex);
-		}
-	}
+    @Override
+    public Double decode(byte[] data, int bitLength) throws BlockCodecException {
+        try {
+            return Double.valueOf(ByteBuffer.wrap(data).getDouble());
+        } catch (Exception ex) {
+            throw new BlockCodecException("double codec failure. " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public byte[] encode(Double data, int bitLength) throws BlockCodecException {
-		try {
-			double value = data.doubleValue();
-			return ByteBuffer.allocate(8).putDouble(value).array();
-		} catch (Exception ex) {
-			throw new BlockCodecException("double encode failure. " + ex.getMessage(), ex);
-		}
-	}
+    @Override
+    public byte[] encode(Double data, int bitLength) throws BlockCodecException {
+        try {
+            double value = data.doubleValue();
+            return ByteBuffer.allocate(8).putDouble(value).array();
+        } catch (Exception ex) {
+            throw new BlockCodecException("double encode failure. " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public void reset() {
-	}
+    @Override
+    public void reset() {
+    }
 }

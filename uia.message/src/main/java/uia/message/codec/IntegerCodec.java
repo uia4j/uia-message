@@ -31,7 +31,7 @@ import uia.utils.ByteUtils;
 import uia.utils.StringUtils;
 
 /**
- * Convert data between integer and byte array. <br />
+ * Convert data between integer and byte array. <br>
  * 
  * @author Kyle
  */

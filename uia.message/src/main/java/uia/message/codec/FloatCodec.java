@@ -29,33 +29,33 @@ package uia.message.codec;
 import java.nio.ByteBuffer;
 
 /**
- * Convert data between float and byte array. <br />
+ * Convert data between float and byte array. <br>
  * 
  * @author Kyle
  */
 public class FloatCodec implements BlockCodec<Float> {
 
-	@Override
-	public Float decode(byte[] data, int bitLength) throws BlockCodecException {
-		try {
+    @Override
+    public Float decode(byte[] data, int bitLength) throws BlockCodecException {
+        try {
 
-			return Float.valueOf(ByteBuffer.wrap(data).getFloat());
-		} catch (Exception ex) {
-			throw new BlockCodecException("float codec failure. " + ex.getMessage(), ex);
-		}
-	}
+            return Float.valueOf(ByteBuffer.wrap(data).getFloat());
+        } catch (Exception ex) {
+            throw new BlockCodecException("float codec failure. " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public byte[] encode(Float data, int bitLength) throws BlockCodecException {
-		try {
-			float value = data.floatValue();
-			return ByteBuffer.allocate(4).putFloat(value).array();
-		} catch (Exception ex) {
-			throw new BlockCodecException("float encode failure. " + ex.getMessage(), ex);
-		}
-	}
+    @Override
+    public byte[] encode(Float data, int bitLength) throws BlockCodecException {
+        try {
+            float value = data.floatValue();
+            return ByteBuffer.allocate(4).putFloat(value).array();
+        } catch (Exception ex) {
+            throw new BlockCodecException("float encode failure. " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public void reset() {
-	}
+    @Override
+    public void reset() {
+    }
 }

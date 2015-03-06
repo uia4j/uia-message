@@ -31,70 +31,70 @@ import uia.utils.ByteUtils;
 import uia.utils.StringUtils;
 
 /**
- * Convert data between long and byte array. <br />
+ * Convert data between long and byte array. <br>
  * 
  * @author Kyle
  */
 public class LongCodec implements BlockCodec<Long> {
 
-	private final boolean orig;
+    private final boolean orig;
 
-	private boolean unsigned;
+    private boolean unsigned;
 
-	public LongCodec() {
-		this(false);
-	}
+    public LongCodec() {
+        this(false);
+    }
 
-	public LongCodec(boolean unsigned) {
-		this.unsigned = unsigned;
-		this.orig = this.unsigned;
-	}
+    public LongCodec(boolean unsigned) {
+        this.unsigned = unsigned;
+        this.orig = this.unsigned;
+    }
 
-	public void setUnsigned(String yn) {
-		this.unsigned = StringUtils.bool(yn);
-	}
+    public void setUnsigned(String yn) {
+        this.unsigned = StringUtils.bool(yn);
+    }
 
-	public String getUnsigned() {
-		return BooleanUtils.toYN(this.unsigned);
-	}
+    public String getUnsigned() {
+        return BooleanUtils.toYN(this.unsigned);
+    }
 
-	@Override
-	public Long decode(byte[] data, int bitLength) throws BlockCodecException {
-		try {
-			return new Long(ByteUtils.longValue(data, bitLength));
-		} catch (Exception ex) {
-			throw new BlockCodecException("long decode failure. " + ex.getMessage(), ex);
-		}
-	}
+    @Override
+    public Long decode(byte[] data, int bitLength) throws BlockCodecException {
+        try {
+            return new Long(ByteUtils.longValue(data, bitLength));
+        } catch (Exception ex) {
+            throw new BlockCodecException("long decode failure. " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public byte[] encode(Long data, int bitLength) throws BlockCodecException {
-		long value = data.longValue();
-		try {
-			byte[] temp = new byte[] {
-			        (byte) (value >> 56),
-			        (byte) (value >> 48),
-			        (byte) (value >> 40),
-			        (byte) (value >> 32),
-			        (byte) (value >> 24),
-			        (byte) (value >> 16),
-			        (byte) (value >> 8),
-			        (byte) value
-			};
+    @Override
+    public byte[] encode(Long data, int bitLength) throws BlockCodecException {
+        long value = data.longValue();
+        try {
+            byte[] temp = new byte[] {
+                    (byte) (value >> 56),
+                    (byte) (value >> 48),
+                    (byte) (value >> 40),
+                    (byte) (value >> 32),
+                    (byte) (value >> 24),
+                    (byte) (value >> 16),
+                    (byte) (value >> 8),
+                    (byte) value
+            };
 
-			int byteStart = 8 - (int) Math.ceil((double) bitLength / 8);
-			int bitStart = bitLength % 8;
-			if (bitStart != 0) {
-				bitStart = 8 - bitStart;
-			}
-			return ByteUtils.copyBits(temp, byteStart, bitStart, bitLength);
-		} catch (Exception ex) {
-			throw new BlockCodecException("long encode failure. " + ex.getMessage(), ex);
-		}
-	}
+            int byteStart = 8 - (int) Math.ceil((double) bitLength / 8);
+            int bitStart = bitLength % 8;
+            if (bitStart != 0) {
+                bitStart = 8 - bitStart;
+            }
+            return ByteUtils.copyBits(temp, byteStart, bitStart, bitLength);
+        } catch (Exception ex) {
+            throw new BlockCodecException("long encode failure. " + ex.getMessage(), ex);
+        }
+    }
 
-	@Override
-	public void reset() {
-		this.unsigned = this.orig;
-	}
+    @Override
+    public void reset() {
+        this.unsigned = this.orig;
+    }
 }

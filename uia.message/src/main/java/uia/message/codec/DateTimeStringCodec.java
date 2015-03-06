@@ -34,7 +34,7 @@ import uia.utils.ByteUtils;
 import uia.utils.StringUtils;
 
 /**
- * Convert data between string of time and byte array with specific format. <br />
+ * Convert data between string of time and byte array with specific format. <br>
  * 
  * <p>
  * XML sample:
@@ -43,7 +43,7 @@ import uia.utils.StringUtils;
  * <pre style="font-size:10px">
  * {@code
  * <CodecPropSet>
- *     <Prop name="format">yyyyMMddHHmmss</Prop>       
+ *     <Prop name="format">yyyyMMddHHmmss</Prop>
  * </CodecPropSet>
  * }
  * </pre>

@@ -82,7 +82,7 @@ public class DataExFactory {
      * 
      * @param domain Domain name.
      * @param fileName XML file name.
-     * @throws Exception
+     * @throws Exception Raise when file is wrong.
      */
     public static void register(String domain, String fileName) throws Exception {
         if (!DATA_EX_FACTORY.containsKey(domain)) {
@@ -95,7 +95,7 @@ public class DataExFactory {
      * 
      * @param domain Domain name.
      * @param stream XML file stream.
-     * @throws Exception
+     * @throws Exception Raise when file is wrong.
      */
     public static void register(String domain, InputStream stream) throws Exception {
         if (!DATA_EX_FACTORY.containsKey(domain)) {
@@ -108,7 +108,7 @@ public class DataExFactory {
      * 
      * @param domain Domain name.
      * @param file XML file.
-     * @throws Exception
+     * @throws Exception Raise when file is wrong.
      */
     public static void register(String domain, File file) throws Exception {
         if (!DATA_EX_FACTORY.containsKey(domain)) {
@@ -168,7 +168,7 @@ public class DataExFactory {
      * @param messageName The message name defined in XML.
      * @param value Object of message.
      * @return Serialize result or null if no domain.
-     * @throws BlockCodecException
+     * @throws BlockCodecException Raise when serialize failure.
      */
     public static byte[] serialize(String domain, String messageName, Object value) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
@@ -185,7 +185,7 @@ public class DataExFactory {
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
      * @return Deserialize result or null if no domain.
-     * @throws BlockCodecException
+     * @throws BlockCodecException Raise when deserialize failure.
      */
     public static Object deserialize(String domain, String messageName, byte[] value) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
@@ -201,7 +201,7 @@ public class DataExFactory {
      * @param messageName The message name defined in XML.
      * @param value Object of message.
      * @return Serialize result.
-     * @throws BlockCodecException
+     * @throws BlockCodecException Raise when serialize failure.
      */
     public byte[] serialize(String messageName, Object value) throws BlockCodecException {
         return createSerializer(messageName).write(value);
@@ -213,7 +213,7 @@ public class DataExFactory {
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
      * @return Deserialize result.
-     * @throws BlockCodecException
+     * @throws BlockCodecException Raise when deserialize failure.
      */
     public Object deserialize(String messageName, byte[] value) throws BlockCodecException {
         return createDeserializer(messageName).read(value);

@@ -31,8 +31,8 @@ import java.util.Date;
 import uia.utils.ByteUtils;
 
 /**
- * Convert data between time and byte array. <br />
- * Suppose data is 8 bytes and bitLength will be ignored. <br />
+ * Convert data between time and byte array. <br>
+ * Suppose data is 8 bytes and bitLength will be ignored. <br>
  * Data is long value of time.
  * 
  * @author Kyle

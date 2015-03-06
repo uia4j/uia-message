@@ -27,24 +27,24 @@
 package uia.message.codec;
 
 /**
- * Convert data between boolean and byte array. <br />
+ * Convert data between boolean and byte array. <br>
  * Just check the highest bit in first byte. bitLength will be ignored.
  * 
  * @author Kyle
  */
 public class BitCodec implements BlockCodec<Boolean> {
 
-	@Override
-	public Boolean decode(byte[] data, int bitLength) throws BlockCodecException {
-		return (data[0] & 0x80) > 0;
-	}
+    @Override
+    public Boolean decode(byte[] data, int bitLength) throws BlockCodecException {
+        return (data[0] & 0x80) > 0;
+    }
 
-	@Override
-	public byte[] encode(Boolean data, int bitLength) throws BlockCodecException {
-		return data ? new byte[] { (byte) 0x80 } : new byte[] { 0x00 };
-	}
+    @Override
+    public byte[] encode(Boolean data, int bitLength) throws BlockCodecException {
+        return data ? new byte[] { (byte) 0x80 } : new byte[] { 0x00 };
+    }
 
-	@Override
-	public void reset() {
-	}
+    @Override
+    public void reset() {
+    }
 }

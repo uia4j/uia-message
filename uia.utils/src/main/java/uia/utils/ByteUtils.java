@@ -35,6 +35,11 @@ import java.util.List;
  */
 public class ByteUtils {
 
+    /**
+     * Reverse byte index.
+     * @param data Data.
+     * @return Result.
+     */
     public static byte[] reverse(byte[] data) {
         byte[] result = new byte[data.length];
         for (int i = 0; i < data.length; i++) {
@@ -43,10 +48,20 @@ public class ByteUtils {
         return result;
     }
 
+    /**
+     * Convert byte to BCD integer.
+     * @param value Data
+     * @return Result.
+     */
     public static int bcdValue(byte value) {
         return 10 * (0x0f & (value >> 4)) + (0x0f & value);
     }
 
+    /**
+     * Convert bytes to BCD integer.
+     * @param value Data
+     * @return Result.
+     */
     public static int bcdValue(byte[] value) {
         int result = 0;
         for (int i = 0; i < value.length; i++) {
@@ -56,6 +71,11 @@ public class ByteUtils {
         return result;
     }
 
+    /**
+     * Convert bytes to short.
+     * @param value Data
+     * @return Result.
+     */
     public static short shortValue(byte[] data) {
         int len = (0x00ff & data[0]);
         if (data.length > 1) {
@@ -65,14 +85,33 @@ public class ByteUtils {
         return (short) len;
     }
 
+    /**
+     * Convert bytes to unsigned integer.
+     * @param value Data
+     * @param bitLength Bit length.
+     * @return Result
+     */
     public static int uintValue(byte[] value, int bitLength) {
         return intValue(value, bitLength, true);
     }
 
+    /**
+     * Convert bytes to integer.
+     * @param value Data
+     * @param bitLength Bit length.
+     * @return Result
+     */
     public static int intValue(byte[] value, int bitLength) {
         return intValue(value, bitLength, false);
     }
 
+    /**
+     * Convert bytes to integer.
+     * @param value Data
+     * @param bitLength Bit length.
+     * @param unsigned Unsigned or not.
+     * @return Result.
+     */
     public static int intValue(byte[] value, int bitLength, boolean unsigned) {
         int bc = (int) Math.ceil((double) bitLength / 8);
         long temp = unsigned ? (long) (0x00ff & value[0]) : (long) value[0];
@@ -93,6 +132,12 @@ public class ByteUtils {
         return (int) temp;
     }
 
+    /**
+     * Convert bytes to long.
+     * @param value Data
+     * @param bitLength Bit length.
+     * @return Result.
+     */
     public static long longValue(byte[] value, int bitLength) {
         int bc = (int) Math.ceil((double) bitLength / 8);
         long temp = value[0];
@@ -111,11 +156,10 @@ public class ByteUtils {
 
     /**
      * Copy bits from original bytes source.
-     * 
      * @param data original bytes source.
      * @param byteStart the start index of bytes.
      * @param bitLength the bit count to be retrieved.
-     * @return
+     * @return Result.
      */
     public static byte[] copyBits(byte[] data, int byteStart, int bitLength) {
         return copyBits(data, byteStart, 0, bitLength);
@@ -123,12 +167,11 @@ public class ByteUtils {
 
     /**
      * Copy bits from original bytes source.
-     * 
-     * @param data
-     * @param byteStart
-     * @param bitStart
-     * @param bitLength
-     * @return
+     * @param data original bytes source.
+     * @param byteStart the start index of bytes.
+     * @param bitStart the start index of bits.
+     * @param bitLength the bit count to be retrieved.
+     * @return Result.
      */
     public static byte[] copyBits(byte[] data, int byteStart, int bitStart, int bitLength) {
         int byteCount = (int) Math.ceil((double) bitLength / 8);

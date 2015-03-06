@@ -38,6 +38,8 @@ public interface BlockListener {
      * Raise when one BlockSeq is read.
      * 
      * @param name The name of BlockSeq.
+     * @param begin Start tag or not.
+     * @param offset offset.
      */
     public void seqTouched(String name, boolean begin, int offset);
 
@@ -45,6 +47,8 @@ public interface BlockListener {
      * Raise when one BlockList is read.
      * 
      * @param name The name of BlockList.
+     * @param begin Start tag or not.
+     * @param offset offset.
      */
     public void listTouched(String name, boolean begin, int offset);
 
@@ -52,7 +56,7 @@ public interface BlockListener {
      * Raise after serializing/deserializing value.
      * 
      * @param name The name of Block.
-     * @param block
+     * @param block Block value changed.
      */
     public void valueHandled(String name, BlockInfo block);
 }
