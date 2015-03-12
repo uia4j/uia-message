@@ -26,7 +26,6 @@
  *******************************************************************************/
 package uia.message;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,7 +53,9 @@ public class MessageSerializer {
 
     private final MessageType mt;
 
-    private final ArrayList<Byte> result;
+    // private final ArrayList<Byte> result;
+
+    private byte[] resultBytes;
 
     private int indexByte;
 
@@ -65,8 +66,9 @@ public class MessageSerializer {
     MessageSerializer(DataExFactory factory, MessageType mt) {
         this.factory = factory;
         this.mt = mt;
-        this.result = new ArrayList<Byte>();
+        //this.result = new ArrayList<Byte>();
         this.blockValues = new HashMap<String, Object>();
+        this.resultBytes = new byte[0];
     }
 
     /**
@@ -79,20 +81,23 @@ public class MessageSerializer {
     public byte[] write(Object obj) throws BlockCodecException {
         this.indexByte = 0;
         this.indexBit = 0;
-        this.result.clear();
+        //this.result.clear();
         this.blockValues.clear();
 
         BitBlockSeqType bodyType = this.mt.getBody();
         encode(bodyType.getName(), bodyType, obj);
-        byte[] data = new byte[this.result.size()];
-        for (int i = 0; i < this.result.size(); i++) {
-            data[i] = this.result.get(i).byteValue();
-        }
+        //byte[] data = new byte[this.result.size()];
+        //for (int i = 0; i < this.result.size(); i++) {
+        //    data[i] = this.result.get(i).byteValue();
+        //}
 
-        this.result.clear();
+        //this.result.clear();
         this.blockValues.clear();
 
-        return data;
+        //return data;
+
+        // be careful
+        return this.resultBytes;
     }
 
     @SuppressWarnings("unchecked")
@@ -263,6 +268,13 @@ public class MessageSerializer {
     }
 
     private void put(byte[] data) {
+        // be careful
+        byte[] value = new byte[this.indexByte + data.length];
+        System.arraycopy(this.resultBytes, 0, value, 0, this.indexByte);
+        System.arraycopy(data, 0, value, this.indexByte, data.length);
+        this.resultBytes = value;
+
+        /** fix: 2015-03-12
         while (this.result.size() < this.indexByte + data.length) {
             this.result.add((byte) 0);
         }
@@ -272,6 +284,7 @@ public class MessageSerializer {
             this.result.remove(this.indexByte + i);
             this.result.add(this.indexByte + i, (byte) (value + data[i]));
         }
+         */
     }
 
     private boolean exists(String blockName, BlockBaseType block, Object obj) throws BlockCodecException {

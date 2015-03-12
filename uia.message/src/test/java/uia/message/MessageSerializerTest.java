@@ -174,30 +174,40 @@ public class MessageSerializerTest {
     @Test
     public void testRcv5() throws Exception {
         // message
-        Rcv5 rcv1 = new Rcv5();
-        rcv1.setFooter(255);
-        rcv1.getVolts().add(1);
-        rcv1.getVolts().add(32);
-        rcv1.getVolts().add(-32);
-        rcv1.setId(15);
+        Rcv5 rcv5 = new Rcv5();
+        rcv5.setFooter(255);
+        rcv5.getVolts().add(1);
+        rcv5.getVolts().add(32);
+        rcv5.getVolts().add(-32);
+        rcv5.setId(15);
 
         try {
             // encode
             MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv5");
-            byte[] data = writer.write(rcv1);
+            byte[] data = writer.write(rcv5);
             System.out.println(ByteUtils.toHexString(data));
 
             // decode
             MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv5");
-            rcv1 = (Rcv5) reader.read(data);
-            System.out.println("footer   : " + rcv1.getFooter());
-            System.out.println("voltCount: " + rcv1.getVoltCount());
-            for (int i = 0; i < rcv1.getVolts().size(); i++) {
-                System.out.println("  Volt    : " + rcv1.getVolts().get(i));
+            rcv5 = (Rcv5) reader.read(data);
+            System.out.println("footer   : " + rcv5.getFooter());
+            System.out.println("voltCount: " + rcv5.getVoltCount());
+            for (int i = 0; i < rcv5.getVolts().size(); i++) {
+                System.out.println("  Volt    : " + rcv5.getVolts().get(i));
             }
-            System.out.println("Id        : " + rcv1.getId());
+            System.out.println("Id        : " + rcv5.getId());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+
+    @Test
+    public void testRcv6() throws Exception {
+        Rcv6 rcv6 = new Rcv6();
+        rcv6.setContent1("1234");
+        rcv6.setContent2("123456");
+        byte[] data = DataExFactory.serialize("Test", "Rcv6", rcv6);
+        System.out.println(ByteUtils.toHexString(data));
     }
 }

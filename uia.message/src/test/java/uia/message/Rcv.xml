@@ -22,7 +22,8 @@
                     <Block name="power3" size="8" dataType="Double" />
                 </BlockSeq>
                 <Block name="voltCount" size="1" dataType="Int" />
-                <Block name="footer" size="1" dataType="String" />
+                <Block name="footer" size="1" dataType="String">
+                </Block>
                 <BlockSeqList name="volts" className="uia.message.Rcv1$Volt" countBlock="voltCount">
                     <Block name="volt" size="6" sizeUnit="bit" dataType="Int" />
                 </BlockSeqList>
@@ -59,11 +60,23 @@
         <Message>
             <Name>Rcv5</Name>
             <Desc></Desc>
-            <Body name="root" className="uia.message.Rcv1">
+            <Body name="root" className="uia.message.Rcv5">
                 <Block name="voltCount" size="2" dataType="BcdL" readonly="true" />
                 <Block name="footer" size="2" dataType="IntL" />
                 <BlockList name="volts" size="6" sizeUnit="bit" dataType="Int" countBlock="voltCount" />
                 <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
+            </Body>
+        </Message>
+        <Message>
+            <Name>Rcv6</Name>
+            <Desc></Desc>
+            <Body name="root" className="uia.message.Rcv6">
+                <Block name="content1" size="10" dataType="String">
+                	<CodecPropSet>
+                		<Prop name="emptyByte">00</Prop>
+                	</CodecPropSet>
+                </Block>
+                <Block name="content2" size="10" dataType="String" />
             </Body>
         </Message>
     </MessageSpace>
