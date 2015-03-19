@@ -63,9 +63,9 @@ public class MessageSerializerTest {
         rcv1.setFooter("f");
         rcv1.setVoltCount(3);
         rcv1.getVolts().add(new Rcv1.Volt(1));
-        rcv1.getVolts().add(new Rcv1.Volt(32));
+        rcv1.getVolts().add(new Rcv1.Volt(31));
         rcv1.getVolts().add(new Rcv1.Volt(-32));
-        rcv1.setId(15);
+        rcv1.setId(-1);
 
         try {
             // encode
@@ -75,18 +75,18 @@ public class MessageSerializerTest {
 
             // decode
             MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv1");
-            rcv1 = (Rcv1) reader.read(data);
-            System.out.println("header   : " + ByteUtils.toHexString(rcv1.getHeader()));
-            System.out.println("time     : " + rcv1.getTime());
-            System.out.println("power1   : " + rcv1.getPowerStatus().getPower1());
-            System.out.println("power2   : " + rcv1.getPowerStatus().getPower2());
-            System.out.println("power3   : " + rcv1.getPowerStatus().getPower3());
-            System.out.println("footer   : " + rcv1.getFooter());
-            System.out.println("voltCount: " + rcv1.getVoltCount());
-            for (int i = 0; i < rcv1.getVolts().size(); i++) {
-                System.out.println("  Volt    : " + rcv1.getVolts().get(i).getVolt());
-            }
-            System.out.println("Id        : " + rcv1.getId());
+            Rcv1 _rcv1 = (Rcv1) reader.read(data);
+            System.out.println("header   : " + ByteUtils.compare(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 }, _rcv1.getHeader()));
+            System.out.println("time     : " + _rcv1.getTime() + "," + _rcv1.getTime().equals(rcv1.getTime()));
+            System.out.println("power1   : " + _rcv1.getPowerStatus().getPower1().equals(rcv1.getPowerStatus().getPower1()));
+            System.out.println("power2   : " + _rcv1.getPowerStatus().getPower2().equals(rcv1.getPowerStatus().getPower2()));
+            System.out.println("power3   : " + _rcv1.getPowerStatus().getPower3().equals(rcv1.getPowerStatus().getPower3()));
+            System.out.println("footer   : " + _rcv1.getFooter().equals(rcv1.getFooter()));
+            System.out.println("voltCount: " + (_rcv1.getVoltCount() == rcv1.getVolts().size()));
+            System.out.println("    volt1: " + _rcv1.getVolts().get(0).getVolt().equals(rcv1.getVolts().get(0).getVolt()));
+            System.out.println("    volt2: " + _rcv1.getVolts().get(1).getVolt().equals(rcv1.getVolts().get(1).getVolt()));
+            System.out.println("    volt3: " + _rcv1.getVolts().get(2).getVolt().equals(rcv1.getVolts().get(2).getVolt()));
+            System.out.println("Id       : " + _rcv1.getId().equals(rcv1.getId()));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

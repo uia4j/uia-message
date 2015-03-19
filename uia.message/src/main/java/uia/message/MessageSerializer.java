@@ -270,8 +270,11 @@ public class MessageSerializer {
     private void put(byte[] data) {
         // be careful
         byte[] value = new byte[this.indexByte + data.length];
-        System.arraycopy(this.resultBytes, 0, value, 0, this.indexByte);
-        System.arraycopy(data, 0, value, this.indexByte, data.length);
+        System.arraycopy(this.resultBytes, 0, value, 0, this.resultBytes.length);
+        for (int i = 0; i < data.length; i++) {
+            byte one = value[this.indexByte + i];
+            value[this.indexByte + i] = (byte) (one + data[i]);
+        }
         this.resultBytes = value;
 
         /** fix: 2015-03-12
