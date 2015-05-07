@@ -105,7 +105,7 @@ public class MessageSerializer {
         this.factory.seqTouched(seqName, true, this.indexByte * 8 + this.indexBit);
         try {
             if (obj == null) {
-                throw new BlockCodecException("encode failure. " + seqName + " is null");
+                throw new BlockCodecException(seqName + "> encode failure. value is null");
             }
 
             for (BlockBaseType blockType : seqType.getBlockOrBlockListOrBlockSeq()) {
@@ -120,7 +120,7 @@ public class MessageSerializer {
                     String referenceName = ((BitBlockRefType) blockType).getReference();
                     blockType = this.factory.getReferenceBlock(referenceName);
                     if (blockType == null) {
-                        throw new BlockCodecException("blockRef failure. \'" +
+                        throw new BlockCodecException(seqName + "> blockRef failure. \'" +
                                 referenceName + "\' " + seqType.getClassName() + "." + name + " references is not defined.");
                     }
                 }
@@ -138,14 +138,14 @@ public class MessageSerializer {
                                 PropertyUtils.read(obj, name) :
                                     obj;
                                 if (value == null) {
-                                    throw new BlockCodecException("property failure. " +
+                                    throw new BlockCodecException(seqName + "> property failure. " +
                                             seqType.getName() + "." + name + " is null");
                                 }
                                 encode(name, (BitBlockSeqType) blockType, value);
                     } else {
                         Object value = PropertyUtils.read(obj, name);
                         if (value == null) {
-                            throw new BlockCodecException("property failure. " +
+                            throw new BlockCodecException(seqName + "> property failure. " +
                                     seqType.getName() + "." + name + " is null");
                         }
                         encode(name, (BitBlockType) blockType, value);
@@ -153,7 +153,7 @@ public class MessageSerializer {
                 } catch (BlockCodecException ex1) {
                     throw ex1;
                 } catch (Exception ex2) {
-                    throw new BlockCodecException("encode failure. " +
+                    throw new BlockCodecException(seqName + "> encode failure. " +
                             seqType.getName() + "." + name + " ex:" + ex2.getMessage(),
                             ex2);
                 }
@@ -171,8 +171,7 @@ public class MessageSerializer {
         if (sizeBlock != null && sizeBlock.length() > 0) {
             Object lenObject = this.blockValues.get(blockType.getSizeBlock());
             if (lenObject == null) {
-                throw new BlockCodecException("sizeBlock failure. block:" +
-                        name + " sizeBlock:" + blockType.getSizeBlock());
+                throw new BlockCodecException(name + "> sizeBlock failure. sizeBlock:" + blockType.getSizeBlock());
             }
             Integer size = (Integer) this.blockValues.get(blockType.getSizeBlock());
             bitLength = size.intValue();
@@ -200,9 +199,7 @@ public class MessageSerializer {
                 try {
                     PropertyUtils.write(codec, prop.getName(), prop.getValue());
                 } catch (Exception ex) {
-                    throw new BlockCodecException("codec property failure. block:" +
-                            name + " propType:" + prop.getName() + " ex:" + ex.getMessage(),
-                            ex);
+                    throw new BlockCodecException(name + "> codec property failure. propType:" + prop.getName() + " ex:" + ex.getMessage(), ex);
                 }
             }
         }
@@ -222,8 +219,7 @@ public class MessageSerializer {
             put(bytes);
             this.factory.valueHandled(name, new BlockInfo(obj, temp, bitLength));
         } catch (Exception ex) {
-            throw new BlockCodecException("encode failure. block:" +
-                    name + "(" + blockType.getName() + ") ex:" + ex.getMessage(),
+            throw new BlockCodecException(name + "> encode failure(" + blockType.getName() + "). ex:" + ex.getMessage(),
                     ex);
         }
 
@@ -298,9 +294,7 @@ public class MessageSerializer {
                 return block.isOptionEq() ?
                         block.getOptionValue().equals(v) : !block.getOptionValue().equals(v) ;
             } catch(Exception ex) {
-                throw new BlockCodecException("existsProp failure. " +
-                        blockName + " ex:" + ex.getMessage(),
-                        ex);
+                throw new BlockCodecException(blockName + "> existsProp failure. ex:" + ex.getMessage(), ex);
             }
         } else {
             return true;
