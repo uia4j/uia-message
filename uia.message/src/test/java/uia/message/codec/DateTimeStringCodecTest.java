@@ -60,12 +60,22 @@ public class DateTimeStringCodecTest {
     }
 
     @Test
-    public void testNullable() throws Exception {
+    public void testNullable00() throws Exception {
         DateTimeStringCodec codec = new DateTimeStringCodec();
         codec.setFormat("MMddyyyy");
         codec.setNullByte("00");
         codec.setNullable("y");
         System.out.println(codec.decode(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 8));
+        System.out.println(ByteUtils.toHexString(codec.encode(null, 8)));
+    }
+
+    @Test
+    public void testNullable20() throws Exception {
+        DateTimeStringCodec codec = new DateTimeStringCodec();
+        codec.setFormat("MMddyyyy");
+        codec.setNullByte("20");
+        codec.setNullable("y");
+        System.out.println(codec.decode(new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 }, 8));
         System.out.println(ByteUtils.toHexString(codec.encode(null, 8)));
     }
 }

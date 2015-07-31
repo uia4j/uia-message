@@ -107,6 +107,9 @@ public class DateTimeStringCodec implements BlockCodec<Date> {
             String value = new String(data);
             return new SimpleDateFormat(this.format).parse(value);
         } catch (Exception ex) {
+            if(this.nullable) {
+                return null;
+            }
             throw new BlockCodecException("date decode failure. " + ex.getMessage(), ex);
         }
     }
