@@ -15,6 +15,7 @@ import java.util.List;
 
 import uia.message.codec.BlockCodec;
 import uia.message.codec.BlockCodecException;
+import uia.message.fx.ValueFx;
 import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
 import uia.message.model.xml.BitBlockSeqListType;
@@ -28,7 +29,7 @@ import uia.utils.PropertyUtils;
 
 /**
  * Depend on the structure defines in XML to deserialize a object.
- * 
+ *
  * @author Kyle
  */
 public class MessageDeserializer {
@@ -59,7 +60,7 @@ public class MessageDeserializer {
 
     /**
      * Deserialize byte array to a object.
-     * 
+     *
      * @param data Byte array need to be deserialized.
      * @return The object.
      * @throws BlockCodecException throw when deserialize fail.
@@ -157,31 +158,39 @@ public class MessageDeserializer {
 
     private Object decode(String name, BitBlockType blockType, byte[] data) throws BlockCodecException {
         int bitLength = 0;
-        String sizeBlock = blockType.getSizeBlock();
-        if (sizeBlock != null && sizeBlock.length() > 0) {
-            Object lenObject = this.blockValues.get(blockType.getSizeBlock());
-            if (lenObject == null) {
-                throw new BlockCodecException("sizeBlock failure. block:" +
-                        name + " sizeBlock:" + blockType.getSizeBlock());
-            }
-            Integer size = (Integer) lenObject;
-            bitLength = size.intValue();
-            if ("+".equals(blockType.getSizeFactorOp())) {
-                bitLength += blockType.getSizeFactor();
-            }
-            else if ("-".equals(blockType.getSizeFactorOp())) {
-                bitLength -= blockType.getSizeFactor();
-            }
-            else if ("*".equals(blockType.getSizeFactorOp())) {
-                bitLength *= blockType.getSizeFactor();
-            }
-            else if ("/".equals(blockType.getSizeFactorOp())) {
-                bitLength /= blockType.getSizeFactor();
-            }
+
+        if (blockType.getSizeFx() != null && blockType.getSizeFx().trim().length() > 0) {
+            ValueFx fx = this.factory.getFx(blockType.getSizeFx().trim());
+            bitLength = fx.decode(name, data, this.blockValues, this.byteStart, this.bitStart);
         }
         else {
-            bitLength = blockType.getSize();
+            String sizeBlock = blockType.getSizeBlock();
+            if (sizeBlock != null && sizeBlock.length() > 0) {
+                Object lenObject = this.blockValues.get(blockType.getSizeBlock());
+                if (lenObject == null) {
+                    throw new BlockCodecException("sizeBlock failure. block:" +
+                            name + " sizeBlock:" + blockType.getSizeBlock());
+                }
+                Integer size = (Integer) lenObject;
+                bitLength = size.intValue();
+                if ("+".equals(blockType.getSizeFactorOp())) {
+                    bitLength += blockType.getSizeFactor();
+                }
+                else if ("-".equals(blockType.getSizeFactorOp())) {
+                    bitLength -= blockType.getSizeFactor();
+                }
+                else if ("*".equals(blockType.getSizeFactorOp())) {
+                    bitLength *= blockType.getSizeFactor();
+                }
+                else if ("/".equals(blockType.getSizeFactorOp())) {
+                    bitLength /= blockType.getSizeFactor();
+                }
+            }
+            else {
+                bitLength = blockType.getSize();
+            }
         }
+
         if (bitLength >= 0) {
             bitLength = "bit".equalsIgnoreCase(blockType.getSizeUnit()) ? bitLength : bitLength * 8;
         }
@@ -234,30 +243,37 @@ public class MessageDeserializer {
         this.factory.listTouched(listName, true, this.byteStart * 8 + this.bitStart);
 
         Integer count;
-        String countBlock = listType.getCountBlock();
-        if (countBlock != null && countBlock.length() > 0) {
-            Object lenObject = this.blockValues.get(countBlock);
-            if (lenObject == null) {
-                throw new BlockCodecException("countBlock failure. block:" +
-                        listName + " countBlock:" + listType.getCountBlock());
-            }
 
-            count = (Integer) lenObject;
-            if ("+".equals(listType.getCountFactorOp())) {
-                count += listType.getCountFactor();
-            }
-            else if ("-".equals(listType.getCountFactorOp())) {
-                count -= listType.getCountFactor();
-            }
-            else if ("*".equals(listType.getCountFactorOp())) {
-                count *= listType.getCountFactor();
-            }
-            else if ("/".equals(listType.getCountFactorOp())) {
-                count /= listType.getCountFactor();
-            }
+        if (listType.getCountFx() != null && listType.getCountFx().trim().length() > 0) {
+            ValueFx fx = this.factory.getFx(listType.getCountFx().trim());
+            count = fx.decode(listName, data, this.blockValues, this.byteStart, this.bitStart);
         }
         else {
-            count = listType.getCount();
+            String countBlock = listType.getCountBlock();
+            if (countBlock != null && countBlock.length() > 0) {
+                Object lenObject = this.blockValues.get(countBlock);
+                if (lenObject == null) {
+                    throw new BlockCodecException("countBlock failure. block:" +
+                            listName + " countBlock:" + listType.getCountBlock());
+                }
+
+                count = (Integer) lenObject;
+                if ("+".equals(listType.getCountFactorOp())) {
+                    count += listType.getCountFactor();
+                }
+                else if ("-".equals(listType.getCountFactorOp())) {
+                    count -= listType.getCountFactor();
+                }
+                else if ("*".equals(listType.getCountFactorOp())) {
+                    count *= listType.getCountFactor();
+                }
+                else if ("/".equals(listType.getCountFactorOp())) {
+                    count /= listType.getCountFactor();
+                }
+            }
+            else {
+                count = listType.getCount();
+            }
         }
 
         ArrayList<Object> objs = new ArrayList<Object>();
@@ -273,30 +289,36 @@ public class MessageDeserializer {
         this.factory.listTouched(listName, true, this.byteStart * 8 + this.bitStart);
 
         Integer count;
-        String countBlock = listType.getCountBlock();
-        if (countBlock != null && countBlock.length() > 0) {
-            Object lenObject = this.blockValues.get(countBlock);
-            if (lenObject == null) {
-                throw new BlockCodecException("countBlock failure. block:" +
-                        listName + " countBlock:" + listType.getCountBlock());
-            }
-
-            count = (Integer) lenObject;
-            if ("+".equals(listType.getCountFactorOp())) {
-                count += listType.getCountFactor();
-            }
-            else if ("-".equals(listType.getCountFactorOp())) {
-                count -= listType.getCountFactor();
-            }
-            else if ("*".equals(listType.getCountFactorOp())) {
-                count *= listType.getCountFactor();
-            }
-            else if ("/".equals(listType.getCountFactorOp())) {
-                count /= listType.getCountFactor();
-            }
+        if (listType.getCountFx() != null && listType.getCountFx().trim().length() > 0) {
+            ValueFx fx = this.factory.getFx(listType.getCountFx().trim());
+            count = fx.decode(listName, data, this.blockValues, this.byteStart, this.bitStart);
         }
         else {
-            count = listType.getCount();
+            String countBlock = listType.getCountBlock();
+            if (countBlock != null && countBlock.length() > 0) {
+                Object lenObject = this.blockValues.get(countBlock);
+                if (lenObject == null) {
+                    throw new BlockCodecException("countBlock failure. block:" +
+                            listName + " countBlock:" + listType.getCountBlock());
+                }
+
+                count = (Integer) lenObject;
+                if ("+".equals(listType.getCountFactorOp())) {
+                    count += listType.getCountFactor();
+                }
+                else if ("-".equals(listType.getCountFactorOp())) {
+                    count -= listType.getCountFactor();
+                }
+                else if ("*".equals(listType.getCountFactorOp())) {
+                    count *= listType.getCountFactor();
+                }
+                else if ("/".equals(listType.getCountFactorOp())) {
+                    count /= listType.getCountFactor();
+                }
+            }
+            else {
+                count = listType.getCount();
+            }
         }
 
         ArrayList<Object> objs = new ArrayList<Object>();

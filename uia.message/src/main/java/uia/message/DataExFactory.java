@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import uia.message.codec.BitCodec;
 import uia.message.codec.BlockCodec;
@@ -48,15 +49,17 @@ import uia.message.codec.IntegerLSBCodec;
 import uia.message.codec.IntegerStringCodec;
 import uia.message.codec.LongCodec;
 import uia.message.codec.StringCodec;
+import uia.message.fx.ValueFx;
 import uia.message.model.xml.BlockBaseType;
 import uia.message.model.xml.BlockCodecType;
 import uia.message.model.xml.DataExType;
+import uia.message.model.xml.FxType;
 import uia.message.model.xml.MessageType;
 
 /**
  * Data exchange factory. This factory can serialize and desizalize message depend on the XML defined by user.
- * 
- * 
+ *
+ *
  * @author Kyle
  */
 public class DataExFactory {
@@ -71,6 +74,8 @@ public class DataExFactory {
 
     private HashMap<String, BlockCodec<?>> codecSpace;
 
+    private HashMap<String, ValueFx> fxSpace;
+
     private final ArrayList<BlockListener> listeners;
 
     static {
@@ -79,7 +84,7 @@ public class DataExFactory {
 
     /**
      * Register a XML defines structure of messages with a specific domain name.
-     * 
+     *
      * @param domain Domain name.
      * @param fileName XML file name.
      * @throws Exception Raise when file is wrong.
@@ -92,7 +97,7 @@ public class DataExFactory {
 
     /**
      * Register a XML defines structure of messages with a specific domain name.
-     * 
+     *
      * @param domain Domain name.
      * @param stream XML file stream.
      * @throws Exception Raise when file is wrong.
@@ -105,7 +110,7 @@ public class DataExFactory {
 
     /**
      * Register a XML defines structure of messages with a specific domain name.
-     * 
+     *
      * @param domain Domain name.
      * @param file XML file.
      * @throws Exception Raise when file is wrong.
@@ -118,7 +123,7 @@ public class DataExFactory {
 
     /**
      * Get factory with specific domain name.
-     * 
+     *
      * @param domain The domain name.
      * @return The data exchange factory. Null if this domain is not registered.
      */
@@ -128,7 +133,7 @@ public class DataExFactory {
 
     /**
      * Constructor.
-     * 
+     *
      * @param dataEx Data exchange information from XML.
      */
     private DataExFactory(DataExType dataEx) {
@@ -137,11 +142,20 @@ public class DataExFactory {
         loadBodySpace();
         loadMessageSpace();
         loadCodecSpace();
+        loadFxSpace();
+    }
+
+    public Set<String> getFxList() {
+        return this.fxSpace.keySet();
+    }
+
+    public Set<String> getMessageList() {
+        return this.messageSpace.keySet();
     }
 
     /**
      * Add block listener.
-     * 
+     *
      * @param listener The listener.
      */
     public void addListener(BlockListener listener) {
@@ -152,7 +166,7 @@ public class DataExFactory {
 
     /**
      * Remove block listener.
-     * 
+     *
      * @param listener The listener.
      */
     public void removeListener(BlockListener listener) {
@@ -163,12 +177,12 @@ public class DataExFactory {
 
     /**
      * Serialize object of message to byte array.
-     * 
+     *
      * @param domain The domain name.
      * @param messageName The message name defined in XML.
      * @param value Object of message.
      * @return Serialize result or null if no domain.
-     * @throws BlockCodecException Raise when serialize failure.
+     * @throws BlockCodecException Raise when serialize failed.
      */
     public static byte[] serialize(String domain, String messageName, Object value) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
@@ -180,12 +194,12 @@ public class DataExFactory {
 
     /**
      * Deserialize byte array to object of message.
-     * 
+     *
      * @param domain The domain name.
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
      * @return Deserialize result or null if no domain.
-     * @throws BlockCodecException Raise when deserialize failure.
+     * @throws BlockCodecException Raise when deserialize failed.
      */
     public static Object deserialize(String domain, String messageName, byte[] value) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
@@ -197,11 +211,11 @@ public class DataExFactory {
 
     /**
      * Serialize object of message to byte array.
-     * 
+     *
      * @param messageName The message name defined in XML.
      * @param value Object of message.
      * @return Serialize result.
-     * @throws BlockCodecException Raise when serialize failure.
+     * @throws BlockCodecException Raise when serialize failed.
      */
     public byte[] serialize(String messageName, Object value) throws BlockCodecException {
         return createSerializer(messageName).write(value);
@@ -209,11 +223,11 @@ public class DataExFactory {
 
     /**
      * Deserialize byte array to object of message.
-     * 
+     *
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
      * @return Deserialize result.
-     * @throws BlockCodecException Raise when deserialize failure.
+     * @throws BlockCodecException Raise when deserialize failed.
      */
     public Object deserialize(String messageName, byte[] value) throws BlockCodecException {
         return createDeserializer(messageName).read(value);
@@ -221,7 +235,7 @@ public class DataExFactory {
 
     /**
      * Create a deserializer with specific message name.
-     * 
+     *
      * @param messageName The message name defined in XML.
      * @return The deserializer. Can be null.
      */
@@ -235,7 +249,7 @@ public class DataExFactory {
 
     /**
      * Create a serializer with specific message name.
-     * 
+     *
      * @param messageName The message name defined in XML.
      * @return The serializer. Can be null.
      */
@@ -273,10 +287,18 @@ public class DataExFactory {
         return this.bodySpace.get(blockName);
     }
 
+    ValueFx getFx(String name) throws BlockCodecException {
+        ValueFx fx = this.fxSpace.get(name);
+        if (fx == null) {
+            throw new BlockCodecException("fx name failed. " + name + " is not defined.");
+        }
+        return fx;
+    }
+
     BlockCodec<?> getCodec(String dataType) throws BlockCodecException {
         BlockCodec<?> decoder = this.codecSpace.get(dataType);
         if (decoder == null) {
-            throw new BlockCodecException("codec type failure. " + dataType + " is not defined.");
+            throw new BlockCodecException("codec type failed. " + dataType + " is not defined.");
         }
         return decoder;
     }
@@ -295,14 +317,34 @@ public class DataExFactory {
         }
     }
 
+    private void loadFxSpace() {
+        this.fxSpace = new HashMap<String, ValueFx>();
+        if (this.dataEx.getFxSpace() == null) {
+            return;
+        }
+        for (FxType fx : this.dataEx.getFxSpace().getFx()) {
+            try {
+                this.fxSpace.put(
+                        fx.getName(),
+                        (ValueFx) Class.forName(fx.getDriver()).newInstance());
+            }
+            catch (Exception ex) {
+            }
+        }
+    }
+
     private void loadCodecSpace() {
         this.codecSpace = new HashMap<String, BlockCodec<?>>();
+        if (this.dataEx.getBlockCodecSpace() == null) {
+            return;
+        }
         for (BlockCodecType decoder : this.dataEx.getBlockCodecSpace().getBlockCodec()) {
             try {
                 this.codecSpace.put(
                         decoder.getDataType(),
                         (BlockCodec<?>) Class.forName(decoder.getDriver()).newInstance());
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
             }
         }
 

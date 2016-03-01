@@ -15,18 +15,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for MessageType complex type.
+ * <p>Java class for FxType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="MessageType">
+ * &lt;complexType name="FxType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Desc" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Body" type="{http://message.uia/model/xml}BitBlockSeqType"/>
+ *         &lt;element name="Driver" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,19 +35,16 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "MessageType", propOrder = {
+@XmlType(name = "FxType", propOrder = {
     "name",
-    "desc",
-    "body"
+    "driver"
 })
-public class MessageType {
+public class FxType {
 
     @XmlElement(name = "Name", required = true)
     protected String name;
-    @XmlElement(name = "Desc", required = true)
-    protected String desc;
-    @XmlElement(name = "Body", required = true)
-    protected BitBlockSeqType body;
+    @XmlElement(name = "Driver", required = true)
+    protected String driver;
 
     /**
      * Gets the value of the name property.
@@ -75,51 +71,27 @@ public class MessageType {
     }
 
     /**
-     * Gets the value of the desc property.
+     * Gets the value of the driver property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getDesc() {
-        return desc;
+    public String getDriver() {
+        return driver;
     }
 
     /**
-     * Sets the value of the desc property.
+     * Sets the value of the driver property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setDesc(String value) {
-        this.desc = value;
-    }
-
-    /**
-     * Gets the value of the body property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BitBlockSeqType }
-     *     
-     */
-    public BitBlockSeqType getBody() {
-        return body;
-    }
-
-    /**
-     * Sets the value of the body property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BitBlockSeqType }
-     *     
-     */
-    public void setBody(BitBlockSeqType value) {
-        this.body = value;
+    public void setDriver(String value) {
+        this.driver = value;
     }
 
 }

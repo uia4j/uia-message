@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -31,6 +31,7 @@ import java.util.List;
 
 import uia.message.codec.BlockCodec;
 import uia.message.codec.BlockCodecException;
+import uia.message.fx.ValueFx;
 import uia.message.model.xml.BitBlockListType;
 import uia.message.model.xml.BitBlockRefType;
 import uia.message.model.xml.BitBlockSeqListType;
@@ -44,7 +45,7 @@ import uia.utils.PropertyUtils;
 
 /**
  * Depend on the structure defines in XML to serialize a object.
- * 
+ *
  * @author Kyle
  */
 public class MessageSerializer {
@@ -73,7 +74,7 @@ public class MessageSerializer {
 
     /**
      * Serialize the object into byte array.
-     * 
+     *
      * @param obj The object need to be serialized.
      * @return Byte array.
      * @throws BlockCodecException throw when serialize fail.
@@ -112,7 +113,7 @@ public class MessageSerializer {
                 String name = blockType.getName();
 
                 // exists check
-                if(!exists(name, blockType, obj)) {
+                if (!exists(name, blockType, obj)) {
                     continue;
                 }
 
@@ -129,20 +130,23 @@ public class MessageSerializer {
                     if (blockType instanceof BitBlockSeqListType) {
                         Object value = PropertyUtils.read(obj, name);
                         encode(name, (BitBlockSeqListType) blockType, (List<Object>) value);
-                    } else if (blockType instanceof BitBlockListType) {
+                    }
+                    else if (blockType instanceof BitBlockListType) {
                         Object value = PropertyUtils.read(obj, name);
                         encode(name, (BitBlockListType) blockType, (List<Object>) value);
-                    } else if (blockType instanceof BitBlockSeqType) {
+                    }
+                    else if (blockType instanceof BitBlockSeqType) {
                         String cn = ((BitBlockSeqType) blockType).getClassName();
                         Object value = (cn != null && cn.length() > 0) ?
                                 PropertyUtils.read(obj, name) :
-                                    obj;
-                                if (value == null) {
-                                    throw new BlockCodecException(seqName + "> property failure. " +
-                                            seqType.getName() + "." + name + " is null");
-                                }
-                                encode(name, (BitBlockSeqType) blockType, value);
-                    } else {
+                                obj;
+                        if (value == null) {
+                            throw new BlockCodecException(seqName + "> property failure. " +
+                                    seqType.getName() + "." + name + " is null");
+                        }
+                        encode(name, (BitBlockSeqType) blockType, value);
+                    }
+                    else {
                         Object value = PropertyUtils.read(obj, name);
                         if (value == null) {
                             throw new BlockCodecException(seqName + "> property failure. " +
@@ -150,15 +154,18 @@ public class MessageSerializer {
                         }
                         encode(name, (BitBlockType) blockType, value);
                     }
-                } catch (BlockCodecException ex1) {
+                }
+                catch (BlockCodecException ex1) {
                     throw ex1;
-                } catch (Exception ex2) {
+                }
+                catch (Exception ex2) {
                     throw new BlockCodecException(seqName + "> encode failure. " +
                             seqType.getName() + "." + name + " ex:" + ex2.getMessage(),
                             ex2);
                 }
             }
-        } finally {
+        }
+        finally {
             this.factory.seqTouched(seqName, false, this.indexByte * 8 + this.indexBit);
         }
     }
@@ -167,26 +174,36 @@ public class MessageSerializer {
         this.blockValues.put(name, obj);
 
         int bitLength = 0;
-        String sizeBlock = blockType.getSizeBlock();
-        if (sizeBlock != null && sizeBlock.length() > 0) {
-            Object lenObject = this.blockValues.get(blockType.getSizeBlock());
-            if (lenObject == null) {
-                throw new BlockCodecException(name + "> sizeBlock failure. sizeBlock:" + blockType.getSizeBlock());
-            }
-            Integer size = (Integer) this.blockValues.get(blockType.getSizeBlock());
-            bitLength = size.intValue();
-            if ("+".equals(blockType.getSizeFactorOp())) {
-                bitLength += blockType.getSizeFactor();
-            } else if ("-".equals(blockType.getSizeFactorOp())) {
-                bitLength -= blockType.getSizeFactor();
-            } else if ("*".equals(blockType.getSizeFactorOp())) {
-                bitLength *= blockType.getSizeFactor();
-            } else if ("/".equals(blockType.getSizeFactorOp())) {
-                bitLength /= blockType.getSizeFactor();
-            }
+
+        if (blockType.getSizeFx() != null && blockType.getSizeFx().trim().length() > 0) {
+            ValueFx fx = this.factory.getFx(blockType.getSizeFx().trim());
+            bitLength = fx.encode(name, obj, this.blockValues);
         }
         else {
-            bitLength = blockType.getSize();
+            String sizeBlock = blockType.getSizeBlock();
+            if (sizeBlock != null && sizeBlock.length() > 0) {
+                Object lenObject = this.blockValues.get(blockType.getSizeBlock());
+                if (lenObject == null) {
+                    throw new BlockCodecException(name + "> sizeBlock failure. sizeBlock:" + blockType.getSizeBlock());
+                }
+                Integer size = (Integer) this.blockValues.get(blockType.getSizeBlock());
+                bitLength = size.intValue();
+                if ("+".equals(blockType.getSizeFactorOp())) {
+                    bitLength += blockType.getSizeFactor();
+                }
+                else if ("-".equals(blockType.getSizeFactorOp())) {
+                    bitLength -= blockType.getSizeFactor();
+                }
+                else if ("*".equals(blockType.getSizeFactorOp())) {
+                    bitLength *= blockType.getSizeFactor();
+                }
+                else if ("/".equals(blockType.getSizeFactorOp())) {
+                    bitLength /= blockType.getSizeFactor();
+                }
+            }
+            else {
+                bitLength = blockType.getSize();
+            }
         }
 
         bitLength = "bit".equalsIgnoreCase(blockType.getSizeUnit()) ? bitLength : bitLength * 8;
@@ -198,7 +215,8 @@ public class MessageSerializer {
             for (PropType prop : blockType.getCodecPropSet().getProp()) {
                 try {
                     PropertyUtils.write(codec, prop.getName(), prop.getValue());
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     throw new BlockCodecException(name + "> codec property failure. propType:" + prop.getName() + " ex:" + ex.getMessage(), ex);
                 }
             }
@@ -213,12 +231,14 @@ public class MessageSerializer {
                         temp,
                         this.indexBit,
                         bitLength);
-            } else {
+            }
+            else {
                 bytes = temp;
             }
             put(bytes);
             this.factory.valueHandled(name, new BlockInfo(obj, temp, bitLength));
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException(name + "> encode failure(" + blockType.getName() + "). ex:" + ex.getMessage(),
                     ex);
         }
@@ -241,6 +261,8 @@ public class MessageSerializer {
 
     private void encode(String listName, BitBlockListType listType, List<Object> objs) throws BlockCodecException {
         this.factory.listTouched(listName, true, this.indexByte * 8 + this.indexBit);
+
+        // TODO: fix if objs.size() is different from countBlock
 
         if (objs != null) {
             // body
@@ -287,16 +309,18 @@ public class MessageSerializer {
     }
 
     private boolean exists(String blockName, BlockBaseType block, Object obj) throws BlockCodecException {
-        if(block.getOptionBlock() != null && block.getOptionBlock().length() > 0) {
+        if (block.getOptionBlock() != null && block.getOptionBlock().length() > 0) {
             try {
                 Object option = PropertyUtils.read(obj, block.getOptionBlock());
-                String v = option.getClass() == byte[].class ? ByteUtils.toHexString((byte[])option, "") : option.toString();
+                String v = option.getClass() == byte[].class ? ByteUtils.toHexString((byte[]) option, "") : option.toString();
                 return block.isOptionEq() ?
-                        block.getOptionValue().equals(v) : !block.getOptionValue().equals(v) ;
-            } catch(Exception ex) {
+                        block.getOptionValue().equals(v) : !block.getOptionValue().equals(v);
+            }
+            catch (Exception ex) {
                 throw new BlockCodecException(blockName + "> existsProp failure. ex:" + ex.getMessage(), ex);
             }
-        } else {
+        }
+        else {
             return true;
         }
     }

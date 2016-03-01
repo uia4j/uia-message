@@ -17,16 +17,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for BlockCodecSpaceType complex type.
+ * <p>Java class for FxSpaceType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="BlockCodecSpaceType">
+ * &lt;complexType name="FxSpaceType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="BlockCodec" type="{http://message.uia/model/xml}BlockCodecType" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="Fx" type="{http://message.uia/model/xml}FxType" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,41 +36,41 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "BlockCodecSpaceType", propOrder = {
-    "blockCodec"
+@XmlType(name = "FxSpaceType", propOrder = {
+    "fx"
 })
-public class BlockCodecSpaceType {
+public class FxSpaceType {
 
-    @XmlElement(name = "BlockCodec")
-    protected List<BlockCodecType> blockCodec;
+    @XmlElement(name = "Fx")
+    protected List<FxType> fx;
 
     /**
-     * Gets the value of the blockCodec property.
+     * Gets the value of the fx property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the blockCodec property.
+     * This is why there is not a <CODE>set</CODE> method for the fx property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getBlockCodec().add(newItem);
+     *    getFx().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link BlockCodecType }
+     * {@link FxType }
      * 
      * 
      */
-    public List<BlockCodecType> getBlockCodec() {
-        if (blockCodec == null) {
-            blockCodec = new ArrayList<BlockCodecType>();
+    public List<FxType> getFx() {
+        if (fx == null) {
+            fx = new ArrayList<FxType>();
         }
-        return this.blockCodec;
+        return this.fx;
     }
 
 }

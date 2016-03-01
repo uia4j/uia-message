@@ -11,6 +11,7 @@
             <element name="BlockSpace" type="uia:BlockSpaceType"></element>
             <element name="MessageSpace" type="uia:MessageSpaceType"></element>
             <element name="BlockCodecSpace" type="uia:BlockCodecSpaceType"></element>
+            <element name="FxSpace" type="uia:FxSpaceType"></element>
         </sequence>
     </complexType>
     
@@ -47,6 +48,7 @@
         <attribute name="optionBlock" type="string" />
         <attribute name="optionValue" type="string" />
         <attribute name="optionEq" type="boolean" default="true" />
+        <attribute name="optionFx" type="string" default="EQ" />
     </complexType>
     <complexType name="BitBlockSeqType">
         <complexContent>
@@ -83,6 +85,7 @@
                 <attribute name="sizeBlock" type="string" />
                 <attribute name="sizeFactor" type="int" default="1" />
                 <attribute name="sizeFactorOp" type="string" default="*" />
+                <attribute name="sizeFx" type="string" />
 		        <attribute name="readonly" type="boolean" default="false" />
             </extension>
         </complexContent>
@@ -94,6 +97,7 @@
                 <attribute name="countBlock" type="string" />
                 <attribute name="countFactor" type="int" default="1" />
                 <attribute name="countFactorOp" type="string" default="/" />
+                <attribute name="countFx" type="string" />
             </extension>
         </complexContent>
     </complexType>
@@ -104,6 +108,7 @@
                 <attribute name="countBlock" type="string" />
                 <attribute name="countFactor" type="int" default="1" />
                 <attribute name="countFactorOp" type="string" default="/" />
+                <attribute name="countFx" type="string" />
             </extension>
         </complexContent>
     </complexType>
@@ -131,6 +136,19 @@
     <complexType name="BlockCodecType">
         <sequence>
             <element name="DataType" type="string"></element>
+            <element name="Driver" type="string"></element>
+        </sequence>
+    </complexType>
+
+    <!-- BlockCodecSpace -->
+    <complexType name="FxSpaceType">
+        <sequence>
+            <element name="Fx" type="uia:FxType" maxOccurs="unbounded" minOccurs="0"></element>
+        </sequence>
+    </complexType>
+    <complexType name="FxType">
+        <sequence>
+            <element name="Name" type="string"></element>
             <element name="Driver" type="string"></element>
         </sequence>
     </complexType>
