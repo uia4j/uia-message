@@ -261,28 +261,6 @@ public class DataExFactory {
         return new MessageSerializer(this, mt);
     }
 
-    /**
-     * @deprecated
-     * @param messageName The message name defined in XML.
-     * @return The reader.
-     */
-    @Deprecated
-    public MessageReader createReader(String messageName) {
-        MessageType mt = this.messageSpace.get(messageName);
-        return mt != null ? new MessageReader(this, mt) : null;
-    }
-
-    /**
-     * @deprecated
-     * @param messageName The message name defined in XML.
-     * @return The writer.
-     */
-    @Deprecated
-    public MessageWriter createWriter(String messageName) {
-        MessageType mt = this.messageSpace.get(messageName);
-        return mt != null ? new MessageWriter(this, mt) : null;
-    }
-
     BlockBaseType getReferenceBlock(String blockName) {
         return this.bodySpace.get(blockName);
     }

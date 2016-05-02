@@ -51,7 +51,7 @@ public class Rcv3 {
 	}
 
 	public int getDataLength() {
-		return this.data.length;
+		return this.data.length + 8;
 	}
 
 	public byte[] getData() {

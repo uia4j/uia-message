@@ -134,9 +134,10 @@ public class MessageSerializerTest {
             // decode
             MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3");
             rcv3 = (Rcv3) reader.read(data);
-            System.out.println("header: " + ByteUtils.toHexString(rcv3.getHeader()));
-            System.out.println("data  : " + ByteUtils.toHexString(rcv3.getData()));
-            System.out.println("footer: " + rcv3.getFooter());
+            System.out.println("header:  " + ByteUtils.toHexString(rcv3.getHeader()));
+            System.out.println("dataLen: " + rcv3.getDataLength());
+            System.out.println("data   : " + ByteUtils.toHexString(rcv3.getData()));
+            System.out.println("footer:  " + rcv3.getFooter());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

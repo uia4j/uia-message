@@ -97,7 +97,7 @@ public class MessageDeserializer {
                     String referenceName = ((BitBlockRefType) blockType).getReference();
                     blockType = this.factory.getReferenceBlock(referenceName); // change to reference type.
                     if (blockType == null) {
-                        throw new BlockCodecException("blockRef failure. \'" +
+                        throw new BlockCodecException("blockRef failed. \'" +
                                 referenceName + "\' " + seqType.getName() + "." + name + " references is not defined.");
                     }
                 }
@@ -123,7 +123,7 @@ public class MessageDeserializer {
                 try {
                     if (!readonly) {
                         if (!PropertyUtils.write(seqObj, name, blockValue)) {
-                            throw new BlockCodecException("property failure. " +
+                            throw new BlockCodecException("property failed. " +
                                     seqType.getName() + "." + name + " is null");
                         }
                     }
@@ -132,7 +132,7 @@ public class MessageDeserializer {
                     throw ex1;
                 }
                 catch (Exception ex2) {
-                    throw new BlockCodecException("decode failure. " +
+                    throw new BlockCodecException("decode failed. " +
                             seqType.getName() + "." + name + ". ex:" + ex2.getMessage(),
                             ex2);
                 }
@@ -146,7 +146,7 @@ public class MessageDeserializer {
             throw ex1;
         }
         catch (Exception ex2) {
-            throw new BlockCodecException("decode failure. " +
+            throw new BlockCodecException("decode failed. " +
                     seqName + "(" + seqType.getName() + ") ex:" + ex2.getMessage(),
                     ex2);
         }
@@ -163,32 +163,18 @@ public class MessageDeserializer {
             ValueFx fx = this.factory.getFx(blockType.getSizeFx().trim());
             bitLength = fx.decode(name, data, this.blockValues, this.byteStart, this.bitStart);
         }
-        else {
+        else if (blockType.getSizeBlock() != null && blockType.getSizeBlock().length() > 0) {
             String sizeBlock = blockType.getSizeBlock();
-            if (sizeBlock != null && sizeBlock.length() > 0) {
-                Object lenObject = this.blockValues.get(blockType.getSizeBlock());
-                if (lenObject == null) {
-                    throw new BlockCodecException("sizeBlock failure. block:" +
-                            name + " sizeBlock:" + blockType.getSizeBlock());
-                }
-                Integer size = (Integer) lenObject;
-                bitLength = size.intValue();
-                if ("+".equals(blockType.getSizeFactorOp())) {
-                    bitLength += blockType.getSizeFactor();
-                }
-                else if ("-".equals(blockType.getSizeFactorOp())) {
-                    bitLength -= blockType.getSizeFactor();
-                }
-                else if ("*".equals(blockType.getSizeFactorOp())) {
-                    bitLength *= blockType.getSizeFactor();
-                }
-                else if ("/".equals(blockType.getSizeFactorOp())) {
-                    bitLength /= blockType.getSizeFactor();
-                }
+            try {
+            	bitLength = SizeFx.calculate(sizeBlock, this.blockValues);
             }
-            else {
-                bitLength = blockType.getSize();
+            catch(Exception ex) {
+                throw new BlockCodecException("sizeBlock failed. block:" +
+                        name + " sizeBlock:" + blockType.getSizeBlock(), ex);
             }
+        }
+        else {
+            bitLength = blockType.getSize();
         }
 
         if (bitLength >= 0) {
@@ -208,7 +194,7 @@ public class MessageDeserializer {
                     PropertyUtils.write(codec, prop.getName(), prop.getValue());
                 }
                 catch (Exception ex) {
-                    throw new BlockCodecException("codec property failure. block:" +
+                    throw new BlockCodecException("codec property failed. block:" +
                             name + " propType:" + prop.getName() + " ex:" + ex.getMessage(),
                             ex);
                 }
@@ -221,7 +207,7 @@ public class MessageDeserializer {
             this.factory.valueHandled(name, new BlockInfo(value, bytes, bitLength));
         }
         catch (Exception ex) {
-            throw new BlockCodecException("decode failure. block:" +
+            throw new BlockCodecException("decode failed. block:" +
                     name + "(" + blockType.getName() + ") ex:" + ex.getMessage(),
                     ex);
         }
@@ -248,32 +234,18 @@ public class MessageDeserializer {
             ValueFx fx = this.factory.getFx(listType.getCountFx().trim());
             count = fx.decode(listName, data, this.blockValues, this.byteStart, this.bitStart);
         }
-        else {
+        else if (listType.getCountBlock() != null && listType.getCountBlock().length() > 0) {
             String countBlock = listType.getCountBlock();
-            if (countBlock != null && countBlock.length() > 0) {
-                Object lenObject = this.blockValues.get(countBlock);
-                if (lenObject == null) {
-                    throw new BlockCodecException("countBlock failure. block:" +
-                            listName + " countBlock:" + listType.getCountBlock());
-                }
-
-                count = (Integer) lenObject;
-                if ("+".equals(listType.getCountFactorOp())) {
-                    count += listType.getCountFactor();
-                }
-                else if ("-".equals(listType.getCountFactorOp())) {
-                    count -= listType.getCountFactor();
-                }
-                else if ("*".equals(listType.getCountFactorOp())) {
-                    count *= listType.getCountFactor();
-                }
-                else if ("/".equals(listType.getCountFactorOp())) {
-                    count /= listType.getCountFactor();
-                }
+            try {
+            	count = SizeFx.calculate(countBlock, this.blockValues);
             }
-            else {
-                count = listType.getCount();
+            catch(Exception ex) {
+                throw new BlockCodecException("countBlock failed. block:" +
+                		listName + " sizeBlock:" + listType.getCountBlock(), ex);
             }
+        }
+        else {
+            count = listType.getCount();
         }
 
         ArrayList<Object> objs = new ArrayList<Object>();
@@ -293,32 +265,18 @@ public class MessageDeserializer {
             ValueFx fx = this.factory.getFx(listType.getCountFx().trim());
             count = fx.decode(listName, data, this.blockValues, this.byteStart, this.bitStart);
         }
-        else {
+        else if (listType.getCountBlock() != null && listType.getCountBlock().length() > 0) {
             String countBlock = listType.getCountBlock();
-            if (countBlock != null && countBlock.length() > 0) {
-                Object lenObject = this.blockValues.get(countBlock);
-                if (lenObject == null) {
-                    throw new BlockCodecException("countBlock failure. block:" +
-                            listName + " countBlock:" + listType.getCountBlock());
-                }
-
-                count = (Integer) lenObject;
-                if ("+".equals(listType.getCountFactorOp())) {
-                    count += listType.getCountFactor();
-                }
-                else if ("-".equals(listType.getCountFactorOp())) {
-                    count -= listType.getCountFactor();
-                }
-                else if ("*".equals(listType.getCountFactorOp())) {
-                    count *= listType.getCountFactor();
-                }
-                else if ("/".equals(listType.getCountFactorOp())) {
-                    count /= listType.getCountFactor();
-                }
+            try {
+            	count = SizeFx.calculate(countBlock, this.blockValues);
             }
-            else {
-                count = listType.getCount();
+            catch(Exception ex) {
+                throw new BlockCodecException("countBlock failed. block:" +
+                		listName + " sizeBlock:" + listType.getCountBlock(), ex);
             }
+        }
+        else {
+            count = listType.getCount();
         }
 
         ArrayList<Object> objs = new ArrayList<Object>();
@@ -339,7 +297,7 @@ public class MessageDeserializer {
                         block.getOptionValue().equals(v) : !block.getOptionValue().equals(v);
             }
             catch (Exception ex) {
-                throw new BlockCodecException("existsProp failure. " +
+                throw new BlockCodecException("existsProp failed. " +
                         blockName + " ex:" + ex.getMessage(),
                         ex);
             }

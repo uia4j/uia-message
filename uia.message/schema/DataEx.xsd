@@ -83,8 +83,6 @@
                 <attribute name="sizeUnit" type="string" default="byte" />
                 <attribute name="size" type="int" default="1" />
                 <attribute name="sizeBlock" type="string" />
-                <attribute name="sizeFactor" type="int" default="1" />
-                <attribute name="sizeFactorOp" type="string" default="*" />
                 <attribute name="sizeFx" type="string" />
 		        <attribute name="readonly" type="boolean" default="false" />
             </extension>
@@ -95,8 +93,6 @@
             <extension base="uia:BitBlockType">
                 <attribute name="count" type="int" default="1" />
                 <attribute name="countBlock" type="string" />
-                <attribute name="countFactor" type="int" default="1" />
-                <attribute name="countFactorOp" type="string" default="/" />
                 <attribute name="countFx" type="string" />
             </extension>
         </complexContent>
@@ -106,8 +102,6 @@
             <extension base="uia:BitBlockSeqType">
                 <attribute name="count" type="int" default="1" />
                 <attribute name="countBlock" type="string" />
-                <attribute name="countFactor" type="int" default="1" />
-                <attribute name="countFactorOp" type="string" default="/" />
                 <attribute name="countFx" type="string" />
             </extension>
         </complexContent>

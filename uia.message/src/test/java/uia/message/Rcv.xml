@@ -43,7 +43,7 @@
             <Body name="root" className="uia.message.Rcv3">
                 <BlockRef name="header" reference="a" />
                 <Block name="dataLength" size="1" dataType="Int" readonly="true" />
-                <Block name="data" sizeBlock="dataLength" dataType="ByteArray" />
+                <Block name="data" sizeBlock="dataLength-8" dataType="ByteArray" />
                 <Block name="footer" size="8" sizeUnit="bit" dataType="String" />
             </Body>
         </Message>
