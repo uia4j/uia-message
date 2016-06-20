@@ -71,6 +71,10 @@ public class MessageSerializer {
         this.blockValues = new HashMap<String, Object>();
         this.resultBytes = new byte[0];
     }
+    
+    public MessageType getMessageType() {
+    	return this.mt;
+    }
 
     /**
      * Serialize the object into byte array.
