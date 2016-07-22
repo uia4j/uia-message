@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import uia.message.codec.BitCodec;
@@ -57,7 +58,7 @@ import uia.message.model.xml.FxType;
 import uia.message.model.xml.MessageType;
 
 /**
- * Data exchange factory. This factory can serialize and desizalize message depend on the XML defined by user.
+ * Data exchange factory. This factory can serialize and deserialize message depend on the XML defined by user.
  *
  *
  * @author Kyle
@@ -193,6 +194,23 @@ public class DataExFactory {
     }
 
     /**
+     * Serialize object of message to byte array.
+     *
+     * @param domain The domain name.
+     * @param messageName The message name defined in XML.
+     * @param value Object of message.
+     * @return Serialize result or null if no domain.
+     * @throws BlockCodecException Raise when serialize failed.
+     */
+    public static byte[] serialize(String domain, String messageName, Object value, Map<String, Object> initialValues) throws BlockCodecException {
+        DataExFactory factory = getFactory(domain);
+        if (factory == null) {
+            throw new NullPointerException("Domain:" + domain + " doesn't exist.");
+        }
+        return factory.createSerializer(messageName).write(value, initialValues);
+    }
+
+    /**
      * Deserialize byte array to object of message.
      *
      * @param domain The domain name.
@@ -210,6 +228,23 @@ public class DataExFactory {
     }
 
     /**
+     * Deserialize byte array to object of message.
+     *
+     * @param domain The domain name.
+     * @param messageName The message name defined in XML.
+     * @param value byte array of message.
+     * @return Deserialize result or null if no domain.
+     * @throws BlockCodecException Raise when deserialize failed.
+     */
+    public static Object deserialize(String domain, String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
+        DataExFactory factory = getFactory(domain);
+        if (factory == null) {
+            throw new NullPointerException("Domain:" + domain + " doesn't exist.");
+        }
+        return factory.createDeserializer(messageName).read(value, initialValues);
+    }
+
+    /**
      * Serialize object of message to byte array.
      *
      * @param messageName The message name defined in XML.
@@ -222,6 +257,18 @@ public class DataExFactory {
     }
 
     /**
+     * Serialize object of message to byte array.
+     *
+     * @param messageName The message name defined in XML.
+     * @param value Object of message.
+     * @return Serialize result.
+     * @throws BlockCodecException Raise when serialize failed.
+     */
+    public byte[] serialize(String messageName, Object value, Map<String, Object> initialValues) throws BlockCodecException {
+        return createSerializer(messageName).write(value, initialValues);
+    }
+
+    /**
      * Deserialize byte array to object of message.
      *
      * @param messageName The message name defined in XML.
@@ -231,6 +278,18 @@ public class DataExFactory {
      */
     public Object deserialize(String messageName, byte[] value) throws BlockCodecException {
         return createDeserializer(messageName).read(value);
+    }
+
+    /**
+     * Deserialize byte array to object of message.
+     *
+     * @param messageName The message name defined in XML.
+     * @param value byte array of message.
+     * @return Deserialize result.
+     * @throws BlockCodecException Raise when deserialize failed.
+     */
+    public Object deserialize(String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
+        return createDeserializer(messageName).read(value, initialValues);
     }
 
     /**

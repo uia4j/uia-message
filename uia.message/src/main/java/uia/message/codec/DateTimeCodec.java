@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -34,7 +34,7 @@ import uia.utils.ByteUtils;
  * Convert data between time and byte array. <br>
  * Suppose data is 8 bytes and bitLength will be ignored. <br>
  * Data is long value of time.
- * 
+ *
  * @author Kyle
  */
 public class DateTimeCodec implements BlockCodec<Date> {
@@ -43,11 +43,17 @@ public class DateTimeCodec implements BlockCodec<Date> {
     }
 
     @Override
+    public Date zeroValue() {
+        return new Date();
+    }
+
+    @Override
     public Date decode(byte[] data, int bitLength) throws BlockCodecException {
         try {
             long value = ByteUtils.longValue(data, bitLength);
             return new Date(value);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException("Date decode failure. " + ex.getMessage(), ex);
         }
     }
@@ -73,7 +79,8 @@ public class DateTimeCodec implements BlockCodec<Date> {
                 bitStart = 8 - bitStart;
             }
             return ByteUtils.copyBits(temp, byteStart, bitStart, bitLength);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException("Date encode failure. " + ex.getMessage(), ex);
         }
     }

@@ -25,6 +25,6 @@
  * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 /**
- * uia.message is core package used to serialize and deserialize data between object and byte array user defines.
+ * Core package used to serialize and deserialize data between object and byte array user defines.
  */
 package uia.message;

@@ -2,6 +2,11 @@ package uia.message.fx;
 
 import java.util.Map;
 
+/**
+ * 
+ * @author Kyle
+ *
+ */
 public interface ValueFx {
 
     public int encode(String blockName, Object value, Map<String, Object> parsed);

@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -28,35 +28,41 @@ package uia.message.codec;
 
 /**
  * Core interface used to encode and decode data between actual value and byte array.
- * 
+ *
  * @author Kyle
- * 
+ *
  * @param <T> Data type byte array to be converted to.
  */
 public interface BlockCodec<T> {
 
-	/**
-	 * Decode byte array to specific data.
-	 * 
-	 * @param data The byte array.
-	 * @param bitLength Effective bit length of data.
-	 * @return The result.
-	 * @throws BlockCodecException Decode fail.
-	 */
-	public T decode(byte[] data, int bitLength) throws BlockCodecException;
+    /**
+     * Decode byte array to specific data.
+     *
+     * @param data The byte array.
+     * @param bitLength Effective bit length of data.
+     * @return The result.
+     * @throws BlockCodecException Decode fail.
+     */
+    public T decode(byte[] data, int bitLength) throws BlockCodecException;
 
-	/**
-	 * Encode specific data to byte array.
-	 * 
-	 * @param data Data to be converted.
-	 * @param bitLength Effective bit length of result.
-	 * @return The result.
-	 * @throws BlockCodecException Encode fail.
-	 */
-	public byte[] encode(T data, int bitLength) throws BlockCodecException;
+    /**
+     * Encode specific data to byte array.
+     *
+     * @param data Data to be converted.
+     * @param bitLength Effective bit length of result.
+     * @return The result.
+     * @throws BlockCodecException Encode fail.
+     */
+    public byte[] encode(T data, int bitLength) throws BlockCodecException;
 
-	/**
-	 * Reset to initial state.
-	 */
-	public void reset();
+    /**
+     * Default value if bit length is zero.
+     * @return Default value.
+     */
+    public T zeroValue();
+
+    /**
+     * Reset to initial state.
+     */
+    public void reset();
 }

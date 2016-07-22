@@ -8,6 +8,11 @@ import org.antlr.runtime.CommonTokenStream;
 
 import uia.utils.ElemArithmetic;
 
+/**
+ * 
+ * @author Kyle
+ *
+ */
 public class SizeFx {
 
 	/**

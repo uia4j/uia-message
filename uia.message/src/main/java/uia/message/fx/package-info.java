@@ -24,36 +24,7 @@
  * * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package uia.message;
-
 /**
- * 
- * @author Kyle
- *
+ * Function to parse value.
  */
-public class BlockInfo {
-
-	private final Object value;
-
-	private final byte[] data;
-
-	private final int bitLength;
-
-	public BlockInfo(Object value, byte[] data, int bitLength) {
-		this.value = value;
-		this.data = data;
-		this.bitLength = bitLength;
-	}
-
-	public Object getValue() {
-		return this.value;
-	}
-
-	public byte[] getData() {
-		return this.data;
-	}
-
-	public int getBitLength() {
-		return this.bitLength;
-	}
-}
+package uia.message.fx;

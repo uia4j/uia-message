@@ -28,6 +28,11 @@ package uia.message;
 
 import uia.utils.ByteUtils;
 
+/**
+ * 
+ * @author Kyle
+ *
+ */
 public class SimpleBlockListener implements BlockListener {
 
     private String fix;

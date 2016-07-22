@@ -48,7 +48,7 @@ import uia.message.model.xml.DataExType;
 /**
  * Data exchange codec.
  * 
- * @author kyle
+ * @author Kyle
  */
 class DataExCodec {
 

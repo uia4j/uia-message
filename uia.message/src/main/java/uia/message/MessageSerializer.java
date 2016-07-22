@@ -28,6 +28,7 @@ package uia.message;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uia.message.codec.BlockCodec;
 import uia.message.codec.BlockCodecException;
@@ -71,9 +72,9 @@ public class MessageSerializer {
         this.blockValues = new HashMap<String, Object>();
         this.resultBytes = new byte[0];
     }
-    
+
     public MessageType getMessageType() {
-    	return this.mt;
+        return this.mt;
     }
 
     /**
@@ -88,6 +89,36 @@ public class MessageSerializer {
         this.indexBit = 0;
         //this.result.clear();
         this.blockValues.clear();
+
+        BitBlockSeqType bodyType = this.mt.getBody();
+        encode(bodyType.getName(), bodyType, obj);
+        //byte[] data = new byte[this.result.size()];
+        //for (int i = 0; i < this.result.size(); i++) {
+        //    data[i] = this.result.get(i).byteValue();
+        //}
+
+        //this.result.clear();
+        this.blockValues.clear();
+
+        //return data;
+
+        // be careful
+        return this.resultBytes;
+    }
+
+    /**
+     * Serialize the object into byte array.
+     *
+     * @param obj The object need to be serialized.
+     * @return Byte array.
+     * @throws BlockCodecException throw when serialize fail.
+     */
+    public byte[] write(Object obj, Map<String, Object> initialValues) throws BlockCodecException {
+        this.indexByte = 0;
+        this.indexBit = 0;
+        //this.result.clear();
+        this.blockValues.clear();
+        this.blockValues.putAll(initialValues);
 
         BitBlockSeqType bodyType = this.mt.getBody();
         encode(bodyType.getName(), bodyType, obj);
@@ -186,9 +217,9 @@ public class MessageSerializer {
         else if (blockType.getSizeBlock() != null && blockType.getSizeBlock().length() > 0) {
             String sizeBlock = blockType.getSizeBlock();
             try {
-            	bitLength = SizeFx.calculate(sizeBlock, this.blockValues);
+                bitLength = SizeFx.calculate(sizeBlock, this.blockValues);
             }
-            catch(Exception ex) {
+            catch (Exception ex) {
                 throw new BlockCodecException(name + "> codec sizeBlock parse failed. propType:" + name + " ex:" + ex.getMessage(), ex);
             }
         }
@@ -215,7 +246,7 @@ public class MessageSerializer {
         byte[] bytes;
         try {
             @SuppressWarnings("unchecked")
-            byte[] temp = codec.encode(obj, bitLength);
+            byte[] temp = bitLength == 0 ? new byte[0] : codec.encode(obj, bitLength);
             if (bitLength >= 0) {
                 bytes = ByteUtils.offsetBits(
                         temp,

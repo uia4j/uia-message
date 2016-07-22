@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -35,11 +35,11 @@ import uia.utils.StringUtils;
 
 /**
  * Convert data between string of time and byte array with specific format. <br>
- * 
+ *
  * <p>
  * XML sample:
  * </p>
- * 
+ *
  * <pre style="font-size:10px">
  * {@code
  * <CodecPropSet>
@@ -47,7 +47,7 @@ import uia.utils.StringUtils;
  * </CodecPropSet>
  * }
  * </pre>
- * 
+ *
  * @author Kyle
  */
 public class DateTimeStringCodec implements BlockCodec<Date> {
@@ -89,6 +89,11 @@ public class DateTimeStringCodec implements BlockCodec<Date> {
     }
 
     @Override
+    public Date zeroValue() {
+        return new Date();
+    }
+
+    @Override
     public Date decode(byte[] data, int bitLength) throws BlockCodecException {
         if (this.nullable) {
             boolean isNull = true;
@@ -106,8 +111,9 @@ public class DateTimeStringCodec implements BlockCodec<Date> {
         try {
             String value = new String(data);
             return new SimpleDateFormat(this.format).parse(value);
-        } catch (Exception ex) {
-            if(this.nullable) {
+        }
+        catch (Exception ex) {
+            if (this.nullable) {
                 return null;
             }
             throw new BlockCodecException("date decode failure. " + ex.getMessage(), ex);
@@ -123,7 +129,8 @@ public class DateTimeStringCodec implements BlockCodec<Date> {
                 return result;
             }
             return new SimpleDateFormat(this.format).format(data).getBytes();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException("date encode failure. " + ex.getMessage(), ex);
         }
     }

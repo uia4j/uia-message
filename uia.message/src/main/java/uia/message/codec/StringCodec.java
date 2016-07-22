@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import uia.utils.ByteUtils;
 
 /**
- * 
+ *
  * @author Kyle
  */
 public class StringCodec implements BlockCodec<String> {
@@ -62,6 +62,11 @@ public class StringCodec implements BlockCodec<String> {
     }
 
     @Override
+    public String zeroValue() {
+        return "";
+    }
+
+    @Override
     public String decode(byte[] data, int bitLength) throws BlockCodecException {
         try {
             byte[] value = new byte[data.length];
@@ -69,7 +74,8 @@ public class StringCodec implements BlockCodec<String> {
                 value[i] = data[i] != this.empty ? data[i] : 0x20;
             }
             return new String(Arrays.copyOfRange(value, 0, bitLength / 8), this.encoding).trim();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException("string decode failure. " + ex.getMessage(), ex);
         }
     }
@@ -83,7 +89,8 @@ public class StringCodec implements BlockCodec<String> {
             Arrays.fill(result, this.empty);
             System.arraycopy(str, 0, result, 0, Math.min(str.length, result.length));
             return result;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException("string encode failure. " + ex.getMessage(), ex);
         }
     }

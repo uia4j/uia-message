@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -30,22 +30,27 @@ import java.awt.Color;
 
 /**
  * Convert byte[] to boolean.
- * 
+ *
  * @author Kyle
  */
 public class ColorCodec implements BlockCodec<Color> {
 
-	@Override
-	public Color decode(byte[] data, int bitLength) throws BlockCodecException {
-		return new Color(0x0ff & data[0], 0x0ff & data[1], 0x0ff & data[2]);
-	}
+    @Override
+    public Color zeroValue() {
+        return Color.black;
+    }
 
-	@Override
-	public byte[] encode(Color data, int bitLength) throws BlockCodecException {
-		return new byte[] { (byte) data.getRed(), (byte) data.getGreen(), (byte) data.getBlue() };
-	}
+    @Override
+    public Color decode(byte[] data, int bitLength) throws BlockCodecException {
+        return new Color(0x0ff & data[0], 0x0ff & data[1], 0x0ff & data[2]);
+    }
 
-	@Override
-	public void reset() {
-	}
+    @Override
+    public byte[] encode(Color data, int bitLength) throws BlockCodecException {
+        return new byte[] { (byte) data.getRed(), (byte) data.getGreen(), (byte) data.getBlue() };
+    }
+
+    @Override
+    public void reset() {
+    }
 }

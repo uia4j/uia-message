@@ -4,14 +4,14 @@
  * * Redistribution and use in source and binary forms, with or without
  * * modification, are permitted provided that the following conditions are met:
  * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
+ * * * Redistributions of source code must retain the above copyright
+ * * notice, this list of conditions and the following disclaimer.
+ * * * Redistributions in binary form must reproduce the above copyright
+ * * notice, this list of conditions and the following disclaimer in the
+ * * documentation and/or other materials provided with the distribution.
+ * * * Neither the name of the {company name} nor the
+ * * names of its contributors may be used to endorse or promote products
+ * * derived from this software without specific prior written permission.
  * *
  * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
  * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -30,7 +30,7 @@ import java.util.Arrays;
 
 /**
  * Convert data between string of integer and byte array. <br>
- * 
+ *
  * @author Kyle
  */
 public class IntegerStringCodec implements BlockCodec<Integer> {
@@ -39,9 +39,15 @@ public class IntegerStringCodec implements BlockCodec<Integer> {
     public Integer decode(byte[] data, int bitLength) throws BlockCodecException {
         try {
             return Integer.parseInt(new String(data).trim());
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException("integerString decode failure. " + ex.getMessage(), ex);
         }
+    }
+
+    @Override
+    public Integer zeroValue() {
+        return 0;
     }
 
     @Override
@@ -57,7 +63,8 @@ public class IntegerStringCodec implements BlockCodec<Integer> {
             Arrays.fill(result, (byte) '0');
             System.arraycopy(str, 0, result, result.length - len, len);
             return result;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new BlockCodecException("integerString encode failure. " + ex.getMessage(), ex);
         }
     }
