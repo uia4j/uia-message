@@ -177,6 +177,13 @@ public class DataExFactory {
     }
 
     /**
+     * Clear all block listeners.
+     */
+    public void clearListeners() {
+        this.listeners.clear();
+    }
+
+    /**
      * Serialize object of message to byte array.
      *
      * @param domain The domain name.
