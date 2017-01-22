@@ -26,9 +26,7 @@
  *******************************************************************************/
 package uia.message.codec;
 
-import uia.utils.BooleanUtils;
 import uia.utils.ByteUtils;
-import uia.utils.StringUtils;
 
 /**
  * Convert data between long and byte array. <br>
@@ -37,25 +35,7 @@ import uia.utils.StringUtils;
  */
 public class LongCodec implements BlockCodec<Long> {
 
-    private final boolean orig;
-
-    private boolean unsigned;
-
     public LongCodec() {
-        this(false);
-    }
-
-    public LongCodec(boolean unsigned) {
-        this.unsigned = unsigned;
-        this.orig = this.unsigned;
-    }
-
-    public void setUnsigned(String yn) {
-        this.unsigned = StringUtils.bool(yn);
-    }
-
-    public String getUnsigned() {
-        return BooleanUtils.toYN(this.unsigned);
     }
 
     @Override
@@ -102,6 +82,6 @@ public class LongCodec implements BlockCodec<Long> {
 
     @Override
     public void reset() {
-        this.unsigned = this.orig;
+
     }
 }

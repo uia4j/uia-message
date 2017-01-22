@@ -319,12 +319,18 @@ public class MessageDeserializer {
         }
         else {
             count = listType.getCount();
+            if(count < 0) {
+            	count = Integer.MAX_VALUE;
+            }
         }
 
         ArrayList<Object> objs = new ArrayList<Object>();
         for (int i = 0; i < count; i++) {
             objs.add(decode(listName, listType, data, null));
-        }
+            if((this.byteStart * 8 + this.bitStart) >= data.length * 8) {
+            	break;
+            }
+         }
 
         this.factory.listTouched(listName, false, this.byteStart * 8 + this.bitStart);
         return objs;
