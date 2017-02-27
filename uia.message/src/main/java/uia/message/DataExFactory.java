@@ -1,28 +1,20 @@
 /*******************************************************************************
- * * Copyright (c) 2015, UIA
- * * All rights reserved.
- * * Redistribution and use in source and binary forms, with or without
- * * modification, are permitted provided that the following conditions are met:
- * *
- * * * Redistributions of source code must retain the above copyright
- * * notice, this list of conditions and the following disclaimer.
- * * * Redistributions in binary form must reproduce the above copyright
- * * notice, this list of conditions and the following disclaimer in the
- * * documentation and/or other materials provided with the distribution.
- * * * Neither the name of the {company name} nor the
- * * names of its contributors may be used to endorse or promote products
- * * derived from this software without specific prior written permission.
- * *
- * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
- * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * * DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
- * * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2017 UIA
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *******************************************************************************/
 package uia.message;
 
@@ -58,7 +50,7 @@ import uia.message.model.xml.FxType;
 import uia.message.model.xml.MessageType;
 
 /**
- * Data exchange factory. This factory can serialize and deserialize message depend on the XML defined by user.
+ * DataEx factory. This factory can serialize and deserialize message depending on definition in XML.
  *
  *
  * @author Kyle
@@ -84,7 +76,7 @@ public class DataExFactory {
     }
 
     /**
-     * Register a XML defines structure of messages with a specific domain name.
+     * Register a XML with a specific domain name.
      *
      * @param domain Domain name.
      * @param fileName XML file name.
@@ -97,7 +89,7 @@ public class DataExFactory {
     }
 
     /**
-     * Register a XML defines structure of messages with a specific domain name.
+     * Register a XML with a specific domain name.
      *
      * @param domain Domain name.
      * @param stream XML file stream.
@@ -110,7 +102,7 @@ public class DataExFactory {
     }
 
     /**
-     * Register a XML defines structure of messages with a specific domain name.
+     * Register a XML with a specific domain name.
      *
      * @param domain Domain name.
      * @param file XML file.
@@ -123,33 +115,38 @@ public class DataExFactory {
     }
 
     /**
-     * Get factory with specific domain name.
+     * Get DataEx factory with specific domain name.
      *
      * @param domain The domain name.
-     * @return The data exchange factory. Null if this domain is not registered.
+     * @return The DataEx factory. Null if this domain is not registered.
      */
     public static DataExFactory getFactory(String domain) {
         return DATA_EX_FACTORY.get(domain);
     }
 
-    /**
-     * Constructor.
-     *
-     * @param dataEx Data exchange information from XML.
-     */
     private DataExFactory(DataExType dataEx) {
         this.dataEx = dataEx;
         this.listeners = new ArrayList<BlockListener>();
-        loadBodySpace();
+        loadBlockSpace();
         loadMessageSpace();
         loadCodecSpace();
         loadFxSpace();
     }
 
+    /**
+     * Get Fx names defined in FxSpace.
+     *
+     * @return Fx names.
+     */
     public Set<String> getFxList() {
         return this.fxSpace.keySet();
     }
 
+    /**
+     * Get message names defined in SpaceSpace.
+     *
+     * @return Message names.
+     */
     public Set<String> getMessageList() {
         return this.messageSpace.keySet();
     }
@@ -347,8 +344,11 @@ public class DataExFactory {
         return decoder;
     }
 
-    private void loadBodySpace() {
+    private void loadBlockSpace() {
         this.bodySpace = new HashMap<String, BlockBaseType>();
+        if (this.dataEx.getBlockSpace() == null) {
+            return;
+        }
         for (BlockBaseType block : this.dataEx.getBlockSpace().getBlockOrBlockListOrBlockSeq()) {
             this.bodySpace.put(block.getName(), block);
         }
@@ -379,6 +379,25 @@ public class DataExFactory {
 
     private void loadCodecSpace() {
         this.codecSpace = new HashMap<String, BlockCodec<?>>();
+        this.codecSpace.put("Bcd", new IntegerBCDCodec());
+        this.codecSpace.put("BcdL", new IntegerBCDLSBCodec());
+        this.codecSpace.put("Bit", new BitCodec());
+        this.codecSpace.put("Boolean", new BooleanCodec());
+        this.codecSpace.put("Byte", new ByteCodec());
+        this.codecSpace.put("ByteArray", new ByteArrayCodec());
+        this.codecSpace.put("Color", new ColorCodec());
+        this.codecSpace.put("DateTime", new DateTimeCodec());
+        this.codecSpace.put("DateTimeString", new DateTimeStringCodec());
+        this.codecSpace.put("Double", new DoubleCodec());
+        this.codecSpace.put("Float", new DoubleCodec());
+        this.codecSpace.put("Int", new IntegerCodec(false));
+        this.codecSpace.put("IntL", new IntegerLSBCodec(false));
+        this.codecSpace.put("IntString", new IntegerStringCodec());
+        this.codecSpace.put("Long", new LongCodec());
+        this.codecSpace.put("String", new StringCodec());
+        this.codecSpace.put("UInt", new IntegerCodec(true));
+        this.codecSpace.put("UIntL", new IntegerLSBCodec(true));
+
         if (this.dataEx.getBlockCodecSpace() == null) {
             return;
         }
@@ -390,78 +409,6 @@ public class DataExFactory {
             }
             catch (Exception ex) {
             }
-        }
-
-        if (!this.codecSpace.containsKey("Boolean")) {
-            this.codecSpace.put("Boolean", new BooleanCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Bit")) {
-            this.codecSpace.put("Bit", new BitCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Byte")) {
-            this.codecSpace.put("Byte", new ByteCodec());
-        }
-
-        if (!this.codecSpace.containsKey("ByteArray")) {
-            this.codecSpace.put("ByteArray", new ByteArrayCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Double")) {
-            this.codecSpace.put("Double", new DoubleCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Float")) {
-            this.codecSpace.put("Float", new DoubleCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Bcd")) {
-            this.codecSpace.put("Bcd", new IntegerBCDCodec());
-        }
-
-        if (!this.codecSpace.containsKey("BcdL")) {
-            this.codecSpace.put("BcdL", new IntegerBCDLSBCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Int")) {
-            this.codecSpace.put("Int", new IntegerCodec(false));
-        }
-
-        if (!this.codecSpace.containsKey("UInt")) {
-            this.codecSpace.put("UInt", new IntegerCodec(true));
-        }
-
-        if (!this.codecSpace.containsKey("IntL")) {
-            this.codecSpace.put("IntL", new IntegerLSBCodec(false));
-        }
-
-        if (!this.codecSpace.containsKey("UIntL")) {
-            this.codecSpace.put("UIntL", new IntegerLSBCodec(true));
-        }
-
-        if (!this.codecSpace.containsKey("IntString")) {
-            this.codecSpace.put("IntString", new IntegerStringCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Long")) {
-            this.codecSpace.put("Long", new LongCodec());
-        }
-
-        if (!this.codecSpace.containsKey("String")) {
-            this.codecSpace.put("String", new StringCodec());
-        }
-
-        if (!this.codecSpace.containsKey("DateTime")) {
-            this.codecSpace.put("DateTime", new DateTimeCodec());
-        }
-
-        if (!this.codecSpace.containsKey("DateTimeString")) {
-            this.codecSpace.put("DateTimeString", new DateTimeStringCodec());
-        }
-
-        if (!this.codecSpace.containsKey("Color")) {
-            this.codecSpace.put("Color", new ColorCodec());
         }
     }
 

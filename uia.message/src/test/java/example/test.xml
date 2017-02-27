@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataEx>
+    <BlockSpace />
+    <MessageSpace>
+        <Message>
+            <Name>Case1</Name>
+            <Desc>The first case named Case1.</Desc>
+            <Body name="root" className="example.One">
+                <Block name="name" size="10" dataType="String" />
+                <Block name="sex" size="1" dataType="Int" />
+                <Block name="birthday" size="8" dataType="DateTimeString">
+                    <CodecPropSet>
+                        <Prop name="format">yyyyMMdd</Prop>
+                    </CodecPropSet>
+                </Block>
+            </Body>
+        </Message>
+    </MessageSpace>
+    <BlockCodecSpace />
+    <FxSpace />
+</DataEx>

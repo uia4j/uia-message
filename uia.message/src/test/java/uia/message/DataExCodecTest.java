@@ -1,28 +1,20 @@
 /*******************************************************************************
- * * Copyright (c) 2014, UIA
- * * All rights reserved.
- * * Redistribution and use in source and binary forms, with or without
- * * modification, are permitted provided that the following conditions are met:
- * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
- * *
- * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
- * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * * DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
- * * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2017 UIA
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *******************************************************************************/
 package uia.message;
 
@@ -38,13 +30,16 @@ import uia.message.model.xml.BlockBaseType;
 import uia.message.model.xml.BlockCodecSpaceType;
 import uia.message.model.xml.BlockCodecType;
 import uia.message.model.xml.BlockSpaceType;
+import uia.message.model.xml.CodecPropSetType;
 import uia.message.model.xml.DataExType;
+import uia.message.model.xml.FxSpaceType;
+import uia.message.model.xml.FxType;
 import uia.message.model.xml.MessageSpaceType;
 import uia.message.model.xml.MessageType;
 import uia.message.model.xml.PropType;
 
 /**
- * 
+ *
  * @author Kyle
  */
 public class DataExCodecTest {
@@ -63,25 +58,33 @@ public class DataExCodecTest {
         System.out.println();
         print(dxType.getBlockCodecSpace());
         System.out.println();
+        print(dxType.getFxSpace());
+        System.out.println();
     }
 
     private void print(BlockSpaceType bsType) {
-        System.out.println("BlockSpace>");
+        if (bsType == null) {
+            return;
+        }
+        System.out.println("BlockSpace> " + bsType.getBlockOrBlockListOrBlockSeq().size());
         for (BlockBaseType block : bsType.getBlockOrBlockListOrBlockSeq()) {
             if (block instanceof BitBlockRefType) {
                 print((BitBlockRefType) block);
-            } else if (block instanceof BitBlockSeqListType) {
+            }
+            else if (block instanceof BitBlockSeqListType) {
                 print((BitBlockSeqListType) block);
-            } else if (block instanceof BitBlockSeqType) {
+            }
+            else if (block instanceof BitBlockSeqType) {
                 print((BitBlockSeqType) block);
-            } else {
+            }
+            else {
                 print((BitBlockType) block);
             }
         }
     }
 
     private void print(MessageSpaceType msType) {
-        System.out.println("MessageSpace>");
+        System.out.println("MessageSpace> " + msType.getMessage().size());
         for (MessageType mt : msType.getMessage()) {
             System.out.println(mt.getName());
             print(mt.getBody());
@@ -89,7 +92,10 @@ public class DataExCodecTest {
     }
 
     private void print(BlockCodecSpaceType dsType) {
-        System.out.println("CodecSpace>");
+        if (dsType == null) {
+            return;
+        }
+        System.out.println("CodecSpace> " + dsType.getBlockCodec().size());
         for (BlockCodecType decoder : dsType.getBlockCodec()) {
             System.out.println(String.format("  %1$-10s> %2$s",
                     decoder.getDataType(),
@@ -97,32 +103,53 @@ public class DataExCodecTest {
         }
     }
 
+    private void print(FxSpaceType fxType) {
+        if (fxType == null) {
+            return;
+        }
+        System.out.println("FxSpace> " + fxType.getFx().size());
+        for (FxType decoder : fxType.getFx()) {
+            System.out.println(String.format("  %1$-10s> %2$s",
+                    decoder.getName(),
+                    decoder.getDriver()));
+        }
+    }
+
     private void print(BitBlockSeqType seq) {
+        System.out.println(String.format("  seq> %1$-15s> %2$s - %3$s",
+                seq.getName(),
+                seq.getClassName(),
+                seq.getDesc()));
         for (BlockBaseType block : seq.getBlockOrBlockListOrBlockSeq()) {
             if (block instanceof BitBlockRefType) {
                 print((BitBlockRefType) block);
-            } else if (block instanceof BitBlockSeqListType) {
+            }
+            else if (block instanceof BitBlockSeqListType) {
                 print((BitBlockSeqListType) block);
-            } else if (block instanceof BitBlockSeqType) {
+            }
+            else if (block instanceof BitBlockSeqType) {
                 print((BitBlockSeqType) block);
-            } else {
+            }
+            else {
                 print((BitBlockType) block);
             }
         }
     }
 
     private void print(BitBlockRefType block) {
-        System.out.println(String.format("  %1$-10s> (ref)",
+        System.out.println(String.format("  ref> %1$-15s> (ref)",
                 block.getName()));
     }
 
     private void print(BitBlockType block) {
-        System.out.println(String.format("  %1$-10s> %2$s(%3$s)",
+        System.out.println(String.format("  blk> %1$-15s> %2$s(%3$s) - %4$s",
                 block.getName(),
                 block.getDataType(),
-                block.getSize()));
-        if (block.getCodecPropSet() != null) {
-            for (PropType prop : block.getCodecPropSet().getProp()) {
+                block.getSize(),
+                block.getDesc()));
+        CodecPropSetType propSet = block.getCodecPropSet();
+        if (propSet != null) {
+            for (PropType prop : propSet.getProp()) {
                 System.out.println(String.format("   .%1$-8s= %2$s",
                         prop.getName(),
                         prop.getValue()));

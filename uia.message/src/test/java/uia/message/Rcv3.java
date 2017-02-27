@@ -1,72 +1,85 @@
-/*******************************************************************************
- * * Copyright (c) 2014, UIA
- * * All rights reserved.
- * * Redistribution and use in source and binary forms, with or without
- * * modification, are permitted provided that the following conditions are met:
- * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
- * *
- * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
- * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * * DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
- * * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
 package uia.message;
 
-/**
- * 
- * @author Kyle
- */
+import java.util.ArrayList;
+
 public class Rcv3 {
 
-	private byte[] header;
+    private int count;
 
-	private byte[] data;
+    private ArrayList<Integer> value1;
 
-	private String footer;
+    private ArrayList<String> value2;
 
-	public Rcv3() {
-		this.data = new byte[0];
-	}
+    private ArrayList<Value3> value3;
 
-	public byte[] getHeader() {
-		return this.header;
-	}
+    public Rcv3() {
+        this.value1 = new ArrayList<Integer>();
+        this.value2 = new ArrayList<String>();
+        this.value3 = new ArrayList<Value3>();
+    }
 
-	public void setHeader(byte[] header) {
-		this.header = header;
-	}
+    public int getCount() {
+        return this.count;
+    }
 
-	public int getDataLength() {
-		return this.data.length + 8;
-	}
+    public void setCount(int count) {
+        this.count = count;
+    }
 
-	public byte[] getData() {
-		return this.data;
-	}
+    public ArrayList<Integer> getValue1() {
+        return this.value1;
+    }
 
-	public void setData(byte[] data) {
-		this.data = data;
-	}
+    public void setValue1(ArrayList<Integer> value1) {
+        this.value1 = value1;
+    }
 
-	public String getFooter() {
-		return this.footer;
-	}
+    public ArrayList<String> getValue2() {
+        return this.value2;
+    }
 
-	public void setFooter(String footer) {
-		this.footer = footer;
-	}
+    public void setValue2(ArrayList<String> value2) {
+        this.value2 = value2;
+    }
+
+    public ArrayList<Value3> getValue3() {
+        return this.value3;
+    }
+
+    public void setValue3(ArrayList<Value3> value3) {
+        this.value3 = value3;
+    }
+
+    public static class Value3 {
+
+        private String name;
+
+        private int id;
+
+        public Value3() {
+
+        }
+
+        public Value3(String name, int id) {
+            this.name = name;
+            this.id = id;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+    }
+
 }

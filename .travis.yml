@@ -1,0 +1,10 @@
+---
+language: java
+
+script:
+  - mvn test -f ./uia.message/pom.xml
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk6

@@ -2,22 +2,21 @@
 <DataEx>
     <BlockSpace>
         <Block name="a" size="6" dataType="ByteArray" desc="" />
-        <Block name="b" size="14" dataType="DateTimeString" desc="">
+        <Block name="b" size="17" dataType="DateTimeString" desc="">
             <CodecPropSet>
-                <Prop name="format">yyyyMMddHHmmss</Prop>
+                <Prop name="format">yyyyMMddHHmmssSSS</Prop>
             </CodecPropSet>
         </Block>
     </BlockSpace>
-    <!--  -->
     <MessageSpace>
         <Message>
             <Name>Rcv1</Name>
-            <Desc></Desc>
+            <Desc>Normal Test</Desc>
             <Body name="root" className="uia.message.Rcv1">
                 <BlockRef name="header" reference="a" />
                 <BlockRef name="time" reference="b" />
                 <BlockSeq name="powerStatus" className="uia.message.Rcv1$PowerStatus">
-                    <Block name="power1" size="4" dataType="Int" />
+                    <Block name="power1" size="4" dataType="IntL" />
                     <Block name="power2" size="2" dataType="IntString" />
                     <Block name="power3" size="8" dataType="Double" />
                 </BlockSeq>
@@ -32,23 +31,30 @@
         </Message>
         <Message>
             <Name>Rcv2</Name>
+            <Desc>SizeBlock Test</Desc>
             <Body name="root" className="uia.message.Rcv2">
                 <BlockRef name="header" reference="a" />
-                <BlockRef name="time" reference="b" />
-                <Block name="footer" size="1" dataType="String" />
-            </Body>
-        </Message>
-        <Message>
-            <Name>Rcv3</Name>
-            <Body name="root" className="uia.message.Rcv3">
-                <BlockRef name="header" reference="a" />
                 <Block name="dataLength" size="1" dataType="Int" readonly="true" />
-                <Block name="data" sizeBlock="dataLength-8" dataType="ByteArray" />
+                <Block name="data" sizeBlock="dataLength-3*3+1" dataType="ByteArray" />
                 <Block name="footer" size="8" sizeUnit="bit" dataType="String" />
             </Body>
         </Message>
         <Message>
+            <Name>Rcv3</Name>
+            <Desc>List Test</Desc>
+            <Body name="root" className="uia.message.Rcv3">
+            	<Block name="count" size="2" dataType="Int" />
+                <BlockList name="value1" size="4" dataType="Int" countBlock="count" />
+                <BlockList name="value2" size="8" dataType="String" count="3" />
+	            <BlockSeqList name="value3" className="uia.message.Rcv3$Value3" countBlock="2*count-1">
+	                <Block name="name" size="10" dataType="String" />
+	                <Block name="id" size="2" dataType="Int" />
+	            </BlockSeqList>
+	        </Body>
+        </Message>
+        <Message>
             <Name>Rcv4</Name>
+            <Desc>OptionBlock Test</Desc>
             <Body name="root" className="uia.message.Rcv4">
                 <Block name="mask1" size="2" dataType="ByteArray" />
                 <Block name="mask2" size="2" dataType="Int" />
@@ -59,17 +65,17 @@
         </Message>
         <Message>
             <Name>Rcv5</Name>
-            <Desc></Desc>
+            <Desc>Number Test</Desc>
             <Body name="root" className="uia.message.Rcv5">
-                <Block name="voltCount" size="2" dataType="BcdL" readonly="true" />
-                <Block name="footer" size="2" dataType="IntL" />
-                <BlockList name="volts" size="6" sizeUnit="bit" dataType="Int" countBlock="voltCount" />
-                <Block name="id" size="4" sizeUnit="bit" dataType="Int" />
+                <Block name="value1" size="2" dataType="Int" />
+                <Block name="value2" size="2" dataType="IntL" />
+                <Block name="value3" size="2" dataType="Bcd" />
+                <Block name="value4" size="2" dataType="BcdL" />
             </Body>
         </Message>
         <Message>
             <Name>Rcv6</Name>
-            <Desc></Desc>
+            <Desc>String Test</Desc>
             <Body name="root" className="uia.message.Rcv6">
                 <Block name="content1" size="10" dataType="String">
                 	<CodecPropSet>
@@ -80,7 +86,6 @@
             </Body>
         </Message>
     </MessageSpace>
-    <!--  -->
     <BlockCodecSpace>
         <BlockCodec>
             <DataType>DateTime</DataType>

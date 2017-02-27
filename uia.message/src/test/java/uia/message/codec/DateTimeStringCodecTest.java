@@ -1,39 +1,31 @@
 /*******************************************************************************
- * * Copyright (c) 2014, UIA
- * * All rights reserved.
- * * Redistribution and use in source and binary forms, with or without
- * * modification, are permitted provided that the following conditions are met:
- * *
- * *     * Redistributions of source code must retain the above copyright
- * *       notice, this list of conditions and the following disclaimer.
- * *     * Redistributions in binary form must reproduce the above copyright
- * *       notice, this list of conditions and the following disclaimer in the
- * *       documentation and/or other materials provided with the distribution.
- * *     * Neither the name of the {company name} nor the
- * *       names of its contributors may be used to endorse or promote products
- * *       derived from this software without specific prior written permission.
- * *
- * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
- * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * * DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
- * * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2017 UIA
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *******************************************************************************/
 package uia.message.codec;
 
+import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import uia.utils.ByteUtils;
-
 /**
- * 
+ *
  * @author Kyle
  */
 public class DateTimeStringCodecTest {
@@ -45,37 +37,48 @@ public class DateTimeStringCodecTest {
     public void testDecode() throws Exception {
         DateTimeStringCodec codec = new DateTimeStringCodec();
         codec.setFormat("MMddyyyy");
-        System.out.println(codec.decode(new byte[] { 0x31, 0x30, 0x31, 0x39, 0x32, 0x30, 0x31, 0x33 }, 8));
+        Date dt1 = codec.decode(new byte[] { 0x31, 0x30, 0x31, 0x39, 0x32, 0x30, 0x31, 0x33 }, 8);
+
         codec.setFormat("(HHmmssyyyyMMdd)");
-        System.out.println(codec.decode("(10462820080604)".getBytes(), 16));
-        System.out.println();
+        Date dt2 = codec.decode("(18462820080604)".getBytes(), 16);
+
+        Calendar cal = Calendar.getInstance();
+        // 1
+        cal.setTime(dt1);
+        Assert.assertEquals(2013, cal.get(Calendar.YEAR), 0);
+        Assert.assertEquals(10, cal.get(Calendar.MONTH) + 1, 0);
+        Assert.assertEquals(19, cal.get(Calendar.DATE), 0);
+        // 2
+        cal.setTime(dt2);
+        Assert.assertEquals(2008, cal.get(Calendar.YEAR), 0);
+        Assert.assertEquals(6, cal.get(Calendar.MONTH) + 1, 0);
+        Assert.assertEquals(4, cal.get(Calendar.DATE), 0);
+        Assert.assertEquals(18, cal.get(Calendar.HOUR_OF_DAY), 0);
+        Assert.assertEquals(46, cal.get(Calendar.MINUTE), 0);
+        Assert.assertEquals(28, cal.get(Calendar.SECOND), 0);
+
+        // Null Value
+        codec.setFormat("MMddyyyy");
+        codec.setNullByte("00");
+        codec.setNullable("y");
+        Assert.assertEquals(null, codec.decode(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 8));
     }
 
     @Test
     public void testEncode() throws Exception {
         DateTimeStringCodec codec = new DateTimeStringCodec();
-        codec.setFormat("yyyyMMdd");
-        System.out.println(ByteUtils.toHexString(codec.encode(new Date(), 8)));
-        System.out.println();
-    }
 
-    @Test
-    public void testNullable00() throws Exception {
-        DateTimeStringCodec codec = new DateTimeStringCodec();
-        codec.setFormat("MMddyyyy");
+        long time = 1488005388080L;	// 2017-02-25 14:49
+        codec.setFormat("yyyyMMdd");
+        Assert.assertArrayEquals("20170225".getBytes(), codec.encode(new Date(time), 8));
+        codec.setFormat("yyyyMMddHHmm");
+        Assert.assertArrayEquals("201702251449".getBytes(), codec.encode(new Date(time), 12));
+
+        // Null Value
         codec.setNullByte("00");
         codec.setNullable("y");
-        System.out.println(codec.decode(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 8));
-        System.out.println(ByteUtils.toHexString(codec.encode(null, 8)));
-    }
-
-    @Test
-    public void testNullable20() throws Exception {
-        DateTimeStringCodec codec = new DateTimeStringCodec();
-        codec.setFormat("MMddyyyy");
-        codec.setNullByte("20");
-        codec.setNullable("y");
-        System.out.println(codec.decode(new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 }, 8));
-        System.out.println(ByteUtils.toHexString(codec.encode(null, 8)));
+        Assert.assertArrayEquals(
+                new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+                codec.encode(null, 12));
     }
 }

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataEx>
+    <BlockSpace />
+	<MessageSpace>
+		<Message>
+			<Name>Packet</Name>
+			<Body name="root" className="uia.netflow.packet.NFPacket">
+		        <Block name="version" size="2" dataType="Int" desc="NetFlow export format version number" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>PacketV1</Name>
+			<Body name="root" className="uia.netflow.packet.v1.NFPacketV1">
+		        <BlockSeq name="header" className="uia.netflow.packet.v1.NFHeaderV1">
+			        <Block name="version" size="2" dataType="Int" desc="NetFlow export format version number" />
+			        <Block name="count" size="2" dataType="Int" desc="Number of flows exported in this packet (1-30)" />
+			        <Block name="sysUptime" size="4" dataType="Int" desc="Current time in milliseconds since the export device booted" />
+			        <Block name="unixSecs" size="4" dataType="Int" desc="Current count of seconds since 0000 UTC 1970" />
+			        <Block name="unixNsecs" size="4" dataType="Int" desc="Residual nanoseconds since 0000 UTC 1970" />
+		        </BlockSeq>
+			</Body>
+		</Message>
+		<Message>
+			<Name>PacketV5</Name>
+			<Body name="root" className="uia.netflow.packet.v5.NFPacketV5">
+		        <BlockSeq name="header" className="uia.netflow.packet.v5.NFHeaderV5">
+			        <Block name="version" size="2" dataType="Int" desc="NetFlow export format version number" />
+			        <Block name="count" size="2" dataType="Int" desc="Number of flows exported in this packet (1-30)" />
+			        <Block name="sysUptime" size="4" dataType="Int" desc="Current time in milliseconds since the export device booted" />
+			        <Block name="unixSecs" size="4" dataType="Int" desc="Current count of seconds since 0000 UTC 1970" />
+			        <Block name="unixNsecs" size="4" dataType="Int" desc="Residual nanoseconds since 0000 UTC 1970" />
+			        <Block name="flowSeq" size="4" dataType="Int" desc="Sequence counter of total flows seen" />
+			        <Block name="engineType" size="1" dataType="Int" desc="Type of flow-switching engine" />
+			        <Block name="engineId" size="1" dataType="Int" desc="Slot number of the flow-switching engine" />
+			        <Block name="samplingInterval" size="2" dataType="ByteArray" desc="First two bits hold the sampling mode; remaining 14 bits hold value of sampling interval" />
+		        </BlockSeq>
+		        <BlockSeqList name="records" className="uia.netflow.packet.v5.NFRecordV5" countBlock="count">
+			        <Block name="srcAddr" size="4" dataType="ByteArray" desc="Source IP address" />
+			        <Block name="dstAddr" size="4" dataType="ByteArray" desc="Destination IP address" />
+			        <Block name="nextHop" size="4" dataType="ByteArray" desc="IP address of next hop router" />
+			        <Block name="input" size="2" dataType="ByteArray" desc="SNMP index of input interface" />
+			        <Block name="output" size="2" dataType="ByteArray" desc="SNMP index of output interface" />
+			        <Block name="dPkts" size="4" dataType="Int" desc="Packets in the flow" />
+			        <Block name="dOctets" size="4" dataType="Int" desc="Total number of Layer 3 bytes in the packets of the flow" />
+			        <Block name="first" size="4" dataType="Int" desc="SysUptime at start of flow" />
+			        <Block name="last" size="4" dataType="Int" desc="SysUptime at the time the last packet of the flow was received" />
+			        <Block name="srcPort" size="2" dataType="UInt" desc="TCP/UDP source port number or equivalent" />
+			        <Block name="dstPort" size="2" dataType="UInt" desc="TCP/UDP destination port number or equivalent" />
+			        <Block name="pad1" size="1" dataType="Byte" desc="Unused (zero) bytes" />
+			        <Block name="tcpFlags" size="1" dataType="Byte" desc="Cumulative OR of TCP flags" />
+			        <Block name="protocol" size="1" dataType="Byte" desc="IP protocol type (for example, TCP = 6; UDP = 17)" />
+			        <Block name="typeOfServ" size="1" dataType="Byte" desc="IP type of service (ToS)" />
+			        <Block name="srcAs" size="2" dataType="UInt" desc="Autonomous system number of the source, either origin or peer" />
+			        <Block name="dstAs" size="2" dataType="UInt" desc="Autonomous system number of the destination, either origin or peer" />
+			        <Block name="srcMask" size="1" dataType="Byte" desc="Source address prefix mask bits" />
+			        <Block name="dstMask" size="1" dataType="Byte" desc="Destination address prefix mask bits" />
+			        <Block name="pad2" size="2" dataType="ByteArray" desc="Unused (zero) bytes" />
+		        </BlockSeqList>
+			</Body>
+		</Message>
+		<Message>
+			<Name>PacketV6</Name>
+			<Body name="root" className="uia.netflow.packet.v6.NFPacketV6">
+		        <BlockSeq name="header" className="uia.netflow.packet.v6.NFHeaderV6">
+			        <Block name="version" size="2" dataType="Int" desc="NetFlow export format version number" />
+			        <Block name="count" size="2" dataType="Int" desc="Number of flows exported in this packet (1-30)" />
+			        <Block name="sysUptime" size="4" dataType="Int" desc="Current time in milliseconds since the export device booted" />
+			        <Block name="unixSecs" size="4" dataType="Int" desc="Current count of seconds since 0000 UTC 1970" />
+			        <Block name="unixNsecs" size="4" dataType="Int" desc="Residual nanoseconds since 0000 UTC 1970" />
+			        <Block name="flowSeq" size="4" dataType="Int" desc="Sequence counter of total flows seen" />
+			        <Block name="engineType" size="1" dataType="Int" desc="Type of flow-switching engine" />
+			        <Block name="engineId" size="1" dataType="Int" desc="Slot number of the flow-switching engine" />
+			        <Block name="samplingInterval" size="2" dataType="ByteArray" desc="First two bits hold the sampling mode; remaining 14 bits hold value of sampling interval" />
+		        </BlockSeq>
+			</Body>
+		</Message>
+		<Message>
+			<Name>PacketV7</Name>
+			<Body name="root" className="uia.netflow.packet.v7.NFPacketV7">
+		        <BlockSeq name="header" className="uia.netflow.packet.v7.NFHeaderV7">
+			        <Block name="version" size="2" dataType="Int" desc="NetFlow export format version number" />
+			        <Block name="count" size="2" dataType="Int" desc="Number of flows exported in this packet (1-30)" />
+			        <Block name="sysUptime" size="4" dataType="Int" desc="Current time in milliseconds since the export device booted" />
+			        <Block name="unixSecs" size="4" dataType="Int" desc="Current count of seconds since 0000 UTC 1970" />
+			        <Block name="unixNsecs" size="4" dataType="Int" desc="Residual nanoseconds since 0000 UTC 1970" />
+			        <Block name="flowSeq" size="4" dataType="Int" desc="Sequence counter of total flows seen" />
+			        <Block name="reserved" size="4" dataType="ByteArray" desc="Unused (zero) bytes" />
+		        </BlockSeq>
+			</Body>
+		</Message>
+		<Message>
+			<Name>PacketV8</Name>
+			<Body name="root" className="uia.netflow.packet.v8.NFPacketV8">
+		        <BlockSeq name="header" className="uia.netflow.packet.v8.NFHeaderV8">
+			        <Block name="version" size="2" dataType="Int" desc="NetFlow export format version number" />
+			        <Block name="count" size="2" dataType="Int" desc="Number of flows exported in this packet (1-30)" />
+			        <Block name="sysUptime" size="4" dataType="Int" desc="Current time in milliseconds since the export device booted" />
+			        <Block name="unixSecs" size="4" dataType="Int" desc="Current count of seconds since 0000 UTC 1970" />
+			        <Block name="unixNsecs" size="4" dataType="Int" desc="Residual nanoseconds since 0000 UTC 1970" />
+			        <Block name="flowSeq" size="4" dataType="Int" desc="Sequence counter of total flows seen" />
+			        <Block name="engineType" size="1" dataType="Int" desc="	Type of flow switching engine" />
+			        <Block name="engineId" size="1" dataType="Int" desc="ID number of the flow switching engine" />
+			        <Block name="aggregation" size="1" dataType="Int" desc="Aggregation method being used" />
+			        <Block name="aggVersion" size="1" dataType="Int" desc="Version of the aggregation export" />
+			        <Block name="reserved" size="4" dataType="ByteArray" desc="Unused (zero) bytes" />
+		        </BlockSeq>
+			</Body>
+		</Message>
+		<Message>
+			<Name>PacketV9</Name>
+			<Body name="root" className="uia.netflow.packet.v9.NFPacketV9">
+		        <BlockSeq name="header" className="uia.netflow.packet.v9.NFHeaderV9">
+			        <Block name="version" size="2" dataType="Int" desc="NetFlow export format version number" />
+			        <Block name="count" size="2" dataType="Int" desc="Number of flows exported in this packet (1-30)" />
+			        <Block name="sysUptime" size="4" dataType="Int" desc="Current time in milliseconds since the export device booted" />
+			        <Block name="unixSecs" size="4" dataType="Int" desc="Current count of seconds since 0000 UTC 1970" />
+			        <Block name="packageSeq" size="4" dataType="Int" desc="Sequence counter of all export packets sent by the export device" />
+			        <Block name="sourceId" size="4" dataType="ByteArray" desc="A 32-bit value that is used to guarantee uniqueness for all flows exported from a particular device" />
+		        </BlockSeq>
+		        <BlockSeqList name="records" className="uia.netflow.packet.v9.NFRecordV9" count="-1">
+			        <BlockSeq name="template" className="uia.netflow.packet.v9.NFTemplateFlowSetV9">
+				        <Block name="flowSetId" size="2" dataType="Int" desc="" />
+				        <Block name="length" size="2" dataType="Int" readonly="true" desc="" />
+				        <Block name="binary" sizeBlock="length-4" dataType="ByteArray" desc="Template detail(PacketV9TemplateRecordSet)"/>
+			        </BlockSeq>
+			        <BlockSeq name="data" className="uia.netflow.packet.v9.NFDataFlowSetV9">
+				        <Block name="flowSetId" size="2" dataType="Int" desc="" />
+				        <Block name="length" size="2" dataType="Int" readonly="true" desc="" />
+				        <Block name="binary" sizeBlock="length-8" dataType="ByteArray" desc="Data records" />
+				        <Block name="pad" size="4" dataType="ByteArray" />
+			        </BlockSeq>
+		        </BlockSeqList>
+			</Body>
+		</Message>
+		<Message>
+			<Name>PacketV9TemplateSet</Name>
+			<Body name="root" className="uia.netflow.packet.v9.NFTemplateSetV9">
+		        <BlockSeqList name="templates" className="uia.netflow.packet.v9.NFTemplateV9" count="-1">
+			        <Block name="templateId" size="2" dataType="Int" desc="" />
+			        <Block name="fieldCount" size="2" dataType="Int" readonly="true" desc="" />
+			        <BlockSeqList name="fields" countBlock="fieldCount" className="uia.netflow.packet.v9.NFFieldV9">
+				        <Block name="dataType" size="2" dataType="Int" desc="" />
+				        <Block name="dataLength" size="2" dataType="Int" desc="" />
+			        </BlockSeqList>
+		        </BlockSeqList>
+	        </Body>	
+		</Message>
+	</MessageSpace>
+	<BlockCodecSpace />
+</DataEx>

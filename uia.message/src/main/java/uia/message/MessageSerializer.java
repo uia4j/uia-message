@@ -1,28 +1,20 @@
 /*******************************************************************************
- * * Copyright (c) 2015, UIA
- * * All rights reserved.
- * * Redistribution and use in source and binary forms, with or without
- * * modification, are permitted provided that the following conditions are met:
- * *
- * * * Redistributions of source code must retain the above copyright
- * * notice, this list of conditions and the following disclaimer.
- * * * Redistributions in binary form must reproduce the above copyright
- * * notice, this list of conditions and the following disclaimer in the
- * * documentation and/or other materials provided with the distribution.
- * * * Neither the name of the {company name} nor the
- * * names of its contributors may be used to endorse or promote products
- * * derived from this software without specific prior written permission.
- * *
- * * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
- * * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * * DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
- * * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2017 UIA
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *******************************************************************************/
 package uia.message;
 
@@ -42,10 +34,11 @@ import uia.message.model.xml.BlockBaseType;
 import uia.message.model.xml.MessageType;
 import uia.message.model.xml.PropType;
 import uia.utils.ByteUtils;
+import uia.utils.ElemArithmetic;
 import uia.utils.PropertyUtils;
 
 /**
- * Depend on the structure defines in XML to serialize a object.
+ * Serialize a object to byte array.
  *
  * @author Kyle
  */
@@ -54,8 +47,6 @@ public class MessageSerializer {
     private final DataExFactory factory;
 
     private final MessageType mt;
-
-    // private final ArrayList<Byte> result;
 
     private byte[] resultBytes;
 
@@ -68,71 +59,58 @@ public class MessageSerializer {
     MessageSerializer(DataExFactory factory, MessageType mt) {
         this.factory = factory;
         this.mt = mt;
-        //this.result = new ArrayList<Byte>();
         this.blockValues = new HashMap<String, Object>();
         this.resultBytes = new byte[0];
     }
 
+    /**
+     * Get message structure definition.
+     *
+     * @return Message structure definition.
+     */
     public MessageType getMessageType() {
         return this.mt;
     }
 
     /**
-     * Serialize the object into byte array.
+     * Serialize the object to byte array.
      *
      * @param obj The object need to be serialized.
      * @return Byte array.
-     * @throws BlockCodecException throw when serialize fail.
+     * @throws BlockCodecException raise when the object can't be serialized.
      */
     public byte[] write(Object obj) throws BlockCodecException {
         this.indexByte = 0;
         this.indexBit = 0;
-        //this.result.clear();
         this.blockValues.clear();
+        this.resultBytes = new byte[0];
 
         BitBlockSeqType bodyType = this.mt.getBody();
         encode(bodyType.getName(), bodyType, obj);
-        //byte[] data = new byte[this.result.size()];
-        //for (int i = 0; i < this.result.size(); i++) {
-        //    data[i] = this.result.get(i).byteValue();
-        //}
-
-        //this.result.clear();
         this.blockValues.clear();
 
-        //return data;
-
-        // be careful
         return this.resultBytes;
     }
 
     /**
-     * Serialize the object into byte array.
+     * Serialize the object to byte array.
      *
      * @param obj The object need to be serialized.
      * @return Byte array.
-     * @throws BlockCodecException throw when serialize fail.
+     * @throws BlockCodecException raise when the object can't be serialized.
      */
     public byte[] write(Object obj, Map<String, Object> initialValues) throws BlockCodecException {
         this.indexByte = 0;
         this.indexBit = 0;
-        //this.result.clear();
         this.blockValues.clear();
         this.blockValues.putAll(initialValues);
+        this.resultBytes = new byte[0];
 
         BitBlockSeqType bodyType = this.mt.getBody();
         encode(bodyType.getName(), bodyType, obj);
-        //byte[] data = new byte[this.result.size()];
-        //for (int i = 0; i < this.result.size(); i++) {
-        //    data[i] = this.result.get(i).byteValue();
-        //}
 
-        //this.result.clear();
         this.blockValues.clear();
 
-        //return data;
-
-        // be careful
         return this.resultBytes;
     }
 
@@ -217,7 +195,8 @@ public class MessageSerializer {
         else if (blockType.getSizeBlock() != null && blockType.getSizeBlock().length() > 0) {
             String sizeBlock = blockType.getSizeBlock();
             try {
-                bitLength = SizeFx.calculate(sizeBlock, this.blockValues);
+                bitLength = (int) new ElemArithmetic(sizeBlock).calculate(this.blockValues);
+                // bitLength = SizeFx.calculate(sizeBlock, this.blockValues);
             }
             catch (Exception ex) {
                 throw new BlockCodecException(name + "> codec sizeBlock parse failed. propType:" + name + " ex:" + ex.getMessage(), ex);
