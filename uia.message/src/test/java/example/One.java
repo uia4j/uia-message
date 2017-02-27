@@ -1,5 +1,6 @@
 package example;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class One {
@@ -38,5 +39,10 @@ public class One {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public String getBirthday(String fmt) {
+        return new SimpleDateFormat(fmt).format(this.birthday);
+
     }
 }

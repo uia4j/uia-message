@@ -40,7 +40,7 @@ public class ExampleTest {
         One one = (One) DataExFactory.deserialize("cases", "Case1", data);
         Assert.assertEquals("Judy", one.getName());
         Assert.assertEquals(0, one.getSex(), 0);
-        Assert.assertEquals(698342400000L, one.getBirthday().getTime(), 0);
+        Assert.assertEquals("19920218", one.getBirthday("yyyyMMdd"));
 
         // deserialize
         one.setName("Jack");
