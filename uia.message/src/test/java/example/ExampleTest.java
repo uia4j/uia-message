@@ -31,24 +31,24 @@ public class ExampleTest {
         // register
         DataExFactory.register("cases", ExampleTest.class.getResourceAsStream("test.xml"));
 
-        // serialize
+        // deserialize
         byte[] data = new byte[] {
-                0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // Judy
-                0x00,                                                       // sex: 0
-                0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday: 19920218
+                0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name
+                0x00,                                                       // sex
+                0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday
         };
         One one = (One) DataExFactory.deserialize("cases", "Case1", data);
         Assert.assertEquals("Judy", one.getName());
         Assert.assertEquals(0, one.getSex(), 0);
         Assert.assertEquals("19920218", one.getBirthday("yyyyMMdd"));
 
-        // deserialize
+        // serialize
         one.setName("Jack");
         one.setSex(1);
         byte[] result = DataExFactory.serialize("cases", "Case1", one);
         Assert.assertArrayEquals(
                 new byte[] {
-                        0x4a, 0x61, 0x63, 0x6b, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // Jack
+                        0x4a, 0x61, 0x63, 0x6b, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name: Jack
                         0x01,                                                       // sex: 1
                         0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday: 19920218
                 },

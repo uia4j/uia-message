@@ -1,24 +1,28 @@
 UIA message
 ================
 
-[![Build Status](https://travis-ci.org/gazer2kanlin/uia.message4j.svg?branch=master)](https://travis-ci.org/gazer2kanlin/uia.message4j)
+[![Build Status](https://travis-ci.org/gazer2kanlin/uia.message4j.svg?branch=0.5.0.0)](https://travis-ci.org/gazer2kanlin/uia.message4j)
 
 Serialize & deserialize binary message depending on XML.
 
 ## Feature
 
 * Use XML to define data structure.
-
 * Map binary to POJO.
-
 * Support custom data types.
 
 
 ## Example
 
-More detail, check test cases.
+This test case exists in example package of test source code.
+
+__Case1__ defines binary structure of example.One class which has 3 properties:
+* __name__ - String, max length is 10.
+* __sex__ - Int, 0: female, 1:male.
+* __birthdy__ - DataString, format is yyyyMMdd.
 
 XML test.xml:
+
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <DataEx>
@@ -43,10 +47,11 @@ XML test.xml:
 </DataEx>
 ```
 
-POJO:
+POJO One.java:
 ```
 package example;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class One {
@@ -86,46 +91,62 @@ public class One {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
+    public String getBirthday(String fmt) {
+        return new SimpleDateFormat(fmt).format(this.birthday);
+
+    }
 }
 ```
 
-Binary data:
+Depending on definition of __Case1__ in test.xml, the binary will be:
 
 ```
 byte[] data = new byte[] {
-        0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-        0x00,
-        0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38
+        0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name
+        0x00,                                                       // sex
+        0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday
 };
 ```
 
-Code:
+Use DataExFactory to serialize and deserialize:
+
+* Domain - cases
+* Message - Case1
+
 ```
 // register
 DataExFactory.register("cases", ExampleTest.class.getResourceAsStream("test.xml"));
 
-// serialize
+// deserialize
+byte[] data = new byte[] {
+        0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name
+        0x00,                                                       // sex
+        0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday
+};
 One one = (One) DataExFactory.deserialize("cases", "Case1", data);
 Assert.assertEquals("Judy", one.getName());
 Assert.assertEquals(0, one.getSex(), 0);
-Assert.assertEquals(698342400000L, one.getBirthday().getTime(), 0);
+Assert.assertEquals("19920218", one.getBirthday("yyyyMMdd"));
 
-// deserialize
+// serialize
 one.setName("Jack");
 one.setSex(1);
 byte[] result = DataExFactory.serialize("cases", "Case1", one);
 Assert.assertArrayEquals(
         new byte[] {
-                0x4a, 0x61, 0x63, 0x6b, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // Jack
+                0x4a, 0x61, 0x63, 0x6b, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name: Jack
                 0x01,                                                       // sex: 1
                 0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday: 19920218
         },
         result);
 ```
 
+More test cases, check test source code.
+
 
 ## Maven
-Because uia.message is distributed on jcenter, configure Maven local repository first.
+Because uia.message uses [uia.utils](https://github.com/gazer2kanlin/uia.utils4j) deployed on jcenter, configure local Maven __settings.xml__ first.
 
 settings.xml in .m2 directory:
 ```
@@ -172,44 +193,44 @@ pom.xml in your project:
 ### default
 Below are default data types uia.messaege supports.
 
-* Boolean - boolean
+* __Boolean__ - boolean
 
-* Bit - boolean
+* __Bit__ - boolean (1 = true, 0 = false)
 
-* Byte - byte (1 = true, 0 = false)
+* __Byte__ - byte
 
-* ByteArray - byte[ ]
+* __ByteArray__ - byte[ ]
 
-* Double - double
+* __Double__ - double
 
-* Float - float
+* __Float__ - float
 
-* Bcd - int (Binary-coded decimal) ex: 256 = 0x02,0x56
+* __Bcd__ - int (Binary-coded decimal) ex: 256 = 0x02,0x56
 
-* BcdL - int (Binary-coded decimal, low byte first) ex: 256 = 0x56,0x02
+* __BcdL__ - int (Binary-coded decimal, LSB) ex: 256 = 0x56,0x02
 
-* Int - int
+* __Int__ - int
 
-* IntL - int (low byte first) ex: 256 = 0x00,0x01
+* __IntL__ - int (low byte first) ex: 256 = 0x00,0x01
 
-* UInt - int (Unsigned integer)
+* __UInt__ - int (Unsigned integer)
 
-* UIntL - int. (Unsigned integer, low byte first) ex: 256 = 0x00,0x01
+* __UIntL__ - int. (Unsigned integer, LSB) ex: 256 = 0x00,0x01
 
-* IntString - int, ex 12 = 0x31,0x32
+* __IntString__ - int, ex 12 = 0x31,0x32
 
-* Long - long
+* __Long__ - long
 
-* String - String
+* __String__ - String
 
-* DateTime - java.util.Date
+* __DateTime__ - java.util.Date
 
-* DateTimeString - java.util.Date, Default format: yyyyMMddHHmmss
+* __DateTimeString__ - java.util.Date, Default format: yyyyMMddHHmmss
 
-* Color - java.awt.Color, ex: Color.red = 0xff,0x00,0x00
+* __Color__ - java.awt.Color, ex: Color.red = 0xff,0x00,0x00
 
 ### customize
-Use ```<BlockCodecSpace />``` to define new data types. Classes of new types have to implement the interface ```uia.message.codec.BlockCodec```.
+Use ```<BlockCodecSpace />``` to define new data types. Classes of new types have to implement the interface __uia.message.codec.BlockCodec__.
 
 ## Dependency Libraries
 
