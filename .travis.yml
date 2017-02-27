@@ -2,7 +2,7 @@
 language: java
 
 script:
-  - mvn test -f ./uia.message/pom.xml
+  - mvn test -f ./uia.message/pom.xml --settings .travis.settings.xml
 
 jdk:
   - oraclejdk8
