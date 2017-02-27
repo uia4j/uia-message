@@ -18,8 +18,6 @@
  *******************************************************************************/
 package uia.message;
 
-import java.io.File;
-
 import org.junit.Test;
 
 import uia.message.model.xml.BitBlockRefType;
@@ -49,9 +47,7 @@ public class DataExCodecTest {
 
     @Test
     public void testDecode() throws Exception {
-        File f = new File(DataExCodecTest.class.getResource("Rcv.xml").toURI());
-
-        DataExType dxType = DataExCodec.decode(f);
+        DataExType dxType = DataExCodec.decode(DataExCodecTest.class.getResourceAsStream("Rcv.xml"));
         print(dxType.getBlockSpace());
         System.out.println();
         print(dxType.getMessageSpace());

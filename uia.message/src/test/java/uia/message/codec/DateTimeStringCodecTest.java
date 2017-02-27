@@ -68,11 +68,20 @@ public class DateTimeStringCodecTest {
     public void testEncode() throws Exception {
         DateTimeStringCodec codec = new DateTimeStringCodec();
 
-        long time = 1488005388080L;	// 2017-02-25 14:49
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 1992);
+        cal.set(Calendar.MONTH, 1);
+        cal.set(Calendar.DATE, 18);
+        cal.set(Calendar.HOUR_OF_DAY, 13);
+        cal.set(Calendar.MINUTE, 20);
+        cal.set(Calendar.SECOND, 15);
+        cal.set(Calendar.MILLISECOND, 27);
+
+        long time = cal.getTimeInMillis();
         codec.setFormat("yyyyMMdd");
-        Assert.assertArrayEquals("20170225".getBytes(), codec.encode(new Date(time), 8));
+        Assert.assertArrayEquals("19920218".getBytes(), codec.encode(new Date(time), 8));
         codec.setFormat("yyyyMMddHHmm");
-        Assert.assertArrayEquals("201702251449".getBytes(), codec.encode(new Date(time), 12));
+        Assert.assertArrayEquals("199202181320".getBytes(), codec.encode(new Date(time), 12));
 
         // Null Value
         codec.setNullByte("00");

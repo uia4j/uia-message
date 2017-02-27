@@ -18,8 +18,6 @@
  *******************************************************************************/
 package uia.message;
 
-import java.io.File;
-import java.net.URL;
 import java.util.Date;
 
 import org.junit.Assert;
@@ -37,8 +35,7 @@ public class RcvTest {
 
     @BeforeClass
     public static void startup() throws Exception {
-        URL url = RcvTest.class.getResource("Rcv.xml");
-        DataExFactory.register("Test", new File(url.toURI()));
+        DataExFactory.register("Test", RcvTest.class.getResourceAsStream("Rcv.xml"));
     }
 
     @Test
