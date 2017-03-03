@@ -3,6 +3,10 @@ language: java
 
 script:
   - mvn test -f ./uia.message/pom.xml --settings .travis.settings.xml
+  - mvn cobertura:cobertura -f ./uia.message/pom.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 jdk:
   - oraclejdk8
