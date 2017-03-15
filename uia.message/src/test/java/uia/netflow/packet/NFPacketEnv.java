@@ -18,8 +18,6 @@
  *******************************************************************************/
 package uia.netflow.packet;
 
-import java.io.File;
-
 import uia.message.DataExFactory;
 
 /**
@@ -34,6 +32,6 @@ public class NFPacketEnv {
 
     public static void initial() throws Exception {
         String file = NFPacketEnv.class.getResource("NFPacket.xml").getFile();
-        DataExFactory.register(DOMAIN_NAME, new File(file));
+        DataExFactory.register(DOMAIN_NAME, file);
     }
 }

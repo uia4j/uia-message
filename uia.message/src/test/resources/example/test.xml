@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DataEx>
-    <BlockSpace />
     <MessageSpace>
         <Message>
             <Name>Case1</Name>
@@ -16,6 +15,4 @@
             </Body>
         </Message>
     </MessageSpace>
-    <BlockCodecSpace />
-    <FxSpace />
 </DataEx>
