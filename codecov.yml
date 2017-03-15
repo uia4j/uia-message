@@ -1,0 +1,2 @@
+ignore:
+  - "uia.message/src/main/java/uia/message/model/xml"
