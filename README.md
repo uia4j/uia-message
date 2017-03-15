@@ -1,4 +1,4 @@
-UIA message
+UIA Message
 ================
 
 [![Build Status](https://travis-ci.org/gazer2kanlin/uia.message4j.svg?branch=0.5.0.0)](https://travis-ci.org/gazer2kanlin/uia.message4j)
@@ -12,6 +12,8 @@ Serialize & deserialize binary message depending on XML.
 * Use XML to define data structure.
 * Map binary to POJO.
 * Support custom data types.
+* Calculate size or count using elementary arithmetic.
+* Calculate size or count using custom function.
 
 
 ## Example
@@ -237,9 +239,7 @@ Use ```<BlockCodecSpace />``` to define new data types. Classes of new types hav
 ## Dependency Libraries
 
 * [uia.utils](https://github.com/gazer2kanlin/uia.utils4j) - UIA common utilities
-* [simpleXML](http://simple.sourceforge.net/) - XML serialization
-
-
+* [simpleXML](http://simple.sourceforge.net/) - XML serialization (0.5.0.0 or above)
 
 ## Copyright and License
 
