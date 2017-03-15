@@ -4,16 +4,18 @@ import java.util.Map;
 
 import uia.message.fx.ValueFx;
 
-public class RcvFx1 implements ValueFx {
+public class RcvFx3SeqList implements ValueFx {
 
     @Override
     public int encode(String blockName, Object value, Map<String, Object> parsed) {
-        return parsed.get("content1").toString().length() * 2;
+        // 2*count-1
+        return 2 * (Integer) parsed.get("count") - 1;
     }
 
     @Override
     public int decode(String blockName, byte[] data, Map<String, Object> parsed, int bytePt, int bitPt) {
-        return parsed.get("content1").toString().trim().length() * 2;
+        // 2*count-1
+        return 2 * (Integer) parsed.get("count") - 1;
     }
 
 }

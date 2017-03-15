@@ -42,8 +42,8 @@ public class RcvTest {
     @Test
     public void testFactory() {
         DataExFactory factory = DataExFactory.getFactory("Test");
-        Assert.assertEquals(9, factory.getMessageList().size(), 0);
-        Assert.assertEquals(1, factory.getFxList().size(), 0);
+        Assert.assertEquals(11, factory.getMessageList().size(), 0);
+        Assert.assertEquals(3, factory.getFxList().size(), 0);
         Assert.assertEquals(19, factory.getCodecList().size(), 0);
     }
 
@@ -120,6 +120,66 @@ public class RcvTest {
         Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3");
+        Rcv3 _rcv = (Rcv3) reader.read(data);
+        Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
+        Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
+        Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());
+        Assert.assertEquals(rcv.getValue3().get(0).getName(), _rcv.getValue3().get(0).getName());
+        Assert.assertEquals(rcv.getValue3().get(0).getId(), _rcv.getValue3().get(0).getId());
+        Assert.assertEquals(rcv.getValue3().get(1).getName(), _rcv.getValue3().get(1).getName());
+        Assert.assertEquals(rcv.getValue3().get(1).getId(), _rcv.getValue3().get(1).getId());
+        Assert.assertEquals(rcv.getValue3().get(2).getName(), _rcv.getValue3().get(2).getName());
+        Assert.assertEquals(rcv.getValue3().get(2).getId(), _rcv.getValue3().get(2).getId());
+    }
+
+    @Test
+    public void testRcv3_1() throws Exception {
+        Rcv3 rcv = new Rcv3();
+        rcv.setCount(2);
+        rcv.getValue1().add(10);  //
+        rcv.getValue1().add(20);
+        rcv.getValue2().add("Good");
+        rcv.getValue2().add("Yes");
+        rcv.getValue2().add("Right");
+        rcv.getValue3().add(new Rcv3.Value3("Jack", 2));
+        rcv.getValue3().add(new Rcv3.Value3("Tom", 3));
+        rcv.getValue3().add(new Rcv3.Value3("Mary", 4));
+
+        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv3_1");
+        byte[] data = writer.write(rcv);
+        Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
+
+        MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3_1");
+        Rcv3 _rcv = (Rcv3) reader.read(data);
+        Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
+        Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
+        Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());
+        Assert.assertEquals(rcv.getValue3().get(0).getName(), _rcv.getValue3().get(0).getName());
+        Assert.assertEquals(rcv.getValue3().get(0).getId(), _rcv.getValue3().get(0).getId());
+        Assert.assertEquals(rcv.getValue3().get(1).getName(), _rcv.getValue3().get(1).getName());
+        Assert.assertEquals(rcv.getValue3().get(1).getId(), _rcv.getValue3().get(1).getId());
+        Assert.assertEquals(rcv.getValue3().get(2).getName(), _rcv.getValue3().get(2).getName());
+        Assert.assertEquals(rcv.getValue3().get(2).getId(), _rcv.getValue3().get(2).getId());
+    }
+
+    @Test
+    public void testRcv3_2() throws Exception {
+        Rcv3 rcv = new Rcv3();
+        rcv.setCount(2);
+        rcv.getValue1().add(10);  //
+        rcv.getValue1().add(20);
+        rcv.getValue2().add("Good");
+        rcv.getValue2().add("Yes");
+        rcv.getValue2().add("Right");
+        rcv.getValue3().add(new Rcv3.Value3("Jack", 2));
+        rcv.getValue3().add(new Rcv3.Value3("Tom", 3));
+        rcv.getValue3().add(new Rcv3.Value3("Mary", 4));
+
+        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv3_2");
+        byte[] data = writer.write(rcv);
+        Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
+
+        MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3_2");
         Rcv3 _rcv = (Rcv3) reader.read(data);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());

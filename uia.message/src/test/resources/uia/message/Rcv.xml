@@ -53,6 +53,32 @@
 	        </Body>
         </Message>
         <Message>
+            <Name>Rcv3_1</Name>
+            <Desc>List Test</Desc>
+            <Body name="root" className="uia.message.Rcv3">
+            	<Block name="count" size="2" dataType="Int" />
+                <BlockList name="value1" size="4" dataType="Int" countFx="Fx3List" />
+                <BlockList name="value2" size="8" dataType="String" count="3" />
+	            <BlockSeqList name="value3" className="uia.message.Rcv3$Value3" countFx="Fx3SeqList">
+	                <Block name="name" size="10" dataType="String" />
+	                <Block name="id" size="2" dataType="Int" />
+	            </BlockSeqList>
+	        </Body>
+        </Message>
+        <Message>
+            <Name>Rcv3_2</Name>
+            <Desc>List Test</Desc>
+            <Body name="root" className="uia.message.Rcv3">
+            	<Block name="count" size="2" dataType="Int" />
+                <BlockList name="value1" size="4" dataType="Int" countFx="Fx3List" />
+                <BlockList name="value2" size="8" dataType="String" count="3" />
+	            <BlockSeqList name="value3" className="uia.message.Rcv3$Value3" count="3">
+	                <Block name="name" size="10" dataType="String" />
+	                <Block name="id" size="2" dataType="Int" />
+	            </BlockSeqList>
+	        </Body>
+        </Message>
+        <Message>
             <Name>Rcv4</Name>
             <Desc>OptionBlock Test</Desc>
             <Body name="root" className="uia.message.Rcv4">
@@ -100,7 +126,7 @@
             <Desc>String Test</Desc>
             <Body name="root" className="uia.message.Rcv7">
                 <Block name="content1" size="10" dataType="String" />
-                <Block name="content2" sizeFx="Fx1" dataType="String" />
+                <Block name="content2" sizeFx="Fx7" dataType="String" />
             </Body>
         </Message>
         <Message>
@@ -124,8 +150,16 @@
     </BlockCodecSpace>
     <FxSpace>
     	<Fx>
-    		<Name>Fx1</Name>
-    		<Driver>uia.message.RcvFx1</Driver>
+    		<Name>Fx3List</Name>
+    		<Driver>uia.message.RcvFx3List</Driver>
+    	</Fx>
+    	<Fx>
+    		<Name>Fx3SeqList</Name>
+    		<Driver>uia.message.RcvFx3SeqList</Driver>
+    	</Fx>
+    	<Fx>
+    		<Name>Fx7</Name>
+    		<Driver>uia.message.RcvFx7</Driver>
     	</Fx>
     </FxSpace>
 </DataEx>
