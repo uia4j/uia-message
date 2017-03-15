@@ -31,6 +31,12 @@ public class DoubleCodecTest {
     }
 
     @Test
+    public void testZero() {
+        DoubleCodec codec = new DoubleCodec();
+        Assert.assertEquals(0.0d, codec.zeroValue(), 0);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         byte[] data = new byte[] {
                 (byte) 0x40,

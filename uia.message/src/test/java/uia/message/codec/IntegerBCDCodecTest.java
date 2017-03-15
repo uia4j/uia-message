@@ -31,6 +31,12 @@ public class IntegerBCDCodecTest {
     }
 
     @Test
+    public void testZero() {
+        IntegerBCDCodec codec = new IntegerBCDCodec();
+        Assert.assertEquals(0, codec.zeroValue(), 0);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         IntegerBCDCodec codec = new IntegerBCDCodec();
         Assert.assertEquals(182, codec.decode(new byte[] { (byte) 0x01, (byte) 0x82 }, 16), 0);

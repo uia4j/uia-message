@@ -18,46 +18,30 @@
  *******************************************************************************/
 package uia.message.codec;
 
+import java.awt.Color;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- *
- * @author Kyle
- */
-public class FloatCodecTest {
-
-    public FloatCodecTest() {
-    }
+public class ColorCodecTes {
 
     @Test
     public void testZero() {
-        FloatCodec codec = new FloatCodec();
-        Assert.assertEquals(0.0f, codec.zeroValue(), 0);
+        ColorCodec codec = new ColorCodec();
+        Assert.assertEquals(Color.black, codec.zeroValue());
     }
 
     @Test
-    public void testDecode() throws Exception {
-        byte[] data = new byte[] {
-                (byte) 0x41,
-                (byte) 0x44,
-                (byte) 0xc4,
-                (byte) 0x9c
-        };
-        FloatCodec codec = new FloatCodec();
-        Assert.assertEquals(12.298, codec.decode(data, 8), 3);
+    public void testDecode() throws BlockCodecException {
+        ColorCodec codec = new ColorCodec();
+        Color color = codec.decode(new byte[] { (byte) 0xff, 0x00, 0x00 }, 24);
+        Assert.assertEquals(Color.red, color);
     }
 
     @Test
-    public void testEncode() throws Exception {
-        FloatCodec codec = new FloatCodec();
-        Assert.assertArrayEquals(
-                new byte[] {
-                        (byte) 0x41,
-                        (byte) 0x44,
-                        (byte) 0xc4,
-                        (byte) 0x9c
-                },
-                codec.encode(new Float(12.298f), 8));
+    public void testEncode() throws BlockCodecException {
+        ColorCodec codec = new ColorCodec();
+        byte[] rgb = codec.encode(Color.blue, 24);
+        Assert.assertArrayEquals(new byte[] { 0x00, 0x00, (byte) 0xff }, rgb);
     }
 }

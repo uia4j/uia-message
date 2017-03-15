@@ -28,6 +28,12 @@ import org.junit.Test;
 public class IntegerStringCodecTest {
 
     @Test
+    public void testZero() {
+        IntegerStringCodec codec = new IntegerStringCodec();
+        Assert.assertEquals(0, codec.zeroValue(), 0);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         IntegerStringCodec codec = new IntegerStringCodec();
         Assert.assertEquals(123, codec.decode("123".getBytes(), 24), 0);

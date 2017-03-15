@@ -21,43 +21,25 @@ package uia.message.codec;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- *
- * @author Kyle
- */
-public class FloatCodecTest {
-
-    public FloatCodecTest() {
-    }
+public class BitCodecTest {
 
     @Test
     public void testZero() {
-        FloatCodec codec = new FloatCodec();
-        Assert.assertEquals(0.0f, codec.zeroValue(), 0);
+        BitCodec codec = new BitCodec();
+        Assert.assertFalse(codec.zeroValue());
     }
 
     @Test
-    public void testDecode() throws Exception {
-        byte[] data = new byte[] {
-                (byte) 0x41,
-                (byte) 0x44,
-                (byte) 0xc4,
-                (byte) 0x9c
-        };
-        FloatCodec codec = new FloatCodec();
-        Assert.assertEquals(12.298, codec.decode(data, 8), 3);
+    public void testDecode() throws BlockCodecException {
+        BitCodec codec = new BitCodec();
+        Assert.assertTrue(codec.decode(new byte[] { (byte) 0x88 }, 1));
+        Assert.assertFalse(codec.decode(new byte[] { (byte) 0x78 }, 1));
     }
 
     @Test
-    public void testEncode() throws Exception {
-        FloatCodec codec = new FloatCodec();
-        Assert.assertArrayEquals(
-                new byte[] {
-                        (byte) 0x41,
-                        (byte) 0x44,
-                        (byte) 0xc4,
-                        (byte) 0x9c
-                },
-                codec.encode(new Float(12.298f), 8));
+    public void testEncode() throws BlockCodecException {
+        BitCodec codec = new BitCodec();
+        Assert.assertArrayEquals(new byte[] { (byte) 0x80 }, codec.encode(true, 1));
+        Assert.assertArrayEquals(new byte[] { (byte) 0x00 }, codec.encode(false, 1));
     }
 }

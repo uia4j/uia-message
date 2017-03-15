@@ -74,6 +74,16 @@
             </Body>
         </Message>
         <Message>
+            <Name>Rcv5_0</Name>
+            <Desc>Number Test</Desc>
+            <Body name="root" className="uia.message.Rcv5">
+                <Block name="value1" sizeBlock="2*REF_VALUE" dataType="Int" />
+                <Block name="value2" size="0" dataType="IntL" />
+                <Block name="value3" size="0" dataType="Bcd" />
+                <Block name="value4" size="0" dataType="BcdL" />
+            </Body>
+        </Message>
+        <Message>
             <Name>Rcv6</Name>
             <Desc>String Test</Desc>
             <Body name="root" className="uia.message.Rcv6">
@@ -91,6 +101,14 @@
             <Body name="root" className="uia.message.Rcv7">
                 <Block name="content1" size="10" dataType="String" />
                 <Block name="content2" sizeFx="Fx1" dataType="String" />
+            </Body>
+        </Message>
+        <Message>
+            <Name>Rcv7_0</Name>
+            <Desc>String Test</Desc>
+            <Body name="root" className="uia.message.Rcv7">
+                <Block name="content1" size="10" dataType="String" />
+                <Block name="content2" size="0" dataType="String" />
             </Body>
         </Message>
     </MessageSpace>

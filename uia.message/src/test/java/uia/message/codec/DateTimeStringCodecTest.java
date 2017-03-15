@@ -34,6 +34,15 @@ public class DateTimeStringCodecTest {
     }
 
     @Test
+    public void testNullable() throws Exception {
+        DateTimeStringCodec codec = new DateTimeStringCodec();
+        codec.setFormat("MMddyyyy");
+        codec.setNullable("Y");
+        Date dt = codec.decode(new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 }, 8);
+        Assert.assertNull(dt);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         DateTimeStringCodec codec = new DateTimeStringCodec();
         codec.setFormat("MMddyyyy");

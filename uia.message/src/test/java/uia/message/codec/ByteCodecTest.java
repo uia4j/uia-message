@@ -31,6 +31,12 @@ public class ByteCodecTest {
     }
 
     @Test
+    public void testZero() {
+        ByteCodec codec = new ByteCodec();
+        Assert.assertEquals(0, codec.zeroValue(), 0);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         ByteCodec codec = new ByteCodec();
         Assert.assertEquals((byte) 0x7f, codec.decode(new byte[] { (byte) 0x7f }, 8), 0);

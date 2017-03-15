@@ -28,6 +28,12 @@ import org.junit.Test;
 public class StringCodecTest {
 
     @Test
+    public void testZero() {
+        StringCodec codec = new StringCodec();
+        Assert.assertEquals("", codec.zeroValue());
+    }
+
+    @Test
     public void tesEncode() throws Exception {
         StringCodec codec = new StringCodec();
         // UTF8

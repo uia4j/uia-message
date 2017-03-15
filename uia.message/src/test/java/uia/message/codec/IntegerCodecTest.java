@@ -31,6 +31,12 @@ public class IntegerCodecTest {
     }
 
     @Test
+    public void testZero() {
+        IntegerCodec codec = new IntegerCodec();
+        Assert.assertEquals(0, codec.zeroValue(), 0);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         IntegerCodec codec = new IntegerCodec();
         // 11111110
@@ -50,6 +56,7 @@ public class IntegerCodecTest {
     public void testDecodeUnsigned() throws Exception {
         IntegerCodec codec = new IntegerCodec();
         codec.setUnsigned("Y");
+        Assert.assertEquals("Y", codec.getUnsigned());
         Assert.assertEquals(254, codec.decode(new byte[] { (byte) 0xfe, (byte) 0x55 }, 8), 0);
         Assert.assertEquals(127, codec.decode(new byte[] { (byte) 0xfe, (byte) 0x55 }, 7), 0);
         Assert.assertEquals(508, codec.decode(new byte[] { (byte) 0xfe, (byte) 0x00 }, 9), 0);
@@ -75,6 +82,8 @@ public class IntegerCodecTest {
     public void testEncodeUnsigned() throws Exception {
         IntegerCodec codec = new IntegerCodec();
         codec.setUnsigned("Y");
+        Assert.assertEquals("Y", codec.getUnsigned());
+
         // 11111110
         Assert.assertArrayEquals(new byte[] { (byte) 0xfe }, codec.encode(254, 8));
         // _1111111 >> 11111110

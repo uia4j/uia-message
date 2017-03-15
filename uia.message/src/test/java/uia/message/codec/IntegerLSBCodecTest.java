@@ -31,6 +31,12 @@ public class IntegerLSBCodecTest {
     }
 
     @Test
+    public void testZero() {
+        IntegerLSBCodec codec = new IntegerLSBCodec();
+        Assert.assertEquals(0, codec.zeroValue(), 0);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         IntegerLSBCodec codec = new IntegerLSBCodec();
         // 1111111_ >> 11111111
@@ -45,7 +51,10 @@ public class IntegerLSBCodecTest {
 
     @Test
     public void testDecodeUnsigned() throws Exception {
-        IntegerLSBCodec codec = new IntegerLSBCodec(true);
+        IntegerLSBCodec codec = new IntegerLSBCodec();
+        codec.setUnsigned("Y");
+        Assert.assertEquals("Y", codec.getUnsigned());
+
         // 1111111_ >> 01111111
         Assert.assertEquals(127, codec.decode(new byte[] { (byte) 0xfe }, 7), 0);
         // 11111110 00000000 >> 00000000 11111110
@@ -68,6 +77,8 @@ public class IntegerLSBCodecTest {
     @Test
     public void testEncodeUnsigned() throws Exception {
         IntegerLSBCodec codec = new IntegerLSBCodec(true);
+        Assert.assertEquals("Y", codec.getUnsigned());
+
         Assert.assertArrayEquals(new byte[] { (byte) 0xfe }, codec.encode(127, 7));
         Assert.assertArrayEquals(new byte[] { (byte) 0xfe, (byte) 0x00 }, codec.encode(254, 16));
         // 00000011 00000001 >> ______11 00000001 >> 11________ 00000001 >> 00000001 11________

@@ -42,7 +42,7 @@ public class RcvTest {
     @Test
     public void testFactory() {
         DataExFactory factory = DataExFactory.getFactory("Test");
-        Assert.assertEquals(7, factory.getMessageList().size(), 0);
+        Assert.assertEquals(9, factory.getMessageList().size(), 0);
         Assert.assertEquals(1, factory.getFxList().size(), 0);
         Assert.assertEquals(19, factory.getCodecList().size(), 0);
     }
@@ -187,6 +187,29 @@ public class RcvTest {
     }
 
     @Test
+    public void testRcv5_0() throws Exception {
+        HashMap<String, Object> initial = new HashMap<String, Object>();
+        initial.put("REF_VALUE", 2);
+
+        Rcv5 rcv = new Rcv5();
+        rcv.setValue1(1);
+        rcv.setValue2(2);
+        rcv.setValue3(3212);
+        rcv.setValue4(3476);
+
+        byte[] data = DataExFactory.serialize("Test", "Rcv5_0", rcv, initial);
+        Assert.assertArrayEquals(
+                new byte[] { 0x00, 0x00, 0x00, 0x01 },
+                data);
+
+        Rcv5 _rcv = (Rcv5) DataExFactory.deserialize("Test", "Rcv5_0", data, initial);
+        Assert.assertEquals(rcv.getValue1(), _rcv.getValue1(), 0);
+        Assert.assertEquals(0, _rcv.getValue2(), 0);
+        Assert.assertEquals(0, _rcv.getValue3(), 0);
+        Assert.assertEquals(0, _rcv.getValue4(), 0);
+    }
+
+    @Test
     public void testRcv6() throws Exception {
         Rcv6 rcv = new Rcv6();
         rcv.setContent1("1234");
@@ -226,5 +249,23 @@ public class RcvTest {
         Rcv7 _rcv = (Rcv7) DataExFactory.deserialize("Test", "Rcv7", data);
         Assert.assertEquals(rcv.getContent1(), _rcv.getContent1());
         Assert.assertEquals("12345678", _rcv.getContent2());
+    }
+
+    @Test
+    public void testRcv7_0() throws Exception {
+        Rcv7 rcv = new Rcv7();
+        rcv.setContent1("1234");
+        rcv.setContent2("123456789abcdefg");
+
+        byte[] data = DataExFactory.serialize("Test", "Rcv7_0", rcv);
+        Assert.assertEquals(10, data.length, 0);
+
+        Assert.assertArrayEquals(
+                new byte[] { 0x31, 0x32, 0x33, 0x34, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 },
+                new byte[] { data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9] });
+
+        Rcv7 _rcv = (Rcv7) DataExFactory.deserialize("Test", "Rcv7_0", data);
+        Assert.assertEquals(rcv.getContent1(), _rcv.getContent1());
+        Assert.assertEquals("", _rcv.getContent2());
     }
 }

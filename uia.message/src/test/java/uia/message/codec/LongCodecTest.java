@@ -31,6 +31,12 @@ public class LongCodecTest {
     }
 
     @Test
+    public void testZero() {
+        LongCodec codec = new LongCodec();
+        Assert.assertEquals(0, codec.zeroValue(), 0);
+    }
+
+    @Test
     public void testDecode() throws Exception {
         LongCodec codec = new LongCodec();
         // 11111110
