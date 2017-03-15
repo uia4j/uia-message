@@ -103,7 +103,9 @@ public class MessageSerializer {
         this.indexByte = 0;
         this.indexBit = 0;
         this.blockValues.clear();
-        this.blockValues.putAll(initialValues);
+        if (initialValues != null) {
+            this.blockValues.putAll(initialValues);
+        }
         this.resultBytes = new byte[0];
 
         BitBlockSeqType bodyType = this.mt.getBody();

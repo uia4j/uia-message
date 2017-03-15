@@ -83,9 +83,7 @@ public class DataExFactory {
      * @throws Exception Raise when file is wrong.
      */
     public static void register(String domain, String fileName) throws Exception {
-        if (!DATA_EX_FACTORY.containsKey(domain)) {
-            DATA_EX_FACTORY.put(domain, new DataExFactory(DataExCodec.decode(new File(fileName))));
-        }
+        register(domain, new File(fileName));
     }
 
     /**
@@ -149,6 +147,15 @@ public class DataExFactory {
      */
     public Set<String> getMessageList() {
         return this.messageSpace.keySet();
+    }
+
+    /**
+     * Get codec names defined in CodecSpace.
+     *
+     * @return Message names.
+     */
+    public Set<String> getCodecList() {
+        return this.codecSpace.keySet();
     }
 
     /**

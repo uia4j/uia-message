@@ -19,6 +19,7 @@
 package uia.message;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -39,6 +40,14 @@ public class RcvTest {
     }
 
     @Test
+    public void testFactory() {
+        DataExFactory factory = DataExFactory.getFactory("Test");
+        Assert.assertEquals(7, factory.getMessageList().size(), 0);
+        Assert.assertEquals(1, factory.getFxList().size(), 0);
+        Assert.assertEquals(19, factory.getCodecList().size(), 0);
+    }
+
+    @Test
     public void testRcv1() throws Exception {
         Rcv1 rcv = new Rcv1();
         rcv.setHeader(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48 });
@@ -54,14 +63,14 @@ public class RcvTest {
         rcv.setId(-1);
 
         MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv1");
-        byte[] data = writer.write(rcv);
+        byte[] data = writer.write(rcv, null);
         Assert.assertEquals(42, data.length, 0);
         Assert.assertArrayEquals(
                 new byte[] { data[23], data[24], data[25], data[26] },
                 new byte[] { (byte) 0xfe, 0x00, 0x00, 0x00 });
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv1");
-        Rcv1 _rcv = (Rcv1) reader.read(data);
+        Rcv1 _rcv = (Rcv1) reader.read(data, null);
         Assert.assertArrayEquals(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 }, _rcv.getHeader());
         Assert.assertEquals(rcv.getTime(), _rcv.getTime());
         Assert.assertEquals(rcv.getPowerStatus().getPower1(), _rcv.getPowerStatus().getPower1());
@@ -156,20 +165,21 @@ public class RcvTest {
 
     @Test
     public void testRcv5() throws Exception {
+        HashMap<String, Object> initial = new HashMap<String, Object>();
+        initial.put("REF_VALUE", 2);
+
         Rcv5 rcv = new Rcv5();
         rcv.setValue1(1);
         rcv.setValue2(2);
         rcv.setValue3(3212);
         rcv.setValue4(3476);
 
-        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv5");
-        byte[] data = writer.write(rcv);
+        byte[] data = DataExFactory.serialize("Test", "Rcv5", rcv, initial);
         Assert.assertArrayEquals(
-                new byte[] { 0x00, 0x01, 0x02, 0x00, 0x32, 0x12, 0x76, 0x34 },
+                new byte[] { 0x00, 0x00, 0x00, 0x01, 0x02, 0x00, 0x32, 0x12, 0x76, 0x34 },
                 data);
 
-        MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv5");
-        Rcv5 _rcv = (Rcv5) reader.read(data);
+        Rcv5 _rcv = (Rcv5) DataExFactory.deserialize("Test", "Rcv5", data, initial);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1(), 0);
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2(), 0);
         Assert.assertEquals(rcv.getValue3(), _rcv.getValue3(), 0);
@@ -195,5 +205,26 @@ public class RcvTest {
         Rcv6 _rcv = (Rcv6) DataExFactory.deserialize("Test", "Rcv6", data);
         Assert.assertEquals(rcv.getContent1(), _rcv.getContent1());
         Assert.assertEquals(rcv.getContent2(), _rcv.getContent2());
+    }
+
+    @Test
+    public void testRcv7() throws Exception {
+        Rcv7 rcv = new Rcv7();
+        rcv.setContent1("1234");
+        rcv.setContent2("123456789abcdefg");
+
+        byte[] data = DataExFactory.serialize("Test", "Rcv7", rcv);
+        Assert.assertEquals(18, data.length, 0);
+
+        Assert.assertArrayEquals(
+                new byte[] { 0x31, 0x32, 0x33, 0x34, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 },
+                new byte[] { data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9] });
+        Assert.assertArrayEquals(
+                new byte[] { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38 },
+                new byte[] { data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17] });
+
+        Rcv7 _rcv = (Rcv7) DataExFactory.deserialize("Test", "Rcv7", data);
+        Assert.assertEquals(rcv.getContent1(), _rcv.getContent1());
+        Assert.assertEquals("12345678", _rcv.getContent2());
     }
 }

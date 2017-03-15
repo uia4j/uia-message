@@ -2,6 +2,8 @@ UIA message
 ================
 
 [![Build Status](https://travis-ci.org/gazer2kanlin/uia.message4j.svg?branch=0.5.0.0)](https://travis-ci.org/gazer2kanlin/uia.message4j)
+[![Codecov](https://img.shields.io/codecov/c/github/gazer2kanlin/uia.message4j.svg)](https://codecov.io/gh/gazer2kanlin/uia.message4j)
+[![License](https://img.shields.io/github/license/gazer2kanlin/uia.message4j.svg)](LICENSE)
 
 Serialize & deserialize binary message depending on XML.
 

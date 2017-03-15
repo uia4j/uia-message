@@ -106,7 +106,9 @@ public class MessageDeserializer {
         this.byteStart = 0;
         this.bitStart = 0;
         this.blockValues.clear();
-        this.blockValues.putAll(initialValues);
+        if (initialValues != null) {
+            this.blockValues.putAll(initialValues);
+        }
         BitBlockSeqType body = this.mt.getBody();
         Object result = decode(body.getName(), body, data, null);
         this.blockValues.clear();
