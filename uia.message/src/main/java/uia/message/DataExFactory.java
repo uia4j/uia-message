@@ -113,6 +113,17 @@ public class DataExFactory {
     }
 
     /**
+     * Register a XML with a specific domain name.
+     *
+     * @param domain Domain name.
+     * @param xmlContent XML content.
+     * @throws Exception Raise when file is wrong.
+     */
+    public static void registerContent(String domain, String xmlContent) throws Exception {
+        register(domain, xmlContent);
+    }
+
+    /**
      * Get DataEx factory with specific domain name.
      *
      * @param domain The domain name.

@@ -41,4 +41,9 @@ final class DataExCodec {
         Persister p = new Persister();
         return p.read(DataExType.class, stream);
     }
+
+    static DataExType decode(String xmlContent) throws Exception {
+        Persister p = new Persister();
+        return p.read(DataExType.class, xmlContent);
+    }
 }

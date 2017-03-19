@@ -35,14 +35,14 @@ public class Rcv1 {
 
     private int voltCount;
 
-    private Rcv1.PowerStatus status;
+    private Rcv1.PowerStatus powerStatus;
 
     private ArrayList<Rcv1.Volt> volts;
 
     private Integer id;
 
     public Rcv1() {
-        this.status = new Rcv1.PowerStatus();
+        this.powerStatus = new Rcv1.PowerStatus();
         this.volts = new ArrayList<Rcv1.Volt>();
     }
 
@@ -63,11 +63,11 @@ public class Rcv1 {
     }
 
     public Rcv1.PowerStatus getPowerStatus() {
-        return this.status;
+        return this.powerStatus;
     }
 
     public void setPowerStatus(Rcv1.PowerStatus status) {
-        this.status = status;
+        this.powerStatus = status;
     }
 
     public String getFooter() {
