@@ -2,13 +2,13 @@
  * Copyright 2017 UIA
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
+ * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,6 +47,8 @@ public class IntegerLSBCodecTest {
         Assert.assertEquals(-255, codec.decode(new byte[] { (byte) 0x01, (byte) 0xcf }, 10), 0);
 
         Assert.assertEquals(-4, codec.decode(new byte[] { (byte) 0xfc, (byte) 0xff, (byte) 0xff }, 24), 0);
+
+        codec.reset();
     }
 
     @Test
@@ -61,6 +63,8 @@ public class IntegerLSBCodecTest {
         Assert.assertEquals(254, codec.decode(new byte[] { (byte) 0xfe, (byte) 0x00 }, 16), 0);
         // 00000001 11______ >> 00000001 11000000 >> 11000000 00000001 >> ______11 00000001
         Assert.assertEquals(512 + 256 + 1, codec.decode(new byte[] { (byte) 0x01, (byte) 0xcf }, 10), 0);
+
+        codec.reset();
     }
 
     @Test
@@ -72,6 +76,8 @@ public class IntegerLSBCodecTest {
         Assert.assertArrayEquals(new byte[] { (byte) 0x01, (byte) 0xc0 }, codec.encode(-255, 10));
 
         Assert.assertArrayEquals(new byte[] { (byte) 0xfc, (byte) 0xff, (byte) 0xff }, codec.encode(-4, 24));
+
+        codec.reset();
     }
 
     @Test
@@ -83,5 +89,7 @@ public class IntegerLSBCodecTest {
         Assert.assertArrayEquals(new byte[] { (byte) 0xfe, (byte) 0x00 }, codec.encode(254, 16));
         // 00000011 00000001 >> ______11 00000001 >> 11________ 00000001 >> 00000001 11________
         Assert.assertArrayEquals(new byte[] { (byte) 0x01, (byte) 0xc0 }, codec.encode(512 + 256 + 1, 10));
+
+        codec.reset();
     }
 }

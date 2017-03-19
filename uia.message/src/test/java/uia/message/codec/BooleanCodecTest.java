@@ -2,13 +2,13 @@
  * Copyright 2017 UIA
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
+ * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,8 +32,22 @@ public class BooleanCodecTest {
     @Test
     public void testDecode() throws BlockCodecException {
         BooleanCodec codec = new BooleanCodec();
+
+        codec.setTrueValue("0");
+        Assert.assertEquals("0", codec.getTrueValue());
+        codec.setFalseValue("1");
+        Assert.assertEquals("1", codec.getFalseValue());
+        Assert.assertEquals(false, codec.decode(new byte[] { (byte) 0xbf }, 1));
+        Assert.assertEquals(false, codec.decode(new byte[] { (byte) 0x3f }, 3));
+        Assert.assertEquals(false, codec.decode(new byte[] { (byte) 0x02 }, 7));
+        Assert.assertEquals(true, codec.decode(new byte[] { (byte) 0x01 }, 7));
+
+        codec.reset();
+
         codec.setTrueValue("1");
         Assert.assertEquals("1", codec.getTrueValue());
+        codec.setFalseValue("0");
+        Assert.assertEquals("0", codec.getFalseValue());
         // 10111111
         Assert.assertEquals(true, codec.decode(new byte[] { (byte) 0xbf }, 1));
         // 00111111
@@ -42,13 +56,6 @@ public class BooleanCodecTest {
         Assert.assertEquals(true, codec.decode(new byte[] { (byte) 0x02 }, 7));
         // 00000001
         Assert.assertEquals(false, codec.decode(new byte[] { (byte) 0x01 }, 7));
-
-        codec.setTrueValue("0");
-        Assert.assertEquals("0", codec.getTrueValue());
-        Assert.assertEquals(false, codec.decode(new byte[] { (byte) 0xbf }, 1));
-        Assert.assertEquals(false, codec.decode(new byte[] { (byte) 0x3f }, 3));
-        Assert.assertEquals(false, codec.decode(new byte[] { (byte) 0x02 }, 7));
-        Assert.assertEquals(true, codec.decode(new byte[] { (byte) 0x01 }, 7));
     }
 
     @Test
