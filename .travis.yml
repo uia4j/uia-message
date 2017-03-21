@@ -4,7 +4,6 @@ language: java
 sudo: false
 
 script:
-  - mvn test -f ./uia.message/pom.xml --settings .travis.settings.xml
   - mvn cobertura:cobertura -f ./uia.message/pom.xml
 
 after_success:
