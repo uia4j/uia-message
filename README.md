@@ -7,6 +7,11 @@ UIA Message
 
 Serialize & deserialize binary message depending on XML.
 
+## Note
+
+Version 0.5.1 which references [uia.utils-0.1.2](https://github.com/gazer2kanlin/uia.utils4j) runs well on __Android__ platform.
+
+
 ## Feature
 
 * Use XML to define data structure.
@@ -188,7 +193,7 @@ pom.xml in your project:
 <dependency>
     <groupId>uia</groupId>
     <artifactId>uia.message</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 ```
 
@@ -239,7 +244,7 @@ Use ```<BlockCodecSpace />``` to define new data types. Classes of new types hav
 ## Dependency Libraries
 
 * [uia.utils](https://github.com/gazer2kanlin/uia.utils4j) - UIA common utilities
-* [simpleXML](http://simple.sourceforge.net/) - XML serialization (0.5.0.0 or above)
+* [simpleXML](http://simple.sourceforge.net/) - XML serialization
 
 ## Copyright and License
 
