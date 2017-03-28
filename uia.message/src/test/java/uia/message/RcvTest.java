@@ -2,13 +2,13 @@
  * Copyright 2017 UIA
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
+ * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,9 +30,6 @@ import org.junit.Test;
  * @author Kyle
  */
 public class RcvTest {
-
-    public RcvTest() {
-    }
 
     @BeforeClass
     public static void startup() throws Exception {
@@ -133,7 +130,7 @@ public class RcvTest {
     }
 
     @Test
-    public void testRcv3_1() throws Exception {
+    public void testRcv31() throws Exception {
         Rcv3 rcv = new Rcv3();
         rcv.setCount(2);
         rcv.getValue1().add(10);  //
@@ -163,7 +160,7 @@ public class RcvTest {
     }
 
     @Test
-    public void testRcv3_2() throws Exception {
+    public void testRcv32() throws Exception {
         Rcv3 rcv = new Rcv3();
         rcv.setCount(2);
         rcv.getValue1().add(10);  //
@@ -247,7 +244,7 @@ public class RcvTest {
     }
 
     @Test
-    public void testRcv5_0() throws Exception {
+    public void testRcv50() throws Exception {
         HashMap<String, Object> initial = new HashMap<String, Object>();
         initial.put("REF_VALUE", 2);
 
@@ -312,7 +309,7 @@ public class RcvTest {
     }
 
     @Test
-    public void testRcv7_0() throws Exception {
+    public void testRcv70() throws Exception {
         Rcv7 rcv = new Rcv7();
         rcv.setContent1("1234");
         rcv.setContent2("123456789abcdefg");

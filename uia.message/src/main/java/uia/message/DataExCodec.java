@@ -32,17 +32,17 @@ import uia.message.model.xml.DataExType;
  */
 final class DataExCodec {
 
-    static DataExType decode(File file) throws Exception {
+    public static DataExType decode(File file) throws Exception {
         Persister p = new Persister();
         return p.read(DataExType.class, file);
     }
 
-    static DataExType decode(InputStream stream) throws Exception {
+    public static DataExType decode(InputStream stream) throws Exception {
         Persister p = new Persister();
         return p.read(DataExType.class, stream);
     }
 
-    static DataExType decode(String xmlContent) throws Exception {
+    public static DataExType decode(String xmlContent) throws Exception {
         Persister p = new Persister();
         return p.read(DataExType.class, xmlContent);
     }

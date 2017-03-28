@@ -45,10 +45,9 @@ public class IntegerStringCodec implements BlockCodec<Integer> {
     @Override
     public byte[] encode(Integer data, int bitLength) throws BlockCodecException {
         try {
-            if (data == null) {
-                data = 0;
-            }
-            byte[] str = data.toString().getBytes();
+            Integer _data = data == null ? 0 : data;
+
+            byte[] str = _data.toString().getBytes();
             byte[] result = new byte[bitLength / 8];
             int len = Math.min(str.length, result.length);
 

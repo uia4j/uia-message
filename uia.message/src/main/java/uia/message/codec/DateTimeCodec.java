@@ -31,9 +31,6 @@ import uia.utils.ByteUtils;
  */
 public class DateTimeCodec implements BlockCodec<Date> {
 
-    public DateTimeCodec() {
-    }
-
     @Override
     public Date zeroValue() {
         return new Date();

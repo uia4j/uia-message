@@ -27,9 +27,6 @@ import org.junit.Test;
  */
 public class IntegerLSBCodecTest {
 
-    public IntegerLSBCodecTest() {
-    }
-
     @Test
     public void testZero() {
         IntegerLSBCodec codec = new IntegerLSBCodec();

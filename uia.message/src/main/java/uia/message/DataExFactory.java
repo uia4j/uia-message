@@ -210,7 +210,7 @@ public class DataExFactory {
     public static byte[] serialize(String domain, String messageName, Object value) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
-            throw new NullPointerException("Domain:" + domain + " doesn't exist.");
+            throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
         }
         return factory.createSerializer(messageName).write(value);
     }
@@ -227,7 +227,7 @@ public class DataExFactory {
     public static byte[] serialize(String domain, String messageName, Object value, Map<String, Object> initialValues) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
-            throw new NullPointerException("Domain:" + domain + " doesn't exist.");
+            throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
         }
         return factory.createSerializer(messageName).write(value, initialValues);
     }
@@ -244,7 +244,7 @@ public class DataExFactory {
     public static Object deserialize(String domain, String messageName, byte[] value) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
-            throw new NullPointerException("Domain:" + domain + " doesn't exist.");
+            throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
         }
         return factory.createDeserializer(messageName).read(value);
     }
@@ -261,7 +261,7 @@ public class DataExFactory {
     public static Object deserialize(String domain, String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
-            throw new NullPointerException("Domain:" + domain + " doesn't exist.");
+            throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
         }
         return factory.createDeserializer(messageName).read(value, initialValues);
     }

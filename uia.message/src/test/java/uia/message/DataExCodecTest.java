@@ -2,13 +2,13 @@
  * Copyright 2017 UIA
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
+ * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,8 @@
  * limitations under the License.
  *******************************************************************************/
 package uia.message;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -42,18 +44,22 @@ import uia.message.model.xml.PropType;
  */
 public class DataExCodecTest {
 
-    public DataExCodecTest() {
-    }
-
     @Test
     public void testDecode() throws Exception {
         DataExType dxType = DataExCodec.decode(DataExCodecTest.class.getResourceAsStream("Rcv.xml"));
+        assertEquals(2, dxType.getBlockSpace().getBlockOrBlockListOrBlockSeq().size());
         print(dxType.getBlockSpace());
         System.out.println();
+
+        assertEquals(11, dxType.getMessageSpace().getMessage().size());
         print(dxType.getMessageSpace());
         System.out.println();
+
+        assertEquals(2, dxType.getBlockCodecSpace().getBlockCodec().size());
         print(dxType.getBlockCodecSpace());
         System.out.println();
+
+        assertEquals(3, dxType.getFxSpace().getFx().size());
         print(dxType.getFxSpace());
         System.out.println();
     }

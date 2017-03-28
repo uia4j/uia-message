@@ -34,17 +34,17 @@ public class ByteCodec implements BlockCodec<Byte> {
 
     @Override
     public Byte decode(byte[] data, int bitLength) throws BlockCodecException {
-        bitLength = Math.min(8, bitLength);
-        byte result = ByteUtils.valueLeft(data[0], bitLength);
-        result = (byte) (result >> (8 - bitLength));
+        int _bitLength = Math.min(8, bitLength);
+        byte result = ByteUtils.valueLeft(data[0], _bitLength);
+        result = (byte) (result >> (8 - _bitLength));
         return result;
     }
 
     @Override
     public byte[] encode(Byte data, int bitLength) throws BlockCodecException {
-        bitLength = Math.min(8, bitLength);
-        byte result = ByteUtils.valueRight(data.byteValue(), 8 - bitLength);
-        result = (byte) (result << (8 - bitLength));
+        int _bitLength = Math.min(8, bitLength);
+        byte result = ByteUtils.valueRight(data.byteValue(), 8 - _bitLength);
+        result = (byte) (result << (8 - _bitLength));
         return new byte[] { result };
     }
 
