@@ -15,13 +15,13 @@ Version 0.5.1 which references [uia.utils-0.1.2](https://github.com/gazer2kanlin
 ## Feature
 
 * Use XML to define data structure.
-* Map binary to POJO.
+* Map byte array to POJO.
 * Support custom data types.
 * Calculate size or count using elementary arithmetic.
 * Calculate size or count using custom function.
 
 
-## Example
+## Example 1
 
 This test case exists in example package of test source code.
 
@@ -108,7 +108,7 @@ public class One {
 }
 ```
 
-Depending on definition of __Case1__ in test.xml, the binary will be:
+Depending on definition of __Case1__ in test.xml, the byte array will be:
 
 ```java
 byte[] data = new byte[] {
@@ -150,8 +150,8 @@ Assert.assertArrayEquals(
         },
         result);
 ```
-
 More test cases, check test source code.
+* [Netflow XML sample](https://github.com/gazer2kanlin/uia.message4j/blob/0.5.0.0/uia.message/src/test/resources/uia/netflow/packet/NFPacket.xml)
 
 
 ## Maven
