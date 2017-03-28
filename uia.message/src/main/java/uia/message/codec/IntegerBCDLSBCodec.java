@@ -28,9 +28,6 @@ import uia.utils.IntegerUtils;
  */
 public class IntegerBCDLSBCodec implements BlockCodec<Integer> {
 
-    public IntegerBCDLSBCodec() {
-    }
-
     @Override
     public Integer zeroValue() {
         return 0;

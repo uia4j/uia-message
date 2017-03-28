@@ -27,9 +27,6 @@ import uia.utils.ByteUtils;
  */
 public class LongCodec implements BlockCodec<Long> {
 
-    public LongCodec() {
-    }
-
     @Override
     public Long zeroValue() {
         return 0L;

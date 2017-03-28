@@ -320,10 +320,10 @@ public class DataExFactory {
      * @param messageName The message name defined in XML.
      * @return The deserializer. Can be null.
      */
-    public MessageDeserializer createDeserializer(String messageName) {
+    public MessageDeserializer createDeserializer(String messageName) throws BlockCodecException {
         MessageType mt = this.messageSpace.get(messageName);
         if (mt == null) {
-            throw new NullPointerException("Mesage:" + messageName + " doesn't exist.");
+            throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
         }
         return new MessageDeserializer(this, mt);
     }
@@ -334,10 +334,10 @@ public class DataExFactory {
      * @param messageName The message name defined in XML.
      * @return The serializer. Can be null.
      */
-    public MessageSerializer createSerializer(String messageName) {
+    public MessageSerializer createSerializer(String messageName) throws BlockCodecException {
         MessageType mt = this.messageSpace.get(messageName);
         if (mt == null) {
-            throw new NullPointerException("Mesage:" + messageName + " doesn't exist.");
+            throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
         }
         return new MessageSerializer(this, mt);
     }

@@ -158,10 +158,8 @@ public class MessageDeserializer {
                 }
 
                 try {
-                    if (!readonly) {
-                        if (!PropertyUtils.write(seqObj, name, blockValue)) {
-                            throw new BlockCodecException("property failed. " + seqType.getName() + "." + name + " is null");
-                        }
+                    if (!readonly && !PropertyUtils.write(seqObj, name, blockValue)) {
+                        throw new BlockCodecException("property failed. " + seqType.getName() + "." + name + " is null");
                     }
                 }
                 catch (BlockCodecException ex1) {
