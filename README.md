@@ -32,7 +32,7 @@ __Case1__ defines binary structure of __example.One__ class which has 3 properti
 
 XML test.xml:
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <DataEx>
     <BlockSpace />
@@ -57,7 +57,7 @@ XML test.xml:
 ```
 
 POJO One.java:
-```
+```java
 package example;
 
 import java.text.SimpleDateFormat;
@@ -110,7 +110,7 @@ public class One {
 
 Depending on definition of __Case1__ in test.xml, the binary will be:
 
-```
+```java
 byte[] data = new byte[] {
         0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name
         0x00,                                                       // sex
@@ -123,7 +123,7 @@ Use DataExFactory to serialize and deserialize:
 * Domain - cases
 * Message - Case1
 
-```
+```java
 // register
 DataExFactory.register("cases", ExampleTest.class.getResourceAsStream("test.xml"));
 
@@ -158,7 +158,7 @@ More test cases, check test source code.
 Because uia.message uses [uia.utils](https://github.com/gazer2kanlin/uia.utils4j) deployed on jcenter, configure local Maven __settings.xml__ first.
 
 settings.xml in .m2 directory:
-```
+```xml
 <profiles>
     <profile>
         <repositories>
@@ -189,7 +189,7 @@ settings.xml in .m2 directory:
 </activeProfiles>
 ```
 pom.xml in your project:
-```
+```xml
 <dependency>
     <groupId>uia</groupId>
     <artifactId>uia.message</artifactId>
