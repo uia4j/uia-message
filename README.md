@@ -5,8 +5,7 @@ UIA Message
 [![Codecov](https://img.shields.io/codecov/c/github/gazer2kanlin/uia.message4j.svg)](https://codecov.io/gh/gazer2kanlin/uia.message4j)
 [![License](https://img.shields.io/github/license/gazer2kanlin/uia.message4j.svg)](LICENSE)
 
-Serialize & deserialize binary message depending on XML.
-
+Serialize and deserialize between binary and POJO depending on structure defined by XML.
 ## Note
 
 Version 0.5.1 which references [uia.utils-0.1.2](https://github.com/gazer2kanlin/uia.utils4j) runs well on __Android__ platform.
@@ -25,10 +24,10 @@ Version 0.5.1 which references [uia.utils-0.1.2](https://github.com/gazer2kanlin
 
 This test case exists in example package of test source code.
 
-__Case1__ defines binary structure of example.One class which has 3 properties:
+__Case1__ defines binary structure of __example.One__ class which has 3 properties:
 * __name__ - String, max length is 10.
 * __sex__ - Int, 0: female, 1:male.
-* __birthdy__ - DataString, format is yyyyMMdd.
+* __birthdy__ - DateTimeString, format is yyyyMMdd.
 
 XML test.xml:
 
