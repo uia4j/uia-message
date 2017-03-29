@@ -6,10 +6,10 @@ UIA Message
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e3389195edee40968a0eda690d63a9ec)](https://www.codacy.com/app/gazer2kanlin/uia-message4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gazer2kanlin/uia.message4j&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/github/license/gazer2kanlin/uia.message4j.svg)](LICENSE)
 
-Serialize and deserialize between binary and POJO depending on structure defined by XML.
+Serialize and deserialize between byte array and POJO depending on structure defined by XML.
 ## Note
 
-Version 0.5.1 which references [uia.utils-0.1.2](https://github.com/gazer2kanlin/uia.utils4j) runs well on __Android__ platform.
+Version 0.5.1 or above supports __Android__ platform.
 
 
 ## Feature
@@ -21,42 +21,24 @@ Version 0.5.1 which references [uia.utils-0.1.2](https://github.com/gazer2kanlin
 * Calculate size or count using custom function.
 
 
-## Example 1
+## Example
 
-This test case exists in example package of test source code.
-
-__Case1__ defines binary structure of __example.One__ class which has 3 properties:
-* __name__ - String, max length is 10.
-* __sex__ - Int, 0: female, 1:male.
-* __birthdy__ - DateTimeString, format is yyyyMMdd.
-
-XML test.xml:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<DataEx>
-    <BlockSpace />
-    <MessageSpace>
-        <Message>
-            <Name>Case1</Name>
-            <Desc>The first case named Case1.</Desc>
-            <Body name="root" className="example.One">
-                <Block name="name" size="10" dataType="String" />
-                <Block name="sex" size="1" dataType="Int" />
-                <Block name="birthday" size="8" dataType="DateTimeString">
-                    <CodecPropSet>
-                        <Prop name="format">yyyyMMdd</Prop>
-                    </CodecPropSet>
-                </Block>
-            </Body>
-        </Message>
-    </MessageSpace>
-    <BlockCodecSpace />
-    <FxSpace />
-</DataEx>
+ Byte array below represents a person information.
+```java
+byte[] data = new byte[] {
+        0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name
+        0x00,                                                       // sex
+        0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday
+};
 ```
+2 steps to use this library to deserialize this byte array to POJO.
 
-POJO One.java:
+
+* Define POJO class
+
+* Define binary structure by XML
+
+#### POJO - One.java
 ```java
 package example;
 
@@ -108,20 +90,43 @@ public class One {
 }
 ```
 
-Depending on definition of __Case1__ in test.xml, the byte array will be:
+#### XML - test.xml
 
-```java
-byte[] data = new byte[] {
-        0x4a, 0x75, 0x64, 0x79, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, // name
-        0x00,                                                       // sex
-        0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday
-};
+Message named __Case1__ defines binary structure of __example.One__ class which has 3 properties:
+* __name__ - String, max length is 10.
+* __sex__ - Int, 0: female, 1:male.
+* __birthdy__ - DateTimeString, format is yyyyMMdd.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<DataEx>
+    <BlockSpace />
+    <MessageSpace>
+        <Message>
+            <Name>Case1</Name>
+            <Desc>The first case named Case1.</Desc>
+            <Body name="root" className="example.One">
+                <Block name="name" size="10" dataType="String" />
+                <Block name="sex" size="1" dataType="Int" />
+                <Block name="birthday" size="8" dataType="DateTimeString">
+                    <CodecPropSet>
+                        <Prop name="format">yyyyMMdd</Prop>
+                    </CodecPropSet>
+                </Block>
+            </Body>
+        </Message>
+    </MessageSpace>
+    <BlockCodecSpace />
+    <FxSpace />
+</DataEx>
 ```
+
+#### RUN
 
 Use DataExFactory to serialize and deserialize:
 
-* Domain - cases
-* Message - Case1
+* Domain Name - cases
+* Message Name - Case1
 
 ```java
 // register
@@ -150,8 +155,11 @@ Assert.assertArrayEquals(
         },
         result);
 ```
-More test cases, check test source code.
-* [Netflow XML sample](https://github.com/gazer2kanlin/uia.message4j/blob/0.5.0.0/uia.message/src/test/resources/uia/netflow/packet/NFPacket.xml)
+You can find out this example in example package of test source code.
+
+## Other Examples
+
+* [Netflow XML](https://github.com/gazer2kanlin/uia.message4j/blob/0.5.0.0/uia.message/src/test/resources/uia/netflow/packet/NFPacket.xml)
 
 
 ## Maven
