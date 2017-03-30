@@ -84,15 +84,8 @@ public class MessageDeserializer {
      * @return The object.
      * @throws BlockCodecException raise when byte array can't be deserialized.
      */
-    public Object read(byte[] data) throws BlockCodecException {
-        this.byteStart = 0;
-        this.bitStart = 0;
-        this.blockValues.clear();
-        BitBlockSeqType body = this.mt.getBody();
-        Object result = decode(body.getName(), body, data, null);
-        this.blockValues.clear();
-        System.gc();
-        return result;
+    public synchronized Object read(byte[] data) throws BlockCodecException {
+        return read(data, null);
     }
 
     /**
@@ -102,7 +95,7 @@ public class MessageDeserializer {
      * @return The object.
      * @throws BlockCodecException raise when byte array can't be deserialized.
      */
-    public Object read(byte[] data, Map<String, Object> initialValues) throws BlockCodecException {
+    public synchronized Object read(byte[] data, Map<String, Object> initialValues) throws BlockCodecException {
         this.byteStart = 0;
         this.bitStart = 0;
         this.blockValues.clear();

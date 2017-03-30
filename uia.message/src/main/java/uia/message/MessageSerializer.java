@@ -79,17 +79,8 @@ public class MessageSerializer {
      * @return Byte array.
      * @throws BlockCodecException raise when the object can't be serialized.
      */
-    public byte[] write(Object obj) throws BlockCodecException {
-        this.indexByte = 0;
-        this.indexBit = 0;
-        this.blockValues.clear();
-        this.resultBytes = new byte[0];
-
-        BitBlockSeqType bodyType = this.mt.getBody();
-        encode(bodyType.getName(), bodyType, obj);
-        this.blockValues.clear();
-
-        return this.resultBytes;
+    public synchronized byte[] write(Object obj) throws BlockCodecException {
+        return write(obj, null);
     }
 
     /**
@@ -99,7 +90,7 @@ public class MessageSerializer {
      * @return Byte array.
      * @throws BlockCodecException raise when the object can't be serialized.
      */
-    public byte[] write(Object obj, Map<String, Object> initialValues) throws BlockCodecException {
+    public synchronized byte[] write(Object obj, Map<String, Object> initialValues) throws BlockCodecException {
         this.indexByte = 0;
         this.indexBit = 0;
         this.blockValues.clear();
