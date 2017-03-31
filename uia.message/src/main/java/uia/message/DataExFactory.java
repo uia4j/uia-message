@@ -241,7 +241,7 @@ public class DataExFactory {
      * @return Deserialize result or null if no domain.
      * @throws BlockCodecException Raise when deserialize failed.
      */
-    public static Object deserialize(String domain, String messageName, byte[] value) throws BlockCodecException {
+    public static <T> T deserialize(String domain, String messageName, byte[] value) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
             throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
@@ -258,7 +258,7 @@ public class DataExFactory {
      * @return Deserialize result or null if no domain.
      * @throws BlockCodecException Raise when deserialize failed.
      */
-    public static Object deserialize(String domain, String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
+    public static <T> T deserialize(String domain, String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
             throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
@@ -298,7 +298,7 @@ public class DataExFactory {
      * @return Deserialize result.
      * @throws BlockCodecException Raise when deserialize failed.
      */
-    public Object deserialize(String messageName, byte[] value) throws BlockCodecException {
+    public <T> T deserialize(String messageName, byte[] value) throws BlockCodecException {
         return createDeserializer(messageName).read(value);
     }
 
@@ -310,7 +310,7 @@ public class DataExFactory {
      * @return Deserialize result.
      * @throws BlockCodecException Raise when deserialize failed.
      */
-    public Object deserialize(String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
+    public <T> T deserialize(String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
         return createDeserializer(messageName).read(value, initialValues);
     }
 

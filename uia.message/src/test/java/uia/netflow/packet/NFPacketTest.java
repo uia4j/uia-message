@@ -57,7 +57,7 @@ public class NFPacketTest {
     @Test
     public void testDeserialize() throws Exception {
         DataExFactory factory = DataExFactory.getFactory(NFPacketEnv.DOMAIN_NAME);
-        NFPacket packet = (NFPacket) factory.deserialize(NFPacket.ID, new byte[] { 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00 });
+        NFPacket packet = factory.deserialize(NFPacket.ID, new byte[] { 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00 });
         Assert.assertEquals(9, packet.getVersion());
     }
 
@@ -82,7 +82,7 @@ public class NFPacketTest {
         Assert.assertEquals(24 + 48, data.length);
 
         DataExFactory factory = DataExFactory.getFactory(NFPacketEnv.DOMAIN_NAME);
-        NFPacketV5 packet = (NFPacketV5) factory.deserialize(NFPacketV5.ID, data, null);
+        NFPacketV5 packet = factory.deserialize(NFPacketV5.ID, data, null);
         Assert.assertEquals(1, packet.getRecords().size());
 
         System.out.println();

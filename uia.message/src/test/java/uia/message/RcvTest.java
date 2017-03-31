@@ -67,7 +67,7 @@ public class RcvTest {
                 new byte[] { (byte) 0xfe, 0x00, 0x00, 0x00 });
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv1");
-        Rcv1 _rcv = (Rcv1) reader.read(data, null);
+        Rcv1 _rcv = reader.read(data, null);
         Assert.assertArrayEquals(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 }, _rcv.getHeader());
         Assert.assertEquals(rcv.getTime(), _rcv.getTime());
         Assert.assertEquals(rcv.getPowerStatus().getPower1(), _rcv.getPowerStatus().getPower1());
@@ -92,7 +92,7 @@ public class RcvTest {
         Assert.assertEquals(15, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv2");
-        Rcv2 _rcv = (Rcv2) reader.read(data);
+        Rcv2 _rcv = reader.read(data);
         Assert.assertArrayEquals(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 }, _rcv.getHeader());
         Assert.assertArrayEquals(rcv.getData(), _rcv.getData());
         Assert.assertEquals(rcv.getDataLength(), _rcv.getDataLength(), 0);
@@ -117,7 +117,7 @@ public class RcvTest {
         Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3");
-        Rcv3 _rcv = (Rcv3) reader.read(data);
+        Rcv3 _rcv = reader.read(data);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
         Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());
@@ -147,7 +147,7 @@ public class RcvTest {
         Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3_1");
-        Rcv3 _rcv = (Rcv3) reader.read(data);
+        Rcv3 _rcv = reader.read(data);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
         Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());
@@ -177,7 +177,7 @@ public class RcvTest {
         Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3_2");
-        Rcv3 _rcv = (Rcv3) reader.read(data);
+        Rcv3 _rcv = reader.read(data);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
         Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());
@@ -201,7 +201,7 @@ public class RcvTest {
         byte[] data = DataExFactory.serialize("Test", "Rcv4", rcv);
         Assert.assertEquals(16, data.length, 0);
 
-        Rcv4 _rcv = (Rcv4) DataExFactory.deserialize("Test", "Rcv4", data);
+        Rcv4 _rcv = DataExFactory.deserialize("Test", "Rcv4", data);
         Assert.assertArrayEquals(rcv.getMask1(), _rcv.getMask1());
         Assert.assertEquals(rcv.getMask2(), _rcv.getMask2());
         Assert.assertArrayEquals(rcv.getSomething1(), _rcv.getSomething1());
@@ -212,7 +212,7 @@ public class RcvTest {
         data = DataExFactory.serialize("Test", "Rcv4", rcv);
         Assert.assertEquals(14, data.length, 0);
 
-        _rcv = (Rcv4) DataExFactory.deserialize("Test", "Rcv4", data);
+        _rcv = DataExFactory.deserialize("Test", "Rcv4", data);
         Assert.assertArrayEquals(rcv.getMask1(), _rcv.getMask1());
         Assert.assertEquals(rcv.getMask2(), _rcv.getMask2());
         Assert.assertArrayEquals(null, _rcv.getSomething1());
@@ -236,7 +236,7 @@ public class RcvTest {
                 new byte[] { 0x00, 0x00, 0x00, 0x01, 0x02, 0x00, 0x32, 0x12, 0x76, 0x34 },
                 data);
 
-        Rcv5 _rcv = (Rcv5) DataExFactory.deserialize("Test", "Rcv5", data, initial);
+        Rcv5 _rcv = DataExFactory.deserialize("Test", "Rcv5", data, initial);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1(), 0);
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2(), 0);
         Assert.assertEquals(rcv.getValue3(), _rcv.getValue3(), 0);
@@ -259,7 +259,7 @@ public class RcvTest {
                 new byte[] { 0x00, 0x00, 0x00, 0x01 },
                 data);
 
-        Rcv5 _rcv = (Rcv5) DataExFactory.deserialize("Test", "Rcv5_0", data, initial);
+        Rcv5 _rcv = DataExFactory.deserialize("Test", "Rcv5_0", data, initial);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1(), 0);
         Assert.assertEquals(0, _rcv.getValue2(), 0);
         Assert.assertEquals(0, _rcv.getValue3(), 0);
@@ -282,7 +282,7 @@ public class RcvTest {
                 new byte[] { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x20, 0x20, 0x20, 0x20 },
                 new byte[] { data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19] });
 
-        Rcv6 _rcv = (Rcv6) DataExFactory.deserialize("Test", "Rcv6", data);
+        Rcv6 _rcv = DataExFactory.deserialize("Test", "Rcv6", data);
         Assert.assertEquals(rcv.getContent1(), _rcv.getContent1());
         Assert.assertEquals(rcv.getContent2(), _rcv.getContent2());
     }
@@ -303,7 +303,7 @@ public class RcvTest {
                 new byte[] { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38 },
                 new byte[] { data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17] });
 
-        Rcv7 _rcv = (Rcv7) DataExFactory.deserialize("Test", "Rcv7", data);
+        Rcv7 _rcv = DataExFactory.deserialize("Test", "Rcv7", data);
         Assert.assertEquals(rcv.getContent1(), _rcv.getContent1());
         Assert.assertEquals("12345678", _rcv.getContent2());
     }
@@ -321,7 +321,7 @@ public class RcvTest {
                 new byte[] { 0x31, 0x32, 0x33, 0x34, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 },
                 new byte[] { data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9] });
 
-        Rcv7 _rcv = (Rcv7) DataExFactory.deserialize("Test", "Rcv7_0", data);
+        Rcv7 _rcv = DataExFactory.deserialize("Test", "Rcv7_0", data);
         Assert.assertEquals(rcv.getContent1(), _rcv.getContent1());
         Assert.assertEquals("", _rcv.getContent2());
     }

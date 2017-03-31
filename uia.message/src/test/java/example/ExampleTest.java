@@ -37,7 +37,7 @@ public class ExampleTest {
                 0x00,                                                       // sex
                 0x31, 0x39, 0x39, 0x32, 0x30, 0x32, 0x31, 0x38              // birthday
         };
-        One one = (One) DataExFactory.deserialize("cases", "Case1", data);
+        One one = DataExFactory.deserialize("cases", "Case1", data);
         Assert.assertEquals("Judy", one.getName());
         Assert.assertEquals(0, one.getSex(), 0);
         Assert.assertEquals("19920218", one.getBirthdayString("yyyyMMdd"));
