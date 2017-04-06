@@ -3,6 +3,7 @@
         xmlns:uia="http://message.uia/model/xml"
         targetNamespace="http://message.uia/model/xml"
         elementFormDefault="qualified"
+        attributeFormDefault="qualified"
         version="1.0">
     
     <element name="DataEx" type="uia:DataExType" nillable="true" />
