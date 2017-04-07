@@ -326,12 +326,12 @@ public class DataExFactory {
      * @param messageName The message name defined in XML.
      * @return The serializer. Can be null.
      */
-    public MessageSerializer createSerializer(String messageName) throws BlockCodecException {
+    public MessageSerializerEx createSerializer(String messageName) throws BlockCodecException {
         MessageType mt = this.messageSpace.get(messageName);
         if (mt == null) {
             throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
         }
-        return new MessageSerializer(this, mt);
+        return new MessageSerializerEx(this, mt);
     }
 
     /**
