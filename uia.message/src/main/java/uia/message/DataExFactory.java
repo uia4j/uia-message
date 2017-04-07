@@ -208,11 +208,7 @@ public class DataExFactory {
      * @throws BlockCodecException Raise when serialize failed.
      */
     public static byte[] serialize(String domain, String messageName, Object value) throws BlockCodecException {
-        DataExFactory factory = getFactory(domain);
-        if (factory == null) {
-            throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
-        }
-        return factory.createSerializer(messageName).write(value);
+        return serialize(domain, messageName, value, null);
     }
 
     /**
@@ -229,7 +225,7 @@ public class DataExFactory {
         if (factory == null) {
             throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
         }
-        return factory.createSerializer(messageName).write(value, initialValues);
+        return factory.createSerializerEx(messageName).write(value, initialValues);
     }
 
     /**
@@ -242,11 +238,7 @@ public class DataExFactory {
      * @throws BlockCodecException Raise when deserialize failed.
      */
     public static <T> T deserialize(String domain, String messageName, byte[] value) throws BlockCodecException {
-        DataExFactory factory = getFactory(domain);
-        if (factory == null) {
-            throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
-        }
-        return factory.createDeserializer(messageName).read(value);
+        return deserialize(domain, messageName, value, null);
     }
 
     /**
@@ -275,7 +267,7 @@ public class DataExFactory {
      * @throws BlockCodecException Raise when serialize failed.
      */
     public byte[] serialize(String messageName, Object value) throws BlockCodecException {
-        return createSerializer(messageName).write(value);
+        return createSerializerEx(messageName).write(value);
     }
 
     /**
@@ -287,7 +279,7 @@ public class DataExFactory {
      * @throws BlockCodecException Raise when serialize failed.
      */
     public byte[] serialize(String messageName, Object value, Map<String, Object> initialValues) throws BlockCodecException {
-        return createSerializer(messageName).write(value, initialValues);
+        return createSerializerEx(messageName).write(value, initialValues);
     }
 
     /**
@@ -340,6 +332,20 @@ public class DataExFactory {
             throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
         }
         return new MessageSerializer(this, mt);
+    }
+
+    /**
+     * Create a serializer with specific message name.
+     *
+     * @param messageName The message name defined in XML.
+     * @return The serializer. Can be null.
+     */
+    public MessageSerializerEx createSerializerEx(String messageName) throws BlockCodecException {
+        MessageType mt = this.messageSpace.get(messageName);
+        if (mt == null) {
+            throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
+        }
+        return new MessageSerializerEx(this, mt);
     }
 
     BlockBaseType getReferenceBlock(String blockName) {
