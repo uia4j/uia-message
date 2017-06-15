@@ -91,7 +91,7 @@ public class MessageDeserializer {
         BitBlockSeqType body = this.mt.getBody();
         Object result = decode(body.getName(), body, data, null);
         this.blockValues.clear();
-        System.gc();
+        // System.gc();
         return result;
     }
 
@@ -112,7 +112,7 @@ public class MessageDeserializer {
         BitBlockSeqType body = this.mt.getBody();
         Object result = decode(body.getName(), body, data, null);
         this.blockValues.clear();
-        System.gc();
+        // System.gc();
         return result;
     }
 
