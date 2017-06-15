@@ -106,7 +106,7 @@ public class MessageDeserializer {
         @SuppressWarnings("unchecked")
         T result = (T) decode(body.getName(), body, data, null);
         this.blockValues.clear();
-        System.gc();
+        // System.gc();
         return result;
     }
 
