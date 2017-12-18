@@ -56,4 +56,9 @@ public class DoubleCodec implements BlockCodec<Double> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "double";
+    }
 }

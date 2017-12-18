@@ -59,15 +59,15 @@ public class RcvTest {
         rcv.getVolts().add(new Rcv1.Volt(-32));
         rcv.setId(-1);
 
-        MessageSerializerEx writer = DataExFactory.getFactory("Test").createSerializer("Rcv1");
-        byte[] data = writer.write(rcv, null);
+        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv1");
+        byte[] data = writer.serialize(rcv, null);
         Assert.assertEquals(42, data.length, 0);
         Assert.assertArrayEquals(
                 new byte[] { data[23], data[24], data[25], data[26] },
                 new byte[] { (byte) 0xfe, 0x00, 0x00, 0x00 });
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv1");
-        Rcv1 _rcv = reader.read(data, null);
+        Rcv1 _rcv = reader.deserialize(data, null);
         Assert.assertArrayEquals(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 }, _rcv.getHeader());
         Assert.assertEquals(rcv.getTime(), _rcv.getTime());
         Assert.assertEquals(rcv.getPowerStatus().getPower1(), _rcv.getPowerStatus().getPower1());
@@ -87,12 +87,12 @@ public class RcvTest {
         rcv.setData(new byte[] { (byte) 0x31, (byte) 0x32, (byte) 0x33, (byte) 0x34, (byte) 0x35, (byte) 0x36, (byte) 0x37 });
         rcv.setFooter("##");
 
-        MessageSerializerEx writer = DataExFactory.getFactory("Test").createSerializer("Rcv2");
-        byte[] data = writer.write(rcv);
+        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv2");
+        byte[] data = writer.serialize(rcv);
         Assert.assertEquals(15, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv2");
-        Rcv2 _rcv = reader.read(data);
+        Rcv2 _rcv = reader.deserialize(data);
         Assert.assertArrayEquals(new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 }, _rcv.getHeader());
         Assert.assertArrayEquals(rcv.getData(), _rcv.getData());
         Assert.assertEquals(rcv.getDataLength(), _rcv.getDataLength(), 0);
@@ -112,12 +112,12 @@ public class RcvTest {
         rcv.getValue3().add(new Rcv3.Value3("Tom", 3));
         rcv.getValue3().add(new Rcv3.Value3("Mary", 4));
 
-        MessageSerializerEx writer = DataExFactory.getFactory("Test").createSerializer("Rcv3");
-        byte[] data = writer.write(rcv);
+        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv3");
+        byte[] data = writer.serialize(rcv);
         Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3");
-        Rcv3 _rcv = reader.read(data);
+        Rcv3 _rcv = reader.deserialize(data);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
         Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());
@@ -142,12 +142,12 @@ public class RcvTest {
         rcv.getValue3().add(new Rcv3.Value3("Tom", 3));
         rcv.getValue3().add(new Rcv3.Value3("Mary", 4));
 
-        MessageSerializerEx writer = DataExFactory.getFactory("Test").createSerializer("Rcv3_1");
-        byte[] data = writer.write(rcv);
+        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv3_1");
+        byte[] data = writer.serialize(rcv);
         Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3_1");
-        Rcv3 _rcv = reader.read(data);
+        Rcv3 _rcv = reader.deserialize(data);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
         Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());
@@ -172,12 +172,12 @@ public class RcvTest {
         rcv.getValue3().add(new Rcv3.Value3("Tom", 3));
         rcv.getValue3().add(new Rcv3.Value3("Mary", 4));
 
-        MessageSerializerEx writer = DataExFactory.getFactory("Test").createSerializer("Rcv3_2");
-        byte[] data = writer.write(rcv);
+        MessageSerializer writer = DataExFactory.getFactory("Test").createSerializer("Rcv3_2");
+        byte[] data = writer.serialize(rcv);
         Assert.assertEquals(2 + 4 * 2 + 8 * 3 + 12 * 3, data.length, 0);
 
         MessageDeserializer reader = DataExFactory.getFactory("Test").createDeserializer("Rcv3_2");
-        Rcv3 _rcv = reader.read(data);
+        Rcv3 _rcv = reader.deserialize(data);
         Assert.assertEquals(rcv.getValue1(), _rcv.getValue1());
         Assert.assertEquals(rcv.getValue2(), _rcv.getValue2());
         Assert.assertEquals(rcv.getValue3().size(), _rcv.getValue3().size());

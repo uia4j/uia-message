@@ -42,7 +42,7 @@ import uia.utils.PropertyUtils;
  *
  * @author Kyle
  */
-public class MessageSerializerEx {
+public class MessageSerializer {
 
     private final DataExFactory factory;
 
@@ -58,7 +58,7 @@ public class MessageSerializerEx {
 
     private final HashMap<String, BlockSerializer> blockSerializers;
 
-    MessageSerializerEx(DataExFactory factory, MessageType mt) {
+    MessageSerializer(DataExFactory factory, MessageType mt) {
         this.factory = factory;
         this.mt = mt;
         this.blockValues = new HashMap<String, Object>();
@@ -127,23 +127,24 @@ public class MessageSerializerEx {
      * @return Byte array.
      * @throws BlockCodecException raise when the object can't be serialized.
      */
-    public synchronized byte[] write(Object obj) throws BlockCodecException {
-        return write(obj, null);
+    public synchronized byte[] serialize(Object obj) throws BlockCodecException {
+        return serialize(obj, null);
     }
 
     /**
      * Serialize the object to byte array.
      *
      * @param obj The object need to be serialized.
+     * @param context Useful data to serialize message.
      * @return Byte array.
      * @throws BlockCodecException raise when the object can't be serialized.
      */
-    public synchronized byte[] write(Object obj, Map<String, Object> initialValues) throws BlockCodecException {
+    public synchronized byte[] serialize(Object obj, Map<String, Object> context) throws BlockCodecException {
         this.indexByte = 0;
         this.indexBit = 0;
         this.blockValues.clear();
-        if (initialValues != null) {
-            this.blockValues.putAll(initialValues);
+        if (context != null) {
+            this.blockValues.putAll(context);
         }
         this.resultBytes = new byte[0];
 
@@ -160,7 +161,14 @@ public class MessageSerializerEx {
                 Object option = value;
                 if (parentValue) {
                     option = PropertyUtils.read(value, block.getOptionBlock());
+                    if (option == null) {
+                        option = this.blockValues.get(block.getOptionBlock());
+                    }
                 }
+                if (option == null) {
+                    return false;
+                }
+
                 String v = option.getClass() == byte[].class ? ByteUtils.toHexString((byte[]) option, "") : option.toString();
                 return block.isOptionEq() ?
                         block.getOptionValue().equals(v) : !block.getOptionValue().equals(v);

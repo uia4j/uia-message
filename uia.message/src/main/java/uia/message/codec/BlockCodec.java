@@ -27,6 +27,8 @@ package uia.message.codec;
  */
 public interface BlockCodec<T> {
 
+    public String getValueType();
+
     /**
      * Decode byte array to specific data.
      *

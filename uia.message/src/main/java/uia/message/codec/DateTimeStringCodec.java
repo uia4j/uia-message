@@ -133,4 +133,9 @@ public class DateTimeStringCodec implements BlockCodec<Date> {
         this.nullable = false;
         this.nullByte = 0x20;
     }
+
+    @Override
+    public String getValueType() {
+        return "String";
+    }
 }

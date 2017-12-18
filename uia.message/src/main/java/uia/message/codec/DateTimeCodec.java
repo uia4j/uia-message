@@ -77,4 +77,9 @@ public class DateTimeCodec implements BlockCodec<Date> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "java.util.Date";
+    }
 }

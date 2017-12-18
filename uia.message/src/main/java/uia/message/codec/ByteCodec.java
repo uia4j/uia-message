@@ -51,4 +51,9 @@ public class ByteCodec implements BlockCodec<Byte> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "byte";
+    }
 }

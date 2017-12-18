@@ -95,4 +95,9 @@ public class IntegerCodec implements BlockCodec<Integer> {
     public void reset() {
         this.unsigned = this.orig;
     }
+
+    @Override
+    public String getValueType() {
+        return "int";
+    }
 }

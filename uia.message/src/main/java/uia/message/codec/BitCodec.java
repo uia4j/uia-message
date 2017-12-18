@@ -44,4 +44,9 @@ public class BitCodec implements BlockCodec<Boolean> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "bool";
+    }
 }

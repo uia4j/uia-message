@@ -57,4 +57,9 @@ public class FloatCodec implements BlockCodec<Float> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "float";
+    }
 }

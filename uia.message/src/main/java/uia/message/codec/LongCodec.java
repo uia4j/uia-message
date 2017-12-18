@@ -73,4 +73,9 @@ public class LongCodec implements BlockCodec<Long> {
     public void reset() {
 
     }
+
+    @Override
+    public String getValueType() {
+        return "long";
+    }
 }

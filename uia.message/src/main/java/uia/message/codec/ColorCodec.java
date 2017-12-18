@@ -46,4 +46,9 @@ public class ColorCodec implements BlockCodec<Color> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "java.awt.Color";
+    }
 }

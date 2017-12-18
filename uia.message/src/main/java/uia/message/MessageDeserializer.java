@@ -81,26 +81,29 @@ public class MessageDeserializer {
      * Deserialize byte array to a object.
      *
      * @param data Byte array need to be deserialized.
+     * @param <T> Type returned.
      * @return The object.
      * @throws BlockCodecException raise when byte array can't be deserialized.
      */
-    public synchronized <T> T read(byte[] data) throws BlockCodecException {
-        return read(data, null);
+    public synchronized <T> T deserialize(byte[] data) throws BlockCodecException {
+        return deserialize(data, null);
     }
 
     /**
      * Deserialize byte array to a object.
      *
      * @param data Byte array need to be deserialized.
+     * @param context Useful data to deserialize message.
+     * @param <T> Type returned.
      * @return The object.
      * @throws BlockCodecException raise when byte array can't be deserialized.
      */
-    public synchronized <T> T read(byte[] data, Map<String, Object> initialValues) throws BlockCodecException {
+    public synchronized <T> T deserialize(byte[] data, Map<String, Object> context) throws BlockCodecException {
         this.byteStart = 0;
         this.bitStart = 0;
         this.blockValues.clear();
-        if (initialValues != null) {
-            this.blockValues.putAll(initialValues);
+        if (context != null) {
+            this.blockValues.putAll(context);
         }
         BitBlockSeqType body = this.mt.getBody();
         @SuppressWarnings("unchecked")
@@ -341,6 +344,12 @@ public class MessageDeserializer {
         if (block.getOptionBlock() != null && block.getOptionBlock().length() > 0) {
             try {
                 Object option = PropertyUtils.read(obj, block.getOptionBlock());
+                if (option == null) {
+                    option = this.blockValues.get(block.getOptionBlock());
+                }
+                if (option == null) {
+                    return false;
+                }
                 String v = option.getClass() == byte[].class ? ByteUtils.toHexString((byte[]) option, "") : option.toString();
                 return block.isOptionEq() ?
                         block.getOptionValue().equals(v) : !block.getOptionValue().equals(v);

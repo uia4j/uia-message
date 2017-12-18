@@ -80,4 +80,9 @@ public class BooleanCodec implements BlockCodec<Boolean> {
         this.trueValue = 0x00;
         this.falseValue = 0x01;
     }
+
+    @Override
+    public String getValueType() {
+        return "bool";
+    }
 }

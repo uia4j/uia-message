@@ -93,4 +93,9 @@ public class StringCodec implements BlockCodec<String> {
         this.empty = 0x20;
         this.encoding = "UTF-8";
     }
+
+    @Override
+    public String getValueType() {
+        return "String";
+    }
 }

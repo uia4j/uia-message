@@ -65,4 +65,9 @@ public class ByteArrayCodec implements BlockCodec<byte[]> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "byte[]";
+    }
 }

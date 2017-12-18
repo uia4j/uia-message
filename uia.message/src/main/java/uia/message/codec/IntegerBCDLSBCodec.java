@@ -66,4 +66,9 @@ public class IntegerBCDLSBCodec implements BlockCodec<Integer> {
     @Override
     public void reset() {
     }
+
+    @Override
+    public String getValueType() {
+        return "int";
+    }
 }

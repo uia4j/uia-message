@@ -20,6 +20,7 @@ package uia.message;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -217,15 +218,16 @@ public class DataExFactory {
      * @param domain The domain name.
      * @param messageName The message name defined in XML.
      * @param value Object of message.
+     * @param context Useful data to serialize message.
      * @return Serialize result or null if no domain.
      * @throws BlockCodecException Raise when serialize failed.
      */
-    public static byte[] serialize(String domain, String messageName, Object value, Map<String, Object> initialValues) throws BlockCodecException {
+    public static byte[] serialize(String domain, String messageName, Object value, Map<String, Object> context) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
             throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
         }
-        return factory.createSerializerEx(messageName).write(value, initialValues);
+        return factory.createSerializer(messageName).serialize(value, context);
     }
 
     /**
@@ -234,6 +236,7 @@ public class DataExFactory {
      * @param domain The domain name.
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
+     * @param <T> Type returned.
      * @return Deserialize result or null if no domain.
      * @throws BlockCodecException Raise when deserialize failed.
      */
@@ -247,15 +250,25 @@ public class DataExFactory {
      * @param domain The domain name.
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
+     * @param context Useful data to deserialize message.
+     * @param <T> Type returned.
      * @return Deserialize result or null if no domain.
      * @throws BlockCodecException Raise when deserialize failed.
      */
-    public static <T> T deserialize(String domain, String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
+    public static <T> T deserialize(String domain, String messageName, byte[] value, Map<String, Object> context) throws BlockCodecException {
         DataExFactory factory = getFactory(domain);
         if (factory == null) {
             throw new BlockCodecException("Domain:" + domain + " doesn't exist.");
         }
-        return factory.createDeserializer(messageName).read(value, initialValues);
+        return factory.createDeserializer(messageName).deserialize(value, context);
+    }
+
+    public void generateClass(String messageName, PrintStream out) throws BlockCodecException {
+        MessageType mt = this.messageSpace.get(messageName);
+        if (mt == null) {
+            return;
+        }
+        new MessageClassGenerator(this, mt).generate(out);
     }
 
     /**
@@ -267,7 +280,7 @@ public class DataExFactory {
      * @throws BlockCodecException Raise when serialize failed.
      */
     public byte[] serialize(String messageName, Object value) throws BlockCodecException {
-        return createSerializerEx(messageName).write(value);
+        return createSerializer(messageName).serialize(value);
     }
 
     /**
@@ -275,11 +288,12 @@ public class DataExFactory {
      *
      * @param messageName The message name defined in XML.
      * @param value Object of message.
+     * @param context Useful data to serialize message.
      * @return Serialize result.
      * @throws BlockCodecException Raise when serialize failed.
      */
-    public byte[] serialize(String messageName, Object value, Map<String, Object> initialValues) throws BlockCodecException {
-        return createSerializerEx(messageName).write(value, initialValues);
+    public byte[] serialize(String messageName, Object value, Map<String, Object> context) throws BlockCodecException {
+        return createSerializer(messageName).serialize(value, context);
     }
 
     /**
@@ -287,11 +301,12 @@ public class DataExFactory {
      *
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
+     * @param <T> Type returned.
      * @return Deserialize result.
      * @throws BlockCodecException Raise when deserialize failed.
      */
     public <T> T deserialize(String messageName, byte[] value) throws BlockCodecException {
-        return createDeserializer(messageName).read(value);
+        return createDeserializer(messageName).deserialize(value);
     }
 
     /**
@@ -299,11 +314,13 @@ public class DataExFactory {
      *
      * @param messageName The message name defined in XML.
      * @param value byte array of message.
+     * @param context Useful data to deserialize message.
+     * @param <T> Type returned.
      * @return Deserialize result.
      * @throws BlockCodecException Raise when deserialize failed.
      */
-    public <T> T deserialize(String messageName, byte[] value, Map<String, Object> initialValues) throws BlockCodecException {
-        return createDeserializer(messageName).read(value, initialValues);
+    public <T> T deserialize(String messageName, byte[] value, Map<String, Object> context) throws BlockCodecException {
+        return createDeserializer(messageName).deserialize(value, context);
     }
 
     /**
@@ -311,6 +328,7 @@ public class DataExFactory {
      *
      * @param messageName The message name defined in XML.
      * @return The deserializer. Can be null.
+     * @throws BlockCodecException Raise when serialize failed.
      */
     public MessageDeserializer createDeserializer(String messageName) throws BlockCodecException {
         MessageType mt = this.messageSpace.get(messageName);
@@ -325,27 +343,14 @@ public class DataExFactory {
      *
      * @param messageName The message name defined in XML.
      * @return The serializer. Can be null.
+     * @throws BlockCodecException Raise when serialize failed.
      */
-    public MessageSerializerEx createSerializer(String messageName) throws BlockCodecException {
+    public MessageSerializer createSerializer(String messageName) throws BlockCodecException {
         MessageType mt = this.messageSpace.get(messageName);
         if (mt == null) {
             throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
         }
-        return new MessageSerializerEx(this, mt);
-    }
-
-    /**
-     * Create a serializer with specific message name.
-     *
-     * @param messageName The message name defined in XML.
-     * @return The serializer. Can be null.
-     */
-    public MessageSerializerEx createSerializerEx(String messageName) throws BlockCodecException {
-        MessageType mt = this.messageSpace.get(messageName);
-        if (mt == null) {
-            throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
-        }
-        return new MessageSerializerEx(this, mt);
+        return new MessageSerializer(this, mt);
     }
 
     BlockBaseType getReferenceBlock(String blockName) {
