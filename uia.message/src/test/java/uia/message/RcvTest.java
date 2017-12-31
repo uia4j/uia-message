@@ -37,6 +37,20 @@ public class RcvTest {
     }
 
     @Test
+    public void testGenerateClass() throws Exception {
+        // register
+        DataExFactory.getFactory("Test").generateClass("Rcv1", System.out);
+        DataExFactory.getFactory("Test").generateClass("Rcv2", System.out);
+        DataExFactory.getFactory("Test").generateClass("Rcv3", System.out);
+        DataExFactory.getFactory("Test").generateClass("Rcv4", System.out);
+        DataExFactory.getFactory("Test").generateClass("Rcv5", System.out);
+        DataExFactory.getFactory("Test").generateClass("Rcv6", System.out);
+        DataExFactory.getFactory("Test").generateClass("Rcv7", System.out);
+        Assert.assertTrue(true);
+
+    }
+
+    @Test
     public void testFactory() {
         DataExFactory factory = DataExFactory.getFactory("Test");
         Assert.assertEquals(11, factory.getMessageList().size(), 0);

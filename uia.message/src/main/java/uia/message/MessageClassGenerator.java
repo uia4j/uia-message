@@ -61,6 +61,11 @@ public class MessageClassGenerator {
                 acceptBitBlock(name, (BitBlockType) blockType, builder, indent);
             }
 
+            @Override
+            public String toString() {
+                return "BitBlockWalker";
+            }
+
         });
 
         this.blockWalker.put(BitBlockListType.class.getSimpleName(), new BlockWalker() {
@@ -68,6 +73,11 @@ public class MessageClassGenerator {
             @Override
             public void accept(String name, BlockBaseType blockType, StringBuilder builder, int indent) throws BlockCodecException {
                 acceptBitBlockList(name, (BitBlockListType) blockType, builder, indent);
+            }
+
+            @Override
+            public String toString() {
+                return "BitBlockListWalker";
             }
 
         });
@@ -79,6 +89,11 @@ public class MessageClassGenerator {
                 acceptBitBlockSeq(name, (BitBlockSeqType) blockType, builder, indent);
             }
 
+            @Override
+            public String toString() {
+                return "BitBlockSeqWalker";
+            }
+
         });
 
         this.blockWalker.put(BitBlockSeqListType.class.getSimpleName(), new BlockWalker() {
@@ -88,6 +103,11 @@ public class MessageClassGenerator {
                 acceptBitBlockSeqList(name, (BitBlockSeqListType) blockType, builder, indent);
             }
 
+            @Override
+            public String toString() {
+                return "BitBlockSeqListWalker";
+            }
+
         });
 
         this.blockWalker.put(BitBlockRefType.class.getSimpleName(), new BlockWalker() {
@@ -95,6 +115,11 @@ public class MessageClassGenerator {
             @Override
             public void accept(String name, BlockBaseType blockType, StringBuilder builder, int indent) throws BlockCodecException {
                 acceptBitBlockRef(name, (BitBlockRefType) blockType, builder, indent);
+            }
+
+            @Override
+            public String toString() {
+                return "BitBlockRefWalker";
             }
 
         });
@@ -175,8 +200,8 @@ public class MessageClassGenerator {
     }
 
     private void acceptBitBlockRef(String blockName, BitBlockRefType referenceType, StringBuilder builder, int indent) throws BlockCodecException {
-        BlockBaseType block = this.factory.getReferenceBlock(blockName);
-        this.blockWalker.get(block.getClass().getSimpleName()).accept(block.getName(), block, builder, 4);
+        BlockBaseType block = this.factory.getReferenceBlock(referenceType.getReference());
+        this.blockWalker.get(block.getClass().getSimpleName()).accept(blockName, block, builder, 4);
     }
 
     private static StringBuilder indenting(StringBuilder builder, int indent) {

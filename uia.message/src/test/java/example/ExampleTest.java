@@ -56,4 +56,14 @@ public class ExampleTest {
 
     }
 
+    @Test
+    public void testGenerateClass() throws Exception {
+
+        // register
+        DataExFactory.register("cases", ExampleTest.class.getResourceAsStream("test.xml"));
+        DataExFactory.getFactory("cases").generateClass("Case1", System.out);
+        DataExFactory.getFactory("cases").generateClass("Case2", System.out);
+        Assert.assertTrue(true);
+    }
+
 }

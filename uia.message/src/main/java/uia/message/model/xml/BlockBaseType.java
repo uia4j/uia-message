@@ -108,4 +108,9 @@ public abstract class BlockBaseType {
     public void setOptionFx(String value) {
         this.optionFx = value;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

@@ -20,6 +20,10 @@ package uia.message;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.junit.Test;
 
 import uia.message.model.xml.BitBlockRefType;
@@ -45,8 +49,39 @@ import uia.message.model.xml.PropType;
 public class DataExCodecTest {
 
     @Test
-    public void testDecode() throws Exception {
+    public void testDecode1() throws Exception {
         DataExType dxType = DataExCodec.decode(DataExCodecTest.class.getResourceAsStream("Rcv.xml"));
+        assertEquals(2, dxType.getBlockSpace().getBlockOrBlockListOrBlockSeq().size());
+        print(dxType.getBlockSpace());
+        System.out.println();
+
+        assertEquals(11, dxType.getMessageSpace().getMessage().size());
+        print(dxType.getMessageSpace());
+        System.out.println();
+
+        assertEquals(2, dxType.getBlockCodecSpace().getBlockCodec().size());
+        print(dxType.getBlockCodecSpace());
+        System.out.println();
+
+        assertEquals(3, dxType.getFxSpace().getFx().size());
+        print(dxType.getFxSpace());
+        System.out.println();
+    }
+
+    @Test
+    public void testDecode2() throws Exception {
+        InputStream is = DataExCodecTest.class.getResourceAsStream("Rcv.xml");
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder xml = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            xml.append(line + "\n");
+        }
+        br.close();
+        is.close();
+        System.out.println(xml.toString());
+
+        DataExType dxType = DataExCodec.decode(xml.toString());
         assertEquals(2, dxType.getBlockSpace().getBlockOrBlockListOrBlockSeq().size());
         print(dxType.getBlockSpace());
         System.out.println();

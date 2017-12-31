@@ -3,7 +3,7 @@
     <MessageSpace>
         <Message>
             <Name>Case1</Name>
-            <Desc>The first case named Case1.</Desc>
+            <Desc>The first case.</Desc>
             <Body name="root" className="example.One">
                 <Block name="name" size="10" dataType="String" />
                 <Block name="sex" size="1" dataType="Int" />
@@ -12,6 +12,30 @@
                         <Prop name="format">yyyyMMdd</Prop>
                     </CodecPropSet>
                 </Block>
+            </Body>
+        </Message>
+        <Message>
+            <Name>Case2</Name>
+            <Desc>The second case.</Desc>
+            <Body name="root" className="example.Two">
+                <Block name="p01" size="10" dataType="Bcd" />
+                <Block name="p02" size="10" dataType="BcdL" />
+                <Block name="p03" size="10" dataType="Bit" />
+                <Block name="p04" size="10" dataType="Boolean" />
+                <Block name="p05" size="10" dataType="Byte" />
+                <Block name="p06" size="10" dataType="ByteArray" />
+                <Block name="p07" size="10" dataType="Color" />
+                <Block name="p08" size="10" dataType="DateTime" />
+                <Block name="p09" size="10" dataType="DateTimeString" />
+                <Block name="p10" size="10" dataType="Double" />
+                <Block name="p11" size="10" dataType="Float" />
+                <Block name="p12" size="10" dataType="Int" />
+                <Block name="p13" size="10" dataType="IntL" />
+                <Block name="p14" size="10" dataType="IntString" />
+                <Block name="p15" size="10" dataType="Long" />
+                <Block name="p16" size="10" dataType="String" />
+                <Block name="p17" size="10" dataType="UInt" />
+                <Block name="p18" size="10" dataType="UIntL" />
             </Body>
         </Message>
     </MessageSpace>

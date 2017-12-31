@@ -83,6 +83,6 @@ public class BooleanCodec implements BlockCodec<Boolean> {
 
     @Override
     public String getValueType() {
-        return "bool";
+        return "boolean";
     }
 }
