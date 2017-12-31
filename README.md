@@ -96,7 +96,7 @@ public class One {
 Message named __Case1__ defines binary structure of __example.One__ class which has 3 properties:
 * __name__ - String, max length is 10.
 * __sex__ - Int, 0: female, 1:male.
-* __birthdy__ - DateTimeString, format is yyyyMMdd.
+* __birthday__ - DateTimeString, format is yyyyMMdd.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
