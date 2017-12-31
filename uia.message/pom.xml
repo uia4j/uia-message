@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uia</groupId>
 	<artifactId>uia.message</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
+	<version>0.6.0</version>
 	<packaging>jar</packaging>
 	<name>uia.message</name>
 	<url>https://github.com/gazer2kanlin/uia.message4j</url>
