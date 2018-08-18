@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataEx>
+    <BlockSpace />
+    <MessageSpace>
+        <Message>
+            <Name>Normal</Name>
+            <Desc>Normal</Desc>
+            <Body name="root" className="wafermap.WaferInfo">
+                <Block name="operationName" size="20" dataType="String" />
+                <Block name="deviceName" size="16" dataType="String" />
+                <Block name="waferSize" size="2" dataType="Int" />
+                <Block name="machineNo" size="2" dataType="Int" />
+                <Block name="indexSizeX" size="4" dataType="Int" />
+                <Block name="indexSizeY" size="4" dataType="Int" />
+                <Block name="stdOrientationFlatDirection" size="2" dataType="Int" />
+                <Block name="finalEditingMachine" size="1" dataType="Int" />
+                <Block name="mapVersion" size="1" dataType="Int" />
+                <Block name="mapRowSize" size="2" dataType="Int" />
+                <Block name="mapLineSize" size="2" dataType="Int" />
+                <Block name="mapDataForm" size="4" dataType="Int" />
+                <Block name="waferId" size="21" dataType="String" />
+                <Block name="waferNumberOfProbing" size="1" dataType="Int" />
+                <Block name="waferLotNo" size="18" dataType="String" />
+                <Block name="waferCassetteNo" size="2" dataType="Int" />
+                <Block name="waferSlotNo" size="2" dataType="Int" />
+                <Block name="probingXIncreaseDirection" size="1" dataType="Int" />
+                <Block name="probingYIncreaseDirection" size="1" dataType="Int" />
+                <Block name="probingDieSetting" size="1" dataType="Int" />
+                <Block name="reserved1" size="1" dataType="Int" />
+                <Block name="probingTargetDiePosX" size="4" dataType="Int" />
+                <Block name="probingTargetDiePosY" size="4" dataType="Int" />
+                <Block name="probingReferenceDieCoordX" size="2" dataType="Int" />
+                <Block name="probingReferenceDieCoordY" size="2" dataType="Int" />
+                <Block name="probingStartPos" size="1" dataType="Int" />
+                <Block name="probingDirection" size="1" dataType="Int" />
+                <Block name="reserved2" size="2" dataType="Int" />
+                <Block name="distanceX2Center" size="4" dataType="Int" />
+                <Block name="distanceY2Center" size="4" dataType="Int" />
+                <Block name="coordX2Center" size="4" dataType="Int" />
+                <Block name="coordY2Center" size="4" dataType="Int" />
+                <Block name="dieFirstCoordX" size="4" dataType="Int" />
+                <Block name="dieFirstCoordY" size="4" dataType="Int" />
+                <Block name="testStartYear" size="2" dataType="String" />
+                <Block name="testStartMonth" size="2" dataType="String" />
+                <Block name="testStartDay" size="2" dataType="String" />
+                <Block name="testStartHour" size="2" dataType="String" />
+                <Block name="testStartMinute" size="2" dataType="String" />
+                <Block name="testStartReserved" size="2" dataType="String" />
+                <Block name="testEndYear" size="2" dataType="String" />
+                <Block name="testEndMonth" size="2" dataType="String" />
+                <Block name="testEndDay" size="2" dataType="String" />
+                <Block name="testEndHour" size="2" dataType="String" />
+                <Block name="testEndMinute" size="2" dataType="String" />
+                <Block name="testEndReserved" size="2" dataType="String" />
+                <Block name="loadingEndYear" size="2" dataType="String" />
+                <Block name="loadingEndMonth" size="2" dataType="String" />
+                <Block name="loadingEndDay" size="2" dataType="String" />
+                <Block name="loadingEndHour" size="2" dataType="String" />
+                <Block name="loadingEndMinute" size="2" dataType="String" />
+                <Block name="loadingEndReserved" size="2" dataType="String" />
+                <Block name="unloadingEndYear" size="2" dataType="String" />
+                <Block name="unloadingEndMonth" size="2" dataType="String" />
+                <Block name="unloadingEndDay" size="2" dataType="String" />
+                <Block name="unloadingEndHour" size="2" dataType="String" />
+                <Block name="unloadingEndMinute" size="2" dataType="String" />
+                <Block name="unloadingEndReserved" size="2" dataType="String" />
+                <Block name="machineNo1" size="4" dataType="Int" />
+                <Block name="machineNo2" size="4" dataType="Int" />
+                <Block name="special" size="4" dataType="ByteArray" />
+                <Block name="testingEndInfo" size="1" dataType="Int" />
+                <Block name="testingReserved" size="1" dataType="Int" />
+                <Block name="testingTestedDice" size="2" dataType="Int" />
+                <Block name="testingPassDice" size="2" dataType="Int" />
+                <Block name="testingFailDice" size="2" dataType="Int" />
+                <Block name="testingDieInfoAddress" size="4" dataType="Int" />
+                <Block name="numberOfLineCategoryData" size="4" dataType="Int" />
+                <Block name="lineCategoryAddress" size="4" dataType="Int" />
+                <Block name="extMapFileConfig" size="2" dataType="Int" />
+                <Block name="extMapMaxMultiSite" size="2" dataType="Int" />
+                <Block name="extMapCategories" size="2" dataType="Int" />
+                <Block name="extRserved" size="2" dataType="Int" />
+                <BlockSeqList name="dies" countBlock="mapRowSize*mapLineSize" className="wafermap.DieInfo">
+	                <Block name="testResult" size="2" sizeUnit="bit" dataType="UInt" />
+	                <Block name="marking" size="1" sizeUnit="bit" dataType="UInt" />
+	                <Block name="reserved2" size="5" sizeUnit="bit" dataType="ByteArray" />
+	                <Block name="reserved1" size="5" dataType="ByteArray" />
+                </BlockSeqList>
+            </Body>
+        </Message>
+    </MessageSpace>
+    <BlockCodecSpace />
+    <FxSpace />
+</DataEx>
