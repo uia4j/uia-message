@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>uia</groupId>
-	<artifactId>uia.message</artifactId>
+	<groupId>org.uia.message</groupId>
+	<artifactId>uia-message</artifactId>
 	<version>0.6.0</version>
 	<packaging>jar</packaging>
 	<name>uia.message</name>
@@ -20,9 +20,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>uia</groupId>
-			<artifactId>uia.utils</artifactId>
-			<version>0.1.3</version>
+			<groupId>org.uia.utils</groupId>
+			<artifactId>uia-utils</artifactId>
+			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.simpleframework</groupId>
@@ -83,22 +83,29 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<scm>
 		<developerConnection>Kyle K. Lin</developerConnection>
 		<url>https://github.com/gazer2kanlin/uia.message4j</url>
 	</scm>
-    <distributionManagement>
-        <repository>
-            <id>htks-sapme4j-public</id>
-            <name>sapme-m2-releases</name>
-            <url>http://10.160.1.56:17002/repository/sapme4j-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>htks-sapme4j-public</id>
-            <name>sapme-m2-snapshots</name>
-            <url>http://10.160.1.56:17002/repository/sapme4j-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>bintray-my-maven</id>
+			<url>https://api.bintray.com/maven/gazer2kanlin/maven/uia-message4j/;publish=1</url>
+		</repository>
+	</distributionManagement>
 </project>
