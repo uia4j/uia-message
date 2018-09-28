@@ -1,7 +1,7 @@
 UIA Message
 ================
 
-[![Download](https://api.bintray.com/packages/gazer2kanlin/maven/uia.message4j/images/download.svg) ](https://bintray.com/gazer2kanlin/maven/uia.message4j/_latestVersion)
+[![Download](https://api.bintray.com/packages/gazer2kanlin/maven/uia-message4j/images/download.svg) ](https://bintray.com/gazer2kanlin/maven/uia-message4j/_latestVersion)
 [![Build Status](https://travis-ci.org/gazer2kanlin/uia.message4j.svg?branch=0.5.0.0)](https://travis-ci.org/gazer2kanlin/uia.message4j)
 [![Codecov](https://img.shields.io/codecov/c/github/gazer2kanlin/uia.message4j.svg)](https://codecov.io/gh/gazer2kanlin/uia.message4j)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e3389195edee40968a0eda690d63a9ec)](https://www.codacy.com/app/gazer2kanlin/uia-message4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gazer2kanlin/uia.message4j&amp;utm_campaign=Badge_Grade)
