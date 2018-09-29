@@ -1,11 +1,11 @@
 UIA Message
 ================
 
-[![Download](https://api.bintray.com/packages/gazer2kanlin/maven/uia-message4j/images/download.svg) ](https://bintray.com/gazer2kanlin/maven/uia-message4j/_latestVersion)
-[![Build Status](https://travis-ci.org/gazer2kanlin/uia.message4j.svg?branch=0.5.0.0)](https://travis-ci.org/gazer2kanlin/uia.message4j)
-[![Codecov](https://img.shields.io/codecov/c/github/gazer2kanlin/uia.message4j.svg)](https://codecov.io/gh/gazer2kanlin/uia.message4j)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e3389195edee40968a0eda690d63a9ec)](https://www.codacy.com/app/gazer2kanlin/uia-message4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gazer2kanlin/uia.message4j&amp;utm_campaign=Badge_Grade)
-[![License](https://img.shields.io/github/license/gazer2kanlin/uia.message4j.svg)](LICENSE)
+[![Download](https://api.bintray.com/packages/uia4j/maven/uia-message/images/download.svg)](https://bintray.com/uia4j/maven/uia-message/_latestVersion)
+[![Build Status](https://travis-ci.org/uia4j/uia-message.svg?branch=0.5.0.0)](https://travis-ci.org/uia4j/uia-message)
+[![codecov](https://codecov.io/gh/uia4j/uia-message/branch/master/graph/badge.svg)](https://codecov.io/gh/uia4j/uia-message)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e3389195edee40968a0eda690d63a9ec)](https://www.codacy.com/app/gazer2kanlin/uia-message?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=uia4j/uia-message&amp;utm_campaign=Badge_Grade)
+[![License](https://img.shields.io/github/license/uia4j/uia-message.svg)](LICENSE)
 
 Serialize and deserialize between byte array and POJO depending on structure defined by XML.
 ## Note
@@ -160,11 +160,11 @@ You can find out this example in example package of test source code.
 
 ## Other Examples
 
-* [Netflow XML](https://github.com/gazer2kanlin/uia.message4j/blob/0.5.0.0/uia.message/src/test/resources/uia/netflow/packet/NFPacket.xml)
+* [Netflow XML](https://github.com/uia4j/uia-message/blob/0.5.0.0/uia.message/src/test/resources/uia/netflow/packet/NFPacket.xml)
 
 
 ## Maven
-Because uia.message uses [uia.utils](https://github.com/gazer2kanlin/uia.utils4j) deployed on jcenter, configure local Maven __settings.xml__ first.
+Because uia.message uses [uia.utils](https://github.com/uia4j/uia-utils) deployed on jcenter, configure local Maven __settings.xml__ first.
 
 settings.xml in .m2 directory:
 ```xml
@@ -252,7 +252,7 @@ Use ```<BlockCodecSpace />``` to define new data types. Classes of new types hav
 
 ## Dependency Libraries
 
-* [uia.utils](https://github.com/gazer2kanlin/uia.utils4j) - UIA common utilities
+* [uia.utils](https://github.com/uia4j/uia-utils) - UIA common utilities
 * [simpleXML](http://simple.sourceforge.net/) - XML serialization
 
 ## Copyright and License

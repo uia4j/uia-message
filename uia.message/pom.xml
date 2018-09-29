@@ -5,8 +5,8 @@
 	<artifactId>uia-message</artifactId>
 	<version>0.6.0</version>
 	<packaging>jar</packaging>
-	<name>uia.message</name>
-	<url>https://github.com/gazer2kanlin/uia.message4j</url>
+	<name>uia-message</name>
+	<url>https://github.com/uia4j/uia-message</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
@@ -35,9 +35,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>central</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
+            <id>uia4j</id>
+            <name>bintray-uia4j</name>
+            <url>https://dl.bintray.com/uia4j/maven</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -100,12 +100,12 @@
 	</build>
 	<scm>
 		<developerConnection>Kyle K. Lin</developerConnection>
-		<url>https://github.com/gazer2kanlin/uia.message4j</url>
+		<url>https://github.com/uia4j/uia-message</url>
 	</scm>
 	<distributionManagement>
 		<repository>
 			<id>bintray-my-maven</id>
-			<url>https://api.bintray.com/maven/gazer2kanlin/maven/uia-message4j/;publish=1</url>
+			<url>https://api.bintray.com/maven/uia4j/maven/uia-message/;publish=1</url>
 		</repository>
 	</distributionManagement>
 </project>
