@@ -16,13 +16,13 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>[4.13.1,)</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.uia.solution</groupId>
 			<artifactId>uia-utils</artifactId>
-			<version>0.2.0</version>
+			<version>0.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.simpleframework</groupId>
@@ -30,26 +30,18 @@
 			<version>2.7.1</version>
 		</dependency>
 	</dependencies>
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>uia4j</id>
-            <name>bintray-uia4j</name>
-            <url>https://dl.bintray.com/uia4j/maven</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>bintray-plugins</name>
-            <url>http://jcenter.bintray.com</url>
-        </pluginRepository>
-    </pluginRepositories>
+	<repositories>
+		<repository>
+			<id>my-github</id>
+			<url>https://maven.pkg.github.com/uia4j/repos</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
 	<build>
 		<finalName>${project.artifactId}-${project.version}</finalName>
 		<plugins>
@@ -104,8 +96,8 @@
 	</scm>
 	<distributionManagement>
 		<repository>
-			<id>bintray-my-maven</id>
-			<url>https://api.bintray.com/maven/uia4j/maven/uia-message/;publish=1</url>
+			<id>my-github</id>
+			<url>https://maven.pkg.github.com/uia4j/repos</url>
 		</repository>
 	</distributionManagement>
 </project>
