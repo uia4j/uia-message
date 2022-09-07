@@ -94,4 +94,15 @@
 		<developerConnection>Kyle K. Lin</developerConnection>
 		<url>https://github.com/uia4j/uia-message</url>
 	</scm>
+	<distributionManagement>
+		<repository>
+			<id>HTKS</id>
+			<url>http://10.160.1.56:17002/repository/sapme4j-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>HTKS</id>
+			<url>http://10.160.1.56:17002/repository/sapme4j-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
