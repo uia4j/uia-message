@@ -1,0 +1,1253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataEx> 
+	<BlockSpace> 
+		<BlockSeq name="msgHeader" desc="表头(28,44,16)" className="onbon.bx06.message.Bx06MessageHeader">
+			<Block name="dstAddr" size="2" dataType="ByteArray" />
+			<Block name="srcAddr" size="2" dataType="ByteArray" />
+			<Block name="protocolVer" size="1" dataType="UIntL" />
+			<BlockSeq name="common" optionBlock="protocolVer" optionValue="240" optionEq="false">
+				<Block name="protocolType" size="1" dataType="UIntL" />
+				<Block name="deviceType" size="2" dataType="ByteArray" />
+				<Block name="phyType" size="1" dataType="PhyType" />
+				<Block name="frmRsved1" size="6" dataType="Byte" sizeUnit="Bit" readonly="true" />
+				<Block name="offset" size="1" dataType="UInt" sizeUnit="Bit" />
+				<Block name="frmRsved1" size="1" dataType="Byte" sizeUnit="Bit" readonly="true" />
+				<Block name="barcode" size="16" dataType="ByteArray" optionBlock="offset" optionValue="1" optionEq="true" />
+				<!-- BX6G Ver7, Item 3.5.1
+				<Block name="frmRsved1" size="1" dataType="Byte" readonly="true" optionBlock="EXTRA7" optionValue="0" optionEq="true" />
+				<BlockSeq name="options" optionBlock="EXTRA7" optionValue="1" optionEq="true">
+					<Block name="optionsRsved" size="6" sizeUnit="bit" dataType="Byte" />
+					<Block name="barcodeFlag" size="1" sizeUnit="bit" dataType="Byte" />
+					<Block name="id16" size="1" sizeUnit="bit" dataType="Byte" /> 		
+					<Block name="barcode" size="16" dataType="ByteArray" />
+				</BlockSeq>
+				 -->
+				<Block name="msgSeq" size="2" dataType="UIntL" />
+				<Block name="frameLenMax" size="2" dataType="UIntL" desc="接收 buffer 大小除以 16, diff v5" />
+				<Block name="encryptionType" size="1" dataType="EncryptionType" />
+				<Block name="randomNumber" size="1" dataType="UIntL" />
+				<Block name="secret" size="6" dataType="ByteArray" />
+				<Block name="bodyLen" size="2" dataType="UIntL" readonly="true" />
+				<Block name="bodyChecksum" size="2" dataType="ByteArray" />
+				<Block name="frmRsved2" size="1" dataType="Byte" readonly="true" desc="备用字, diff v5" />
+				<Block name="headerChecksum" size="1" dataType="UIntL" />
+			</BlockSeq>
+			<BlockSeq name="dynamic" optionBlock="protocolVer" optionValue="240" optionEq="true">
+				<Block name="frmRsved1" size="1" dataType="Byte" readonly="true" />
+				<Block name="deviceType" size="2" dataType="ByteArray" />
+				<Block name="frmRsved3" size="4" dataType="ByteArray" readonly="true" />
+				<Block name="bodyLen" size="4" dataType="UIntL" readonly="true" />
+			</BlockSeq>
+		</BlockSeq> 
+		<BlockSeq name="reqHeader" desc="命令头">
+			<Block name="rtnReq" dataType="Byte" size="1" />
+			<Block name="cmdGroup" dataType="IntL" size="1" />
+			<Block name="cmd" dataType="IntL" size="1" />
+			<Block name="dataLen" dataType="IntL" size="2" readonly="true" />
+		</BlockSeq>
+		<BlockSeq name="respHeader" desc="回复命令头">
+			<Block name="reserved0" dataType="Byte" size="1" readonly="true" />
+			<Block name="cmdGroup" dataType="IntL" size="1" />
+			<Block name="cmd" dataType="IntL" size="1" />
+			<Block name="status" dataType="ByteArray" size="2" />
+			<Block name="error" dataType="ErrorType" size="2" />
+			<Block name="dataLen" dataType="IntL" size="2" readonly="true" />
+		</BlockSeq>
+	</BlockSpace>
+	<MessageSpace>
+		<Message>
+			<Name>Bx06Message</Name>
+			<Desc>PHY1 + 數據包</Desc>
+			<Body name="Bx06Message" className="onbon.bx06.message.Bx06Message">
+				<BlockRef name="header" reference="msgHeader" />
+				<Block name="body" dataType="ByteArray" sizeBlock="bodyLen" />
+			</Body>
+		</Message>
+
+		<!-- GLOBAL begin (total:2) -->
+		<Message>
+			<Name>global.ACK</Name>
+			<Desc>ACK</Desc>
+			<Body name="ACK" className="onbon.bx06.message.global.ACK">
+				<BlockRef name="respHeader" reference="respHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>global.NACK</Name>
+			<Desc>NACK</Desc>
+			<Body name="NACK" className="onbon.bx06.message.global.NACK">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="data" dataType="ByteArray" sizeBlock="dataLen" />
+			</Body>
+		</Message>
+
+
+		<!-- OFS begin (total:12+6) -->
+		<Message>
+			<Name>ofs.EndFileTransf</Name>
+			<Desc>结束文件傳送(09)</Desc>
+			<Body name="EndFileTransf" className="onbon.bx06.message.ofs.EndFileTransf">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.FileDelete</Name>
+			<Desc>文件删除(01/0a)</Desc>
+			<Body name="FileDelete" className="onbon.bx06.message.ofs.FileDelete">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="fileNum" dataType="IntL" size="2" readonly="true" />
+				<BlockList name="fileNames" dataType="String" size="4" countBlock="fileNum" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.Format</Name>
+			<Desc>文件系统格式化(00)</Desc>
+			<Body name="Format" className="onbon.bx06.message.ofs.Format">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.GetMemVolume</Name>
+			<Desc>查询文件系统容量(12)</Desc>
+			<Body name="GetMemVolume" className="onbon.bx06.message.ofs.GetMemVolume">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.GetTransStatus</Name>
+			<Desc>查询传输状态(13)</Desc>
+			<Body name="GetTransStatus" className="onbon.bx06.message.ofs.GetTransStatus">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReadDirBlock</Name>
+			<Desc>读文件目录块(07)</Desc>
+			<Body name="ReadDirBlock" className="onbon.bx06.message.ofs.ReadDirBlock">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="dirOffset" dataType="IntL" size="2" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReadFileBlock</Name>
+			<Desc>读文件块(05/0e)</Desc>
+			<Body name="ReadFileBlock" className="onbon.bx06.message.ofs.ReadFileBlock">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="fileName" dataType="String" size="4" />
+				<Block name="blockOffset" dataType="IntL" size="4" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.StartFileTransf</Name>
+			<Desc>开始文件傳送(08)</Desc>
+			<Body name="StartFileTransf" className="onbon.bx06.message.ofs.StartFileTransf">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.StartReadDir</Name>
+			<Desc>开始读文件目录(06)</Desc>
+			<Body name="StartReadDir" className="onbon.bx06.message.ofs.StartReadDir">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="fileType" dataType="Byte" size="1" />
+				<Block name="dirSize" dataType="IntL" size="1" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.StartReadFile</Name>
+			<Desc>开始读文件(04/0d)</Desc>
+			<Body name="StartReadFile" className="onbon.bx06.message.ofs.StartReadFile">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="fileName" dataType="String" size="4" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.StartWriteFile</Name>
+			<Desc>开始写文件(02/0b)</Desc>
+			<Body name="StartWriteFile" className="onbon.bx06.message.ofs.StartWriteFile">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="fileName" dataType="String" size="4" />
+				<Block name="fileType" dataType="FileType" size="1" />	<!--  BX6G Ver7, Item 3.3 -->
+				<Block name="fileLen" dataType="IntL" size="4" />
+				<Block name="overwrite" dataType="IntL" size="1" />
+				<Block name="crc" dataType="ByteArray" size="4" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.WriteFileBlock</Name>
+			<Desc>写文件块(03/0c)</Desc>
+			<Body name="WriteFileBlock" className="onbon.bx06.message.ofs.WriteFileBlock">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="fileName" dataType="String" size="4" />
+				<Block name="lastBlockFlag" dataType="IntL" size="1" />
+				<Block name="fileOffset" dataType="IntL" size="4" />
+				<Block name="data" dataType="ByteArray" sizeBlock="dataLen-9" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReturnDirBlock</Name>
+			<Desc>返回文件目录块(87)</Desc>
+			<Body name="ReturnDirBlock" className="onbon.bx06.message.ofs.ReturnDirBlock">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="lastBlockFlag" size="1" dataType="UIntL" />
+				<Block name="dirOffset" size="2" dataType="UIntL" />
+				<Block name="fileNum" size="2" dataType="UIntL" readonly="true" />
+				<BlockSeqList name="files" className="onbon.bx06.message.ofs.ReturnDirBlock$FileInfo" countBlock="fileNum">
+					<Block name="fileName" size="4" dataType="String" />
+					<Block name="fileType" size="1" dataType="FileType" />	<!--  BX6G Ver7, Item 3.3 -->
+					<Block name="fileLen" size="4" dataType="UIntL" />
+					<Block name="crc" size="4" dataType="ByteArray" />
+				</BlockSeqList>
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReturnDirSize</Name>
+			<Desc>返回 文件目录大小(86)</Desc>
+			<Body name="ReturnDirSize" className="onbon.bx06.message.ofs.ReturnDirSize">
+				<BlockRef name="respHeader" reference="respHeader" />
+					<Block name="dirNum" size="2" dataType="UIntL" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReturnFileBlock</Name>
+			<Desc>读文件块返回命令(85/8e)</Desc>
+			<Body name="ReturnFileBlock" className="onbon.bx06.message.ofs.ReturnFileBlock">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="lastBlockFlag" size="1" dataType="UIntL" />
+				<Block name="fileName" size="4" dataType="String" />
+				<Block name="blockOffset" size="4" dataType="UIntL" />
+				<Block name="data" sizeBlock="dataLen-9" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReturnFileInfo</Name>
+			<Desc>返回文件資訊(84/8d)</Desc>
+			<Body name="ReturnFileInfo" className="onbon.bx06.message.ofs.ReturnFileInfo">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="fileName" dataType="String" size="4" />
+				<Block name="fileSize" dataType="IntL" size="4" />
+				<Block name="crc" dataType="ByteArray" size="4" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReturnMemVolume</Name>
+			<Desc>返回文件系统容量(92)</Desc>
+			<Body name="ReturnMemVolume" className="onbon.bx06.message.ofs.ReturnMemVolume">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="totalMemVolume" dataType="ByteArray" size="4" />
+				<Block name="availableMemVolume" dataType="ByteArray" size="4" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>ofs.ReturnTransStatus</Name>
+			<Desc>返回传输状态(87)</Desc>
+			<Body name="ReturnTransStatus" className="onbon.bx06.message.ofs.ReturnTransStatus">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="rw" dataType="Byte" size="1" />
+				<Block name="fileName" dataType="String" size="4" />
+				<Block name="fileCrc" dataType="ByteArray" size="4" />
+				<Block name="fileOffset" dataType="IntL" size="4" />
+			</Body>
+		</Message>
+		
+		<!-- LED begin (26+8) -->
+		<Message>
+			<Name>led.CancelScreenTimingOnOff</Name>
+			<Desc>取消定时开关机(08)</Desc>
+			<Body name="CancelScreenTimingOnOff" className="onbon.bx06.message.led.CancelScreenTimingOnOff">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.CheckControllerStatus</Name>
+			<Desc>控制器状态监控(0f)</Desc>
+			<Body name="CheckControllerStatus" className="onbon.bx06.message.led.CheckControllerStatus">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.CheckCurrentFirmware</Name>
+			<Desc>檢查韌體状态(04)</Desc>
+			<Body name="CheckCurrentFirmware" className="onbon.bx06.message.led.CheckCurrentFirmware">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.CheckFPGAStatus</Name>
+			<Desc>查询 FPGA 状态(16)。目前此命令仅针对 BX-5Q2。</Desc>
+			<Body name="CheckFPGAStatus" className="onbon.bx06.message.led.CheckFPGAStatus">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.DeleteSecret</Name>
+			<Desc>解除控制器密码(11)</Desc>
+			<Body name="DeleteSecret" className="onbon.bx06.message.led.DeleteSecret">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="currentSecret" size="6" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.EnableInfraredRemote</Name>
+			<Desc>使能红外功能(24)</Desc>
+			<Body name="EnableInfraredRemote" className="onbon.bx06.message.led.EnableInfraredRemote">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.EraseExFlash</Name>
+			<Desc>擦除整個片外 Flash(09)</Desc>
+			<Body name="EraseExFlash" className="onbon.bx06.message.led.EraseExFlash">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.FirmwareActivate</Name>
+			<Desc>韌體激活(03)</Desc>
+			<Body name="FirmwareActivate" className="onbon.bx06.message.led.FirmwareActivate">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="firmwareName" size="4" dataType="String" />
+			</Body>
+		</Message>
+		<!--  BX6G Ver7, Item 3.5 -->
+		<!-- 
+		<Message>
+			<Name>led.GetBarcode</Name>
+			<Desc>读取条码(1f)</Desc>
+			<Body name="ReadBarcode" className="onbon.bx06.message.led.GetBarcode">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		 -->
+		<Message>
+			<Name>led.GetBattleTime</Name>
+			<Desc>查询当前战斗时间(17)</Desc>
+			<Body name="GetBattleTime" className="onbon.bx06.message.led.GetBattleTime">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="battleCmd" size="1" dataType="Byte" desc="0：启动；1：暂停；2：复位。" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.GetBrightnessValue</Name>
+			<Desc>查询當前亮度傳感器值(19)</Desc>
+			<Body name="GetBrightnessValue" className="onbon.bx06.message.led.GetBrightnessValue">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.GetModbus</Name>
+			<Desc>查询Modbus参数(27)</Desc>
+			<Body name="GetModbus" className="onbon.bx06.message.led.GetModbus">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.GetStopWatch</Name>
+			<Desc>查询当前秒表(18)</Desc>
+			<Body name="GetStopWatch" className="onbon.bx06.message.led.GetStopWatch">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="timerCmd" size="1" dataType="Byte" desc="0：启动；1：暂停；2：复位。" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ModifyBrightness</Name>
+			<Desc>亮度調整(07)</Desc>
+			<Body name="ModifyBrightness" className="onbon.bx06.message.led.ModifyBrightness">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="brightnessMode" dataType="Byte" size="1" />
+				<Block name="halfHourValues" dataType="ByteArray" size="48" />
+			</Body> 
+		</Message>
+		<Message>
+			<Name>led.Ping</Name>
+			<Desc>Ping 控制器(00)</Desc>
+			<Body name="Ping" className="onbon.bx06.message.led.Ping">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ProgramLock</Name>
+			<Desc>锁定节目(0e)</Desc>
+			<Body name="ProgramLock" className="onbon.bx06.message.led.ProgramLock">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="nonvolatile" size="1" dataType="Byte" desc="1：掉电保存，0：掉电不保存。" />
+				<Block name="locked" size="1" dataType="Byte" />
+				<Block name="programName" size="4" dataType="String" />
+				<Block name="lockMode" size="1" dataType="Byte"  desc="1：播放次数锁定，0：定长锁定。" />
+				<Block name="lockDuration" size="4" dataType="Int" desc="定长锁定表示時間，單位 10 毫秒。播放次数锁定表示次數。0xffffffff 表示無限制。" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.QuicklySetAddr</Name>
+			<Desc>快速设置屏号(1b)</Desc>
+			<Body name="QuicklySetAddr" className="onbon.bx06.message.led.QuicklySetAddr">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="address" dataType="ByteArray" size="2" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.QuicklySetBaud</Name>
+			<Desc>快速设置(1d)</Desc>
+			<Body name="QuicklySetBaud" className="onbon.bx06.message.led.QuicklySetBaud">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="baudrate" dataType="Byte" size="1" desc="0：保持原有波特率不变；1：强制设置为9600；2：强制设置为57600。" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.QuicklySetName</Name>
+			<Desc>快速设置(1c)</Desc>
+			<Body name="QuicklySetName" className="onbon.bx06.message.led.QuicklySetName">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="name" dataType="String" size="64" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReadControllerId</Name>
+			<Desc>读取控制器 ID(0a)</Desc>
+			<Body name="ReadControllerId" className="onbon.bx06.message.led.ReadControllerId">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReadControllerWorking</Name>
+			<Desc>查询控制器工况(a2)</Desc>
+			<Body name="CheckControllerStatus" className="onbon.bx06.message.led.ReadControllerWorking">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReadCopyrightInfo</Name>
+			<Desc>读取版权信息(0b)</Desc>
+			<Body name="ReadCopyrightInfo" className="onbon.bx06.message.led.ReadCopyrightInfo">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ScreenLock</Name>
+			<Desc>锁定屏幕(0d)</Desc>
+			<Body name="ScreenLock" className="onbon.bx06.message.led.ScreenLock">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="nonvolatile" size="1" dataType="Byte" desc="1：掉电保存，0：掉电不保存。" />
+				<Block name="locked" size="1" dataType="Byte" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ScreenTimingOnOff</Name>
+			<Desc>定时开关机(06)</Desc>
+			<Body name="ScreenTimingOnOff" className="onbon.bx06.message.led.ScreenTimingOnOff">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="groupNum" size="1" dataType="UIntL" readonly="true" />
+				<BlockSeqList name="groups" className="onbon.bx06.message.led.ScreenTimingOnOff$TimeInfo" countBlock="groupNum">
+					<Block name="onHour" size="1" dataType="BcdL" />
+					<Block name="onMinute" size="1" dataType="BcdL" />
+					<Block name="offHour" size="1" dataType="BcdL" />
+					<Block name="offMinute" size="1" dataType="BcdL" />
+				</BlockSeqList>
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetBarcode</Name>
+			<Desc>设置条码(1e)</Desc>
+			<Body name="SetBarcode" className="onbon.bx06.message.led.SetBarcode">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="barcode" dataType="ByteArray" size="16" desc="条码ID" />
+				<Block name="crc16" dataType="ByteArray" size="2" />	<!--  BX6G Ver7, Item 3.8 -->
+			</Body>
+		</Message>
+		<!-- 
+		<Message>
+			<Name>led.SetBtnFunc</Name>
+			<Desc>设置按钮功能(13)</Desc>
+			<Body name="SetBtnFunc" className="onbon.bx06.message.led.SetBtnFunc">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="btnMode" dataType="Byte" size="1" />
+				<Block name="reserved" dataType="ByteArray" size="5" readonly="true" />
+			</Body>
+		</Message>
+		 -->
+		<Message>
+			<Name>led.SetCleanScreen</Name>
+			<Desc>设置节目切换后是否清屏(21)</Desc>
+			<Body name="SetCleanScreen" className="onbon.bx06.message.led.SetCleanScreen">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="cleanFlag" dataType="Byte" size="1" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetDelayTime</Name>
+			<Desc>设置开机延时(12)</Desc>
+			<Body name="SetDelayTime" className="onbon.bx06.message.led.SetDelayTime">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="delaySec" dataType="UIntL" size="2" desc="单位：秒。" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetDispMode</Name>
+			<Desc>设置控制器的显示模式(15)</Desc>
+			<Body name="SetDispMode" className="onbon.bx06.message.led.SetDispMode">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="dispMode" dataType="Byte" size="1" />
+				<Block name="reserved" dataType="ByteArray" size="5" readonly="true" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetDispOptimizationOption</Name>
+			<Desc>设定优化选项(0c)</Desc>
+			<Body name="SetDispOptimizationOption" className="onbon.bx06.message.led.SetDispOptimizationOption">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="scanTime" size="1" dataType="UIntL" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetIOPin</Name>
+			<Desc>设置IO功能(20)</Desc>
+			<Body name="SetIOPin" className="onbon.bx06.message.led.SetIOPin">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="test" size="1" dataType="Byte" />
+				<Block name="ir" size="1" dataType="Byte" />
+				<Block name="humidityClock" size="1" dataType="Byte" />
+				<Block name="humidityData" size="1" dataType="Byte" />
+				<Block name="temperature" size="1" dataType="Byte" />
+				<Block name="brightnessClock" size="1" dataType="Byte" />
+				<Block name="brightnessData" size="1" dataType="Byte" />
+				<Block name="battleStart" size="1" dataType="Byte" />
+				<Block name="battleReset" size="1" dataType="Byte" />
+				<Block name="stopWatchStart" size="1" dataType="Byte" />
+				<Block name="stopWatchReset" size="1" dataType="Byte" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetModbus</Name>
+			<Desc>设置 Modbus(23)</Desc>
+			<Body name="SetModbus" className="onbon.bx06.message.led.SetModbus">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="protocolVer" dataType="Byte" size="1" />
+				<Block name="reserved" dataType="ByteArray" size="3" />
+				<Block name="modbusMode1" dataType="Byte" size="1" />
+				<Block name="modbusMode2" dataType="Byte" size="1" />
+				<Block name="slaveDeviceNum" dataType="UIntL" size="2" readonly="true" />
+				<BlockSeqList name="slaveDevices" countBlock="slaveDeviceNum" className="onbon.bx06.message.led.SetModbus$SlaveDevice">
+					<Block name="id" dataType="ByteArray" size="2" />
+					<Block name="baudrate" dataType="Byte" size="1" />
+					<Block name="ip" dataType="ByteArray" size="4" />
+					<Block name="port" dataType="UIntL" size="2" />
+					<Block name="mask" dataType="ByteArray" size="4" />
+					<Block name="gateway" dataType="ByteArray" size="4" />
+					<Block name="function" dataType="Byte" size="1" />
+					<Block name="operationRegTime" dataType="UIntL" size="2" />
+					<Block name="responseTimeOut" dataType="UIntL" size="2" />
+					<Block name="retryTimes" dataType="UIntL" size="1" />
+					<Block name="reserved" dataType="ByteArray" size="4" />
+					<Block name="paraNum" dataType="UIntL" size="2" readonly="true" />
+					<BlockSeqList name="paras" countBlock="paraNum" className="onbon.bx06.message.led.SetModbus$SlaveDeviceParam">
+						<Block name="regStartAddr" dataType="Byte" size="2" />
+						<Block name="relateRegNum" dataType="Byte" size="1" />
+						<Block name="adMode" dataType="Byte" size="1" />
+						<Block name="extendParaLen" dataType="UIntL" size="1" />
+						<Block name="ruleStepNum" dataType="UIntL" size="1" readonly="true" />
+						<BlockSeqList name="ruleSteps" countBlock="ruleStepNum" className="onbon.bx06.message.led.SetModbus$RuleStep">
+							<Block name="operator" dataType="Byte" size="1" />
+							<Block name="value" dataType="ByteArray" size="4" />
+						</BlockSeqList>
+					</BlockSeqList>
+				</BlockSeqList>
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetRstFunc</Name>
+			<Desc>設定定時復位功能(14)</Desc>
+			<Body name="SetRstFunc" className="onbon.bx06.message.led.SetRstFunc">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="rstMode" dataType="Byte" size="1" />
+				<Block name="rstInterval" dataType="UIntL" size="4" />
+				<Block name="rstHour1" dataType="UIntL" size="1" />
+				<Block name="rstMinute1" dataType="UIntL" size="1" />
+				<Block name="rstHour2" dataType="UIntL" size="1" />
+				<Block name="rstMinute2" dataType="UIntL" size="1" />
+				<Block name="rstHour3" dataType="UIntL" size="1" />
+				<Block name="rstMinute3" dataType="UIntL" size="1" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetSaveProgramSch</Name>		<!--  BX6G Ver7, Item 3.9 -->
+			<Desc>设置是否記憶撥放進度(22)</Desc>
+			<Body name="SetSaveProgramSch" className="onbon.bx06.message.led.SetSaveProgramSch">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="saveFlag" dataType="Byte" size="1" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SetSecret</Name>
+			<Desc>设置密码(10)</Desc>
+			<Body name="SetSecret" className="onbon.bx06.message.led.SetSecret">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="oldSecret" dataType="ByteArray" size="6" />
+				<Block name="newSecret" dataType="ByteArray" size="6" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SpeedAdjust</Name>
+			<Desc>速度微调(1a)</Desc>
+			<Body name="SpeedAdjust" className="onbon.bx06.message.led.SpeedAdjust">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" dataType="UIntL" size="2" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SwitchOnOffScreen</Name>
+			<Desc>强制开关机(05)</Desc>
+			<Body name="SwitchOnOffScreen" className="onbon.bx06.message.led.SwitchOnOffScreen">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="screenStatus" dataType="Byte" size="1" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SystemClockCorrect</Name>
+			<Desc>校正系统时钟(02)</Desc>
+			<Body name="SystemClockCorrect" className="onbon.bx06.message.led.SystemClockCorrect">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="year" dataType="BcdL" size="2" />
+				<Block name="month" dataType="BcdL" size="1" />
+				<Block name="day" dataType="BcdL" size="1" />
+				<Block name="hour" dataType="BcdL" size="1" />
+				<Block name="minute" dataType="BcdL" size="1" />
+				<Block name="second" dataType="BcdL" size="1" />
+				<Block name="week" dataType="Byte" size="1" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.SystemReset</Name>
+			<Desc>系統復位(01)</Desc>
+			<Body name="SystemReset" className="onbon.bx06.message.led.SystemReset">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnBarcode</Name>
+			<Desc>返回条码ID(9f)</Desc>
+			<Body name="ReturnBarcode" className="onbon.bx06.message.led.ReturnBarcode">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="barcode" size="16" dataType="ByteArray" desc="条码ID" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnBattleTime</Name>
+			<Desc>返回当前战斗时间(97)</Desc>
+			<Body name="ReturnBattleTime" className="onbon.bx06.message.led.ReturnBattleTime">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="rtcYear" size="2" dataType="BcdL" />
+				<Block name="rtcMonth" size="1" dataType="BcdL" />
+				<Block name="rtcDay" size="1" dataType="BcdL" />
+				<Block name="rtcHour" size="1" dataType="BcdL" />
+				<Block name="rtcMinute" size="1" dataType="BcdL" />
+				<Block name="rtcSecond" size="1" dataType="BcdL" />
+				<Block name="rtcWeek" size="1" dataType="Byte" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnBrightnessValue</Name>
+			<Desc>返回當前亮度傳感器值(99)</Desc>
+			<Body name="ReturnBrightnessValue" className="onbon.bx06.message.led.ReturnBrightnessValue">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="brightness" size="4" dataType="UIntL" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnControllerId</Name>
+			<Desc>返回控制器 ID(8a)</Desc>
+			<Body name="ReturnControllerId" className="onbon.bx06.message.led.ReturnControllerId">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="id" sizeBlock="16" dataType="ByteArray" />	<!--  BX6G Ver7, Item 3.5.2, tested -->
+			</Body> 
+		</Message>
+		<Message>
+			<Name>led.ReturnControllerWorking</Name>
+			<Desc>返回控制器工况(ab)</Desc>
+			<Body name="ReturnControllerWorking" className="onbon.bx06.message.led.ReturnControllerWorking">
+				<BlockRef name="respHeader" reference="respHeader" />	<!-- 136 + 28 + 389 -->
+				<Block name="mac" dataType="ByteArray" size="6" />
+				<Block name="ip" dataType="ByteArray" size="4" />
+				<Block name="subnetMask" dataType="ByteArray" size="4" />
+				<Block name="gateway" dataType="ByteArray" size="4" />
+				<Block name="port" dataType="IntL" size="2" />
+				<Block name="ipMode" dataType="IntL" size="1" />
+				<Block name="ipStatus" dataType="IntL" size="1" />
+				<Block name="serverMode" dataType="IntL" size="1" />
+				<BlockSeq name="serverInfo" className="onbon.bx06.message.led.ReturnControllerWorking$ServerInfo">
+					<Block name="ip" dataType="ByteArray" size="4" />
+					<Block name="port" dataType="IntL" size="2" />
+					<Block name="accessPassword" dataType="String" size="8" />
+					<Block name="heartBeatInterval" dataType="IntL" size="2" />
+					<Block name="customerId" dataType="String" size="12" />					<!--  BX6G Ver7, Item 3.7 -->
+				</BlockSeq>
+				<!-- BX6G Ver7, Item 4.5.3
+				<BlockSeq name="webInfo" className="onbon.bx06.message.tcp.ReturnNetwork$WebInfo">
+					<Block name="webUserId" dataType="String" size="128" />
+					<Block name="groupNum" dataType="IntL" size="4" />
+					<Block name="domainFlag" dataType="String" size="1" />
+					<Block name="domainName" dataType="String" size="128" />
+					<Block name="webControllerName" dataType="String" size="128" />
+				</BlockSeq>
+				 -->
+				<Block name="barcode" dataType="String" size="16" />
+				<Block name="controllerType" size="2" dataType="ByteArray" desc="控制器系列" />
+				<Block name="firmwareVersion" size="8" dataType="String" />
+				<Block name="screenParaStatus" size="1" dataType="UIntL" />
+				<Block name="address" size="2" dataType="ByteArray" desc="控制器位址" />
+				<Block name="baudrate" size="1" dataType="UIntL" />
+				<Block name="screenWidth" size="2" dataType="UIntL" />
+				<Block name="screenHeight" size="2" dataType="UIntL" />
+				<Block name="color" size="1" dataType="UIntL" desc="1:單基色	, 3:雙基色, 7:三基色, 255:全彩" />
+				<Block name="brightnessMode" size="1" dataType="UIntL" desc="0:手動, 1:定時, 2:自動" />
+				<Block name="currentBrigtness" size="1" dataType="UIntL" />
+				<Block name="timingOnOff" size="1" dataType="UIntL" desc="0:Off, 1:On" />
+				<Block name="currentOnOffStatus" size="1" dataType="UIntL" />
+				<Block name="scanConfNumber" size="2" dataType="UIntL" />
+				<Block name="rowsPerChanel" size="1" dataType="UIntL" />
+				<Block name="grayFlag" size="1" dataType="UIntL" desc="0:无灰度系统, 1:有灰度系统" />
+				<Block name="unitWidth" size="2" dataType="UIntL" />
+				<Block name="colorCodec" size="1" dataType="Byte" desc="new v6. 0:888, 1:565" />
+				<Block name="udpPackageMode" size="1" dataType="Byte" desc="new v6" />
+				<Block name="packageMode" size="1" dataType="UIntL" />
+				<Block name="barcodeFlag" size="1" dataType="Byte" desc="1:设置条码ID, 0:无设置条码" />
+				<Block name="programNum" size="2" dataType="IntL" />
+				<Block name="currentProgram" size="4" dataType="String" />
+				<Block name="screenLockStatus" size="1" dataType="IntL" />
+				<Block name="programLockStatus" size="1" dataType="IntL" />
+				<Block name="runningMode" size="1" dataType="IntL" />
+				<Block name="rtcStatus" size="1" dataType="IntL" />
+				<Block name="rtcYear" size="2" dataType="IntL" />
+				<Block name="rtcMonth" size="1" dataType="IntL" />
+				<Block name="rtcDate" size="1" dataType="IntL" />
+				<Block name="rtcHour" size="1" dataType="IntL" />
+				<Block name="rtcMinute" size="1" dataType="IntL" />
+				<Block name="rtcSecond" size="1" dataType="IntL" />
+				<Block name="rtcWeek" size="1" dataType="IntL" />
+				<Block name="temperature1" size="3" dataType="TempType" />
+				<Block name="temperature2" size="3" dataType="TempType" />
+				<Block name="humidity" size="2" dataType="HuNoType" />
+				<Block name="noise" size="2" dataType="HuNoType" />
+				<Block name="switchMode" size="1" dataType="IntL" />
+				<Block name="logFlag" size="1" dataType="IntL" />
+				<Block name="powerOnDelay" size="2" dataType="IntL" />
+				<Block name="reserved1" size="32" dataType="ByteArray" />	<!--  BX6G Ver7, Item 3.6 -->
+			</Body> 
+		</Message>
+		<Message>
+			<Name>led.ReturnControllerStatus</Name>
+			<Desc>返回控制器状态(8f)</Desc>
+			<Body name="ReturnControllerStatus" className="onbon.bx06.message.led.ReturnControllerStatus">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="screenOnOff" size="1" dataType="Byte" />
+				<Block name="timingOnOff" size="1" dataType="Byte" />
+				<Block name="brightnessMode" size="1" dataType="Byte" />
+				<Block name="brightness" size="1" dataType="Byte" />
+				<Block name="programNum" size="2" dataType="UIntL" />
+				<Block name="currentProgram" size="4" dataType="String" />
+				<Block name="screenLocked" size="1" dataType="Byte" />
+				<Block name="programLocked" size="1" dataType="Byte" />
+				<Block name="runningMode" size="1" dataType="Byte" />
+				<Block name="rtcStatus" size="1" dataType="Byte" />
+				<Block name="rtcYear" size="2" dataType="BcdL" />
+				<Block name="rtcMonth" size="1" dataType="BcdL" />
+				<Block name="rtcDay" size="1" dataType="BcdL" />
+				<Block name="rtcHour" size="1" dataType="BcdL" />
+				<Block name="rtcMinute" size="1" dataType="BcdL" />
+				<Block name="rtcSecond" size="1" dataType="BcdL" />
+				<Block name="rtcWeek" size="1" dataType="Byte" />
+				<Block name="temperature1" size="3" dataType="TempType" />
+				<Block name="temperature2" size="3" dataType="TempType" />
+				<Block name="humidity" size="2" dataType="HuNoType" />
+				<Block name="noise" size="2" dataType="HuNoType" />
+				<Block name="testButtonStatus" size="1" dataType="Byte" />
+				<Block name="customerId" size="12" dataType="ByteArray" />		<!--  BX6G Ver7, Item 3.8, tested -->
+				<Block name="barcode" size="16" dataType="ByteArray" />			<!--  BX6G Ver7, Item 3.8, tested -->
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnCopyrightInfo</Name>
+			<Desc>返回版权信息(8b)</Desc>
+			<Body name="ReturnCopyrightInfo" className="onbon.bx06.message.led.ReturnCopyrightInfo">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="info" sizeBlock="dataLen" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnCurrentFirmwareStatus</Name>
+			<Desc>返回版权信息(84)</Desc>
+			<Body name="ReturnCurrentFirmwareStatus" className="onbon.bx06.message.led.ReturnCurrentFirmwareStatus">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="firmwareName" size="4" dataType="String" />
+				<Block name="firmwareVersion" size="8" dataType="String" />
+				<Block name="firmwareDateTime" size="19" dataType="String" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnFPGAStatus</Name>
+			<Desc>返回 FPGA 状态(96)</Desc>
+			<Body name="ReturnFPGAStatus" className="onbon.bx06.message.led.ReturnFPGAStatus">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="ver" size="4" dataType="ByteArray" desc="diff v5" />
+				<Block name="reserved1" size="4" dataType="ByteArray" readonly="true" desc="diff v5" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnModbus</Name>
+			<Desc>返回Modbus参数(a7)</Desc>
+			<Body name="ReturnModbus" className="onbon.bx06.message.led.ReturnModbus">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="protocolVer" dataType="Byte" size="1" />
+				<Block name="reserved" dataType="ByteArray" size="3" />
+				<Block name="modbusMode1" dataType="Byte" size="1" />
+				<Block name="modbusMode2" dataType="Byte" size="1" />
+				<Block name="slaveDeviceNum" dataType="UIntL" size="2" readonly="true" />
+				<BlockSeqList name="slaveDevices" countBlock="slaveDeviceNum" className="onbon.bx06.message.led.ReturnModbus$SlaveDevice">
+					<Block name="id" dataType="ByteArray" size="2" />
+					<Block name="baudrate" dataType="Byte" size="1" />
+					<Block name="ip" dataType="ByteArray" size="4" />
+					<Block name="port" dataType="UIntL" size="2" />
+					<Block name="mask" dataType="ByteArray" size="4" />
+					<Block name="gateway" dataType="ByteArray" size="4" />
+					<Block name="function" dataType="Byte" size="1" />
+					<Block name="operationRegTime" dataType="UIntL" size="2" />
+					<Block name="responseTimeOut" dataType="UIntL" size="2" />
+					<Block name="retryTimes" dataType="UIntL" size="1" />
+					<Block name="reserved" dataType="ByteArray" size="4" />
+					<Block name="paraNum" dataType="UIntL" size="2" readonly="true" />
+					<BlockSeqList name="paras" countBlock="paraNum" className="onbon.bx06.message.led.ReturnModbus$SlaveDeviceParam">
+						<Block name="regStartAddr" dataType="Byte" size="2" />
+						<Block name="relateRegNum" dataType="Byte" size="1" />
+						<Block name="adMode" dataType="Byte" size="1" />
+						<Block name="extendParaLen" dataType="UIntL" size="1" />
+						<Block name="ruleStepNum" dataType="UIntL" size="1" readonly="true" />
+						<BlockSeqList name="ruleSteps" countBlock="ruleStepNum" className="onbon.bx06.message.led.ReturnModbus$RuleStep">
+							<Block name="operator" dataType="Byte" size="1" />
+							<Block name="value" dataType="ByteArray" size="4" />
+						</BlockSeqList>
+					</BlockSeqList>
+				</BlockSeqList>
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnPingStatus</Name>
+			<Desc>返回 Ping 状态(80)</Desc>
+			<Body name="ReturnPingStatus" className="onbon.bx06.message.led.ReturnPingStatus">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="controllerType" size="2" dataType="ByteArray" desc="控制器系列" />
+				<Block name="firmwareVersion" size="8" dataType="String" />
+				<Block name="screenParaStatus" size="1" dataType="UIntL" />
+				<Block name="address" size="2" dataType="ByteArray" desc="控制器位址" />
+				<Block name="baudrate" size="1" dataType="UIntL" />
+				<Block name="screenWidth" size="2" dataType="UIntL" />
+				<Block name="screenHeight" size="2" dataType="UIntL" />
+				<Block name="color" size="1" dataType="UIntL" desc="1:單基色	, 3:雙基色, 7:三基色, 255:全彩" />
+				<Block name="currentBrigtness" size="1" dataType="UIntL" />
+				<Block name="currentOnOffStatus" size="1" dataType="UIntL" />
+				<Block name="scanConfNumber" size="2" dataType="UIntL" />
+				<Block name="rowsPerChanel" size="1" dataType="UIntL" />
+				<Block name="grayFlag" size="1" dataType="UIntL" desc="0:无灰度系统, 1:有灰度系统" />
+				<Block name="unitWidth" size="2" dataType="UIntL" />
+				<Block name="colorCodec" size="1" dataType="Byte" desc="new v6. 0:888, 1:565" />
+				<Block name="udpPackageMode" size="1" dataType="Byte" desc="new v6" />
+				<Block name="packageMode" size="1" dataType="UIntL" />
+				<Block name="barcodeFlag" size="1" dataType="Byte" desc="1:设置条码ID, 0:无设置条码, diff v5" />
+				<Block name="barcode" size="16" dataType="ByteArray" />				<!--  BX6G Ver7, Item 4.2 -->
+				<Block name="webUserId" size="128" dataType="ByteArray" />			<!--  BX6G Ver7, Item 4.5.2, 5.2 -->
+				<Block name="webControllerName" size="128" dataType="ByteArray" />	<!--  BX6G Ver7, Item 4.5.2, 5.2 -->
+				<Block name="webGroupNum" size="4" dataType="UIntL" />				<!--  BX6G Ver7, Item 4.5.2, 5.2 -->
+			</Body>
+		</Message>
+		<Message>
+			<Name>led.ReturnStopWatchValue</Name>
+			<Desc>返回当前秒表(98)</Desc>
+			<Body name="ReturnStopWatchValue" className="onbon.bx06.message.led.ReturnStopWatchValue">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="time" size="4" dataType="UIntL" desc="单位：毫秒。" />
+			</Body>
+		</Message>
+		
+		<!-- SCAN begin (14+1) -->
+		<Message>
+			<Name>scan.ScanStart</Name>
+			<Desc>开始智能扫描(0)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.ScanStart">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="backup" size="2" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.ScanExit</Name>
+			<Desc>退出智能扫描(1)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.ScanExit">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="backup" size="2" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetModuleParam</Name>
+			<Desc>设置模组的基本参数(2)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetModuleParam">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="width" size="2" dataType="UIntL" />
+				<Block name="height" size="2" dataType="UIntL" />
+				<Block name="chipId" size="2" dataType="UIntL" />
+				<Block name="routeSeq" size="1" dataType="UIntL" />
+				<Block name="decoderUnen" size="1" dataType="Byte" />
+				<Block name="channel" size="1" dataType="UIntL" />
+				<Block name="emptyPtNum" size="2" dataType="UIntL" />
+				<Block name="backup" size="8" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetDA</Name>
+			<Desc>设置数据极性(3)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetDA">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="1" dataType="Byte" />
+				<Block name="backup" size="3" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetOE</Name>
+			<Desc>设置OE极性(4)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetOE">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="1" dataType="Byte" />
+				<Block name="backup" size="3" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.FillRGB</Name>
+			<Desc>设置RGB通道顺序(5)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.FillRGB">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="2" dataType="ByteArray" />
+				<Block name="backup" size="2" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetRowsPerChannel</Name>
+			<Desc>设置每个通道控制的行数(6)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetRowsPerChannel">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="2" dataType="UIntL" />
+				<Block name="backup" size="3" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetFoldNum</Name>
+			<Desc>设置折行次数(7)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetFoldNum">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="1" dataType="UIntL" />
+				<Block name="backup" size="3" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.DrawPixel</Name>
+			<Desc>描点命令(8)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.DrawPixel">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="2" dataType="UIntL" />
+				<Block name="backup" size="2" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.DrawRow</Name>
+			<Desc>描行命令(9)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.DrawRow">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="2" dataType="UIntL" />
+				<Block name="backup" size="2" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetMUX</Name>
+			<Desc>设置RGB数据通道PIN定义(a)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetMUX">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="red" size="1" dataType="Byte" />
+				<Block name="green" size="1" dataType="Byte" />
+				<Block name="blue" size="1" dataType="Byte" />
+				<Block name="backup" size="8" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetDisplayParam</Name>
+			<Desc>设置显示相关常用参数(b)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetDisplayParam">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="freq" size="1" dataType="UIntL" />
+				<Block name="stbLen" size="1" dataType="UIntL" />
+				<Block name="ooLen" size="1" dataType="UIntL" />
+				<Block name="fcMode" size="1" dataType="Byte" />
+				<Block name="rcMode" size="1" dataType="Byte" />
+				<Block name="redGamma" size="2" dataType="UIntL" />
+				<Block name="greenGamma" size="2" dataType="UIntL" />
+				<Block name="blueGamma" size="2" dataType="UIntL" />
+				<Block name="oeLen" size="2" dataType="UIntL" />
+				<Block name="configMode" size="1" dataType="Byte" />
+				<Block name="redCorrect" size="2" dataType="UIntL" />
+				<Block name="greenCorrect" size="2" dataType="UIntL" />
+				<Block name="blueCorrect" size="2" dataType="UIntL" />
+				<Block name="backup" size="7" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.CheckDisplayParam</Name>
+			<Desc>查询显示相关常用参数(c)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.CheckDisplayParam">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.SetEMIFSpeed</Name>
+			<Desc>设置EMIF速度(d)</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.SetEMIFSpeed">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="value" size="4" dataType="ByteArray" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>scan.ReturnDisplayParam</Name>
+			<Desc>设置显示相关常用参数</Desc>
+			<Body name="root" className="onbon.bx06.message.scan.ReturnDisplayParam">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="freq" size="1" dataType="UIntL" />
+				<Block name="stbLen" size="1" dataType="UIntL" />
+				<Block name="ooLen" size="1" dataType="UIntL" />
+				<Block name="fcMode" size="1" dataType="Byte" />
+				<Block name="rcMode" size="1" dataType="Byte" />
+				<Block name="redGamma" size="2" dataType="UIntL" />
+				<Block name="greenGamma" size="2" dataType="UIntL" />
+				<Block name="blueGamma" size="2" dataType="UIntL" />
+				<Block name="oeLen" size="2" dataType="UIntL" />
+				<Block name="configMode" size="1" dataType="Byte" />
+				<Block name="redCorrect" size="2" dataType="UIntL" />
+				<Block name="greenCorrect" size="2" dataType="UIntL" />
+				<Block name="blueCorrect" size="2" dataType="UIntL" />
+				<Block name="backup" size="7" dataType="ByteArray" />
+			</Body>
+		</Message>
+
+		<!-- TCP begin (3) -->
+		<Message>
+			<Name>tcp.CheckHealth</Name>
+			<Desc>网络搜索(2)</Desc>
+			<Body name="CheckHealth" className="onbon.bx06.message.tcp.CheckHealth">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>tcp.EthernetSetIP</Name>
+			<Desc>设置IP地址(1)</Desc>
+			<Body name="EthernetSetIP" className="onbon.bx06.message.tcp.EthernetSetIP">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="connnectMode" dataType="IntL" size="1" desc="1:DHCP, 2:static" />					<!--  BX6G Ver7, Item 3.5.3 -->
+				<BlockSeq name="staticSetting" className="onbon.bx06.message.tcp.EthernetSetIP$StaticSetting">
+					<Block name="ip" dataType="ByteArray" size="4" />					
+					<Block name="subnetMask" dataType="ByteArray" size="4" />
+					<Block name="gateway" dataType="ByteArray" size="4" />
+					<Block name="port" dataType="IntL" size="2" />
+				</BlockSeq>
+				<BlockSeq name="serverSetting" className="onbon.bx06.message.tcp.EthernetSetIP$ServerSetting">
+					<Block name="mode" dataType="IntL" size="1" />
+					<Block name="ip" dataType="ByteArray" size="4" />
+					<Block name="port" dataType="IntL" size="2" />
+					<Block name="accessPassword" dataType="String" size="8" />
+					<Block name="heartBeatInterval" dataType="IntL" size="2" />
+					<Block name="customerId" dataType="ByteArray" size="12" />									<!--  BX6G Ver7, Item 3.5.3, 3.7 -->
+					<!-- BX6G Ver7, Item 3.5.3, Removed.
+					<Block name="ip2" dataType="ByteArray" size="4" />
+					<Block name="port2" dataType="IntL" size="2" />
+					<Block name="accessPassword2" dataType="String" size="8" />
+					<Block name="heartBeatInterval2" dataType="IntL" size="2" />
+					<Block name="netId" dataType="ByteArray" size="16" />
+					 -->
+				</BlockSeq>
+				<!--  BX6G Ver7, Item 3.5.3, 4.5.1, 5.2
+				<BlockSeq name="webSetting" className="onbon.bx06.message.tcp.EthernetSetIP$WwebSetting">		
+					<Block name="webUserId" dataType="String" size="128" />
+					<Block name="groupNum" dataType="String" size="4" />
+					<Block name="domainFlag" dataType="String" size="1" />
+					<Block name="domainName" dataType="String" size="128" />
+					<Block name="webControllerName" dataType="String" size="128" />
+				</BlockSeq>
+				-->
+			</Body>
+		</Message>
+		<Message>
+			<Name>tcp.EthernetSetMAC</Name>
+			<Desc>设置MAC地址(0)</Desc>
+			<Body name="EthernetSetMAC" className="onbon.bx06.message.tcp.EthernetSetMAC">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="mac" dataType="ByteArray" size="6" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>tcp.SearchNetwork</Name>													<!--  BX6G Ver7, Item 3.5.6, 3.6 -->
+			<Desc>网络搜索(3)</Desc>
+			<Body name="SearchNetwork" className="onbon.bx06.message.tcp.SearchNetwork">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>tcp.ReturnHealth</Name>
+			<Desc>网络心跳數據(82)</Desc>
+			<Body name="ReturnHealth" className="onbon.bx06.message.tcp.ReturnHealth">
+				<BlockRef name="respHeader" reference="respHeader" />
+				<Block name="password" dataType="String" size="8" />
+				<Block name="ip" dataType="ByteArray" size="4" />
+				<Block name="subnetMask" dataType="ByteArray" size="4" />
+				<Block name="gateway" dataType="ByteArray" size="4" />
+				<Block name="port" dataType="IntL" size="2" />
+				<Block name="mac" dataType="ByteArray" size="6" />
+				<!-- BX6G Ver7, Item 3.5.4, removed
+				<Block name="netId" dataType="ByteArray" size="16" desc="diff v5" />		
+				 -->
+				<Block name="customerId" dataType="ByteArray" size="12" />					<!--  BX6G Ver7, Item 3.5.4, 3.7 -->
+				<Block name="barcode" dataType="ByteArray" size="16" />						<!--  BX6G Ver7, Item 3.5.4 -->
+				<Block name="eventNum" dataType="IntL" size="2" readonly="true" />			<!--  BX6G Ver7, Item 3.5.4 -->
+				<BlockSeqList name="events" countBlock="eventNum" className="onbon.bx06.message.tcp.ReturnHealth$EventInfo">
+					<Block name="infoLen" dataType="IntL" size="2" readonly="true" />		<!--  BX6G Ver7, Item 3.5.4 -->
+					<Block name="eventType" size="2" dataType="UInt" />						<!--  BX6G Ver7, Item 3.5.4 -->
+					<Block name="eventCode" size="2" dataType="UInt" />						<!--  BX6G Ver7, Item 3.5.4 -->
+					<Block name="info" sizeBlock="infoLen-6" dataType="ByteArray" />		<!--  BX6G Ver7, Item 3.5.4 -->
+				</BlockSeqList>																
+			</Body>
+		</Message>
+		<Message>
+			<Name>tcp.ReturnNetwork</Name>													<!--  BX6G Ver7, Item 3.5.6 -->
+			<Desc>网络搜索數據(83)</Desc>
+			<Body name="ReturnNetwork" className="onbon.bx06.message.tcp.ReturnNetwork">
+				<BlockRef name="respHeader" reference="respHeader" />	<!-- 136 + 28 + 389 -->
+				<Block name="mac" dataType="ByteArray" size="6" />
+				<Block name="ip" dataType="ByteArray" size="4" />
+				<Block name="subnetMask" dataType="ByteArray" size="4" />
+				<Block name="gateway" dataType="ByteArray" size="4" />
+				<Block name="port" dataType="IntL" size="2" />
+				<Block name="ipMode" dataType="IntL" size="1" />
+				<Block name="ipStatus" dataType="IntL" size="1" />
+				<Block name="serverMode" dataType="IntL" size="1" />
+				<BlockSeq name="serverInfo" className="onbon.bx06.message.tcp.ReturnNetwork$ServerInfo">
+					<Block name="ip" dataType="ByteArray" size="4" />
+					<Block name="port" dataType="IntL" size="2" />
+					<Block name="accessPassword" dataType="String" size="8" />
+					<Block name="heartBeatInterval" dataType="IntL" size="2" />
+					<Block name="customerId" dataType="String" size="12" />					<!--  BX6G Ver7, Item 3.7 -->
+				</BlockSeq>
+				<!-- BX6G Ver7, Item 4.5.3
+				<BlockSeq name="webInfo" className="onbon.bx06.message.tcp.ReturnNetwork$WebInfo">
+					<Block name="webUserId" dataType="String" size="128" />
+					<Block name="groupNum" dataType="IntL" size="4" />
+					<Block name="domainFlag" dataType="String" size="1" />
+					<Block name="domainName" dataType="String" size="128" />
+					<Block name="webControllerName" dataType="String" size="128" />
+				</BlockSeq>
+				 -->
+				<Block name="barcode" dataType="String" size="16" />
+				<Block name="controllerType" size="2" dataType="ByteArray" desc="控制器系列" />
+				<Block name="firmwareVersion" size="8" dataType="String" />
+				<Block name="screenParaStatus" size="1" dataType="UIntL" />
+				<Block name="address" size="2" dataType="ByteArray" desc="控制器位址" />
+				<Block name="baudrate" size="1" dataType="UIntL" />
+				<Block name="screenWidth" size="2" dataType="UIntL" />
+				<Block name="screenHeight" size="2" dataType="UIntL" />
+				<Block name="color" size="1" dataType="UIntL" desc="1:單基色	, 3:雙基色, 7:三基色, 255:全彩" />
+				<Block name="brightnessMode" size="1" dataType="UIntL" desc="0:手動, 1:定時, 2:自動" />
+				<Block name="currentBrigtness" size="1" dataType="UIntL" />
+				<Block name="timingOnOff" size="1" dataType="UIntL" desc="0:Off, 1:On" />
+				<Block name="currentOnOffStatus" size="1" dataType="UIntL" />
+				<Block name="scanConfNumber" size="2" dataType="UIntL" />
+				<Block name="rowsPerChanel" size="1" dataType="UIntL" />
+				<Block name="grayFlag" size="1" dataType="UIntL" desc="0:无灰度系统, 1:有灰度系统" />
+				<Block name="unitWidth" size="2" dataType="UIntL" />
+				<Block name="colorCodec" size="1" dataType="Byte" desc="new v6. 0:888, 1:565" />
+				<Block name="udpPackageMode" size="1" dataType="Byte" desc="new v6" />
+				<Block name="packageMode" size="1" dataType="UIntL" />
+				<Block name="barcodeFlag" size="1" dataType="Byte" desc="1:设置条码ID, 0:无设置条码" />
+				<Block name="programNum" size="2" dataType="IntL" />
+				<Block name="currentProgram" size="4" dataType="String" />
+				<Block name="screenLockStatus" size="1" dataType="IntL" />
+				<Block name="programLockStatus" size="1" dataType="IntL" />
+				<Block name="runningMode" size="1" dataType="IntL" />
+				<Block name="rtcStatus" size="1" dataType="IntL" />
+				<Block name="rtcYear" size="2" dataType="IntL" />
+				<Block name="rtcMonth" size="1" dataType="IntL" />
+				<Block name="rtcDate" size="1" dataType="IntL" />
+				<Block name="rtcHour" size="1" dataType="IntL" />
+				<Block name="rtcMinute" size="1" dataType="IntL" />
+				<Block name="rtcSecond" size="1" dataType="IntL" />
+				<Block name="rtcWeek" size="1" dataType="IntL" />
+				<Block name="temperature1" size="3" dataType="TempType" />
+				<Block name="temperature2" size="3" dataType="TempType" />
+				<Block name="humidity" size="2" dataType="HuNoType" />
+				<Block name="noise" size="2" dataType="HuNoType" />
+				<Block name="switchMode" size="1" dataType="IntL" />
+				<Block name="logFlag" size="1" dataType="IntL" />
+				<Block name="powerOnDelay" size="2" dataType="IntL" />
+				<Block name="reserved1" size="32" dataType="ByteArray" />	<!--  BX6G Ver7, Item 3.6 -->
+			</Body>
+		</Message>
+		
+		<!-- DYN begin (7) -->
+		<Message>
+			<Name>dyn.UpdateDynamicArea</Name>
+			<Desc>更新动态区(0)</Desc>
+			<Body name="root" className="onbon.bx06.message.dyn.UpdateDynamicArea">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="areaNum" dataType="IntL" size="2" readonly="true" />
+				<BlockSeqList name="areas" countBlock="areaNum" className="onbon.bx06.message.dyn.DynamicAreaInfo">
+					<Block name="infoLen" dataType="IntL" size="4" readonly="true" />
+					<Block name="areaId" size="1" dataType="UInt" />
+					<Block name="runMode" size="1" dataType="Byte" />
+					<Block name="timeout" size="2" dataType="UIntL" />
+					<Block name="relateAllPrograms" size="1" dataType="Byte" />
+					<Block name="relateProgramNum" size="2" dataType="UIntL" readonly="true" />
+					<BlockList name="programs" size="2" dataType="UIntL" countBlock="relateProgramNum" />
+					<Block name="immediatePlay" size="1" dataType="Byte" />
+					<Block name="reserved0" size="4" dataType="ByteArray" readonly="true" />
+					<Block name="content" dataType="ByteArray" sizeBlock="infoLen-12-2*relateProgramNum" />
+				</BlockSeqList>
+				<Block name="dynamicData" dataType="ByteArray" size="-1" />
+			</Body>
+		</Message>
+		<Message>
+			<Name>dyn.DeleteDynamicArea</Name>
+			<Desc>删除动态区(1)</Desc>
+			<Body name="root" className="onbon.bx06.message.dyn.DeleteDynamicArea">
+				<BlockRef name="reqHeader" reference="reqHeader" />
+				<Block name="areaNum" size="1" dataType="UIntL" readonly="true" />
+				<BlockList name="areas" size="1" dataType="UIntL" countBlock="areaNum" optionBlock="areaNum" optionValue="255" optionEq="false" />
+			</Body>
+		</Message>
+
+	</MessageSpace>
+    <BlockCodecSpace>
+        <BlockCodec>
+            <DataType>PhyType</DataType>
+            <Driver>onbon.bx06.message.codec.PhyTypeCodec</Driver>
+        </BlockCodec>
+        <BlockCodec>
+            <DataType>EncryptionType</DataType>
+            <Driver>onbon.bx06.message.codec.EncryptionTypeCodec</Driver>
+        </BlockCodec>
+        <BlockCodec>
+            <DataType>FileType</DataType>
+            <Driver>onbon.bx06.message.codec.FileTypeCodec</Driver>
+        </BlockCodec>
+        <BlockCodec>
+            <DataType>TempType</DataType>
+            <Driver>onbon.bx06.message.codec.TemperatureCodec</Driver>
+        </BlockCodec>
+        <BlockCodec>
+            <DataType>HuNoType</DataType>
+            <Driver>onbon.bx06.message.codec.HuNoCodec</Driver>
+        </BlockCodec>
+        <BlockCodec>
+            <DataType>ErrorType</DataType>
+            <Driver>onbon.bx06.message.codec.ErrorTypeCodec</Driver>
+        </BlockCodec>
+    </BlockCodecSpace>
+    <FxSpace />
+</DataEx>

@@ -35,6 +35,9 @@ import uia.xml.TagListInfo;
 @TagInfo(name = "BlockSeq")
 public class BitBlockSeqType extends BlockBaseType {
 
+    @AttrInfo
+    protected String className;
+
     @TagListInfo(
             inline = true,
             elems = {
@@ -45,9 +48,6 @@ public class BitBlockSeqType extends BlockBaseType {
                     @TagListElem(name = "BlockRef", type = BitBlockRefType.class)
             })
     protected ArrayList<BlockBaseType> blockOrBlockListOrBlockSeq;
-
-    @AttrInfo
-    protected String className;
 
     public BitBlockSeqType() {
         this.blockOrBlockListOrBlockSeq = new ArrayList<BlockBaseType>();
