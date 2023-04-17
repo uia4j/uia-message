@@ -24,18 +24,23 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Attribute;
+import uia.xml.AttrInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "BlockSeqList")
 public class BitBlockSeqListType extends BitBlockSeqType {
 
-    @Attribute(required = false)
+    @AttrInfo
     protected Integer count;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String countBlock;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String countFx;
+
+    public BitBlockSeqListType() {
+    }
 
     public int getCount() {
         if (this.count == null) {

@@ -18,18 +18,23 @@
  *******************************************************************************/
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Attribute;
+import uia.xml.AttrInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "BlockList")
 public class BitBlockListType extends BitBlockType {
 
-    @Attribute(required = false)
+    @AttrInfo
     protected Integer count;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String countBlock;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String countFx;
+
+    public BitBlockListType() {
+    }
 
     public int getCount() {
         if (this.count == null) {

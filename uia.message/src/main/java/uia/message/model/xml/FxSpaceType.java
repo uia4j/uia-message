@@ -27,12 +27,19 @@ package uia.message.model.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.ElementList;
+import uia.xml.TagListElem;
+import uia.xml.TagListInfo;
 
 public class FxSpaceType {
 
-    @ElementList(entry = "Fx", inline = true, required = false)
-    protected List<FxType> fx;
+    @TagListInfo(
+            inline = true,
+            elems = { @TagListElem(name = "Fx", type = FxType.class) })
+    protected ArrayList<FxType> fx;
+
+    public FxSpaceType() {
+        this.fx = new ArrayList<FxType>();
+    }
 
     public List<FxType> getFx() {
         if (this.fx == null) {

@@ -24,18 +24,24 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Element;
+import uia.xml.PropInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "Message")
 public class MessageType {
 
-    @Element(name = "Name")
+    @PropInfo(name = "Name")
     protected String name;
 
-    @Element(name = "Desc", required = false)
+    @PropInfo(name = "Desc")
     protected String desc;
 
-    @Element(name = "Body", required = true)
+    @TagInfo(name = "Body")
     protected BitBlockSeqType body;
+
+    public MessageType() {
+        this.body = new BitBlockSeqType();
+    }
 
     public String getName() {
         return this.name;

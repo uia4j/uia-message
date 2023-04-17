@@ -24,26 +24,26 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Attribute;
+import uia.xml.AttrInfo;
 
 public abstract class BlockBaseType {
 
-    @Attribute
+    @AttrInfo
     protected String name;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String desc;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String optionBlock;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String optionValue;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected Boolean optionEq;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String optionFx;
 
     public String getName() {
@@ -111,6 +111,6 @@ public abstract class BlockBaseType {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.name == null ? this.getClass().getSimpleName() : this.name;
     }
 }

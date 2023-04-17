@@ -15,7 +15,7 @@
             <Body name="root" className="uia.message.Rcv1">
                 <BlockRef name="header" reference="a" />
                 <BlockRef name="time" reference="b" />
-                <BlockSeq name="powerStatus" className="uia.message.Rcv1$PowerStatus">
+                <BlockSeq name="" className="uia.message.Rcv1$PowerStatus">
                     <Block name="power1" size="4" dataType="IntL" />
                     <Block name="power2" size="2" dataType="IntString" />
                     <Block name="power3" size="8" dataType="Double" />

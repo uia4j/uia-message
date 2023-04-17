@@ -27,12 +27,21 @@ package uia.message.model.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.ElementList;
+import uia.xml.TagInfo;
+import uia.xml.TagListElem;
+import uia.xml.TagListInfo;
 
+@TagInfo(name = "BlockCodecSpace")
 public class BlockCodecSpaceType {
 
-    @ElementList(entry = "BlockCodec", inline = true, required = false)
+    @TagListInfo(
+            inline = true,
+            elems = { @TagListElem(name = "", type = BlockCodecType.class) })
     protected ArrayList<BlockCodecType> blockCodec;
+
+    public BlockCodecSpaceType() {
+        this.blockCodec = new ArrayList<BlockCodecType>();
+    }
 
     public List<BlockCodecType> getBlockCodec() {
         if (this.blockCodec == null) {

@@ -24,31 +24,35 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import uia.xml.AttrInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "Block")
 public class BitBlockType extends BlockBaseType {
 
-    @Element(name = "CodecPropSet", required = false)
+    @TagInfo(name = "CodecPropSet")
     protected CodecPropSetType codecPropSet;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String dataType;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String sizeUnit;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected Integer size;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String sizeBlock;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String sizeFx;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected Boolean readonly;
+
+    public BitBlockType() {
+    }
 
     public CodecPropSetType getCodecPropSet() {
         return this.codecPropSet;

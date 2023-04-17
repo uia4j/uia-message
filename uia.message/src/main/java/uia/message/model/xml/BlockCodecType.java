@@ -24,14 +24,16 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Element;
+import uia.xml.PropInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "BlockCodec")
 public class BlockCodecType {
 
-    @Element(name = "DataType", required = true)
+    @PropInfo(name = "DataType")
     protected String dataType;
 
-    @Element(name = "Driver", required = true)
+    @PropInfo(name = "Driver")
     protected String driver;
 
     public String getDataType() {

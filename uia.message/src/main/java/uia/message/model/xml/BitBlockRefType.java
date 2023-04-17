@@ -24,12 +24,17 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Attribute;
+import uia.xml.AttrInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "BlockRef")
 public class BitBlockRefType extends BlockBaseType {
 
-    @Attribute
+    @AttrInfo
     protected String reference;
+
+    public BitBlockRefType() {
+    }
 
     public String getReference() {
         return this.reference;

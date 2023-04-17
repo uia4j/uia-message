@@ -27,23 +27,31 @@ package uia.message.model.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementListUnion;
+import uia.xml.AttrInfo;
+import uia.xml.TagInfo;
+import uia.xml.TagListElem;
+import uia.xml.TagListInfo;
 
+@TagInfo(name = "BlockSeq")
 public class BitBlockSeqType extends BlockBaseType {
 
-    @ElementListUnion({
-        @ElementList(entry = "BlockSeqList", inline = true, type = BitBlockSeqListType.class, required = false),
-        @ElementList(entry = "BlockSeq", inline = true, type = BitBlockSeqType.class, required = false),
-        @ElementList(entry = "Block", inline = true, type = BitBlockType.class, required = false),
-        @ElementList(entry = "BlockList", inline = true, type = BitBlockListType.class, required = false),
-        @ElementList(entry = "BlockRef", inline = true, type = BitBlockRefType.class, required = false)
-    })
-    protected List<BlockBaseType> blockOrBlockListOrBlockSeq;
+    @TagListInfo(
+            inline = true,
+            elems = {
+                    @TagListElem(name = "BlockSeqList", type = BitBlockSeqListType.class),
+                    @TagListElem(name = "BlockSeq", type = BitBlockSeqType.class),
+                    @TagListElem(name = "Block", type = BitBlockType.class),
+                    @TagListElem(name = "BlockList", type = BitBlockListType.class),
+                    @TagListElem(name = "BlockRef", type = BitBlockRefType.class)
+            })
+    protected ArrayList<BlockBaseType> blockOrBlockListOrBlockSeq;
 
-    @Attribute(required = false)
+    @AttrInfo
     protected String className;
+
+    public BitBlockSeqType() {
+        this.blockOrBlockListOrBlockSeq = new ArrayList<BlockBaseType>();
+    }
 
     public List<BlockBaseType> getBlockOrBlockListOrBlockSeq() {
         if (this.blockOrBlockListOrBlockSeq == null) {

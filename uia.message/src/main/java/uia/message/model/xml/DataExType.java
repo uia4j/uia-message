@@ -24,23 +24,25 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import uia.xml.TagInfo;
 
-@Root(name = "DataEx")
+@TagInfo(name = "DataEx")
 public class DataExType {
 
-    @Element(name = "BlockSpace", required = false)
+    @TagInfo(name = "BlockSpace")
     protected BlockSpaceType blockSpace;
 
-    @Element(name = "MessageSpace")
+    @TagInfo(name = "MessageSpace")
     protected MessageSpaceType messageSpace;
 
-    @Element(name = "BlockCodecSpace", required = false)
+    @TagInfo(name = "BlockCodecSpace")
     protected BlockCodecSpaceType blockCodecSpace;
 
-    @Element(name = "FxSpace", required = false)
+    @TagInfo(name = "FxSpace")
     protected FxSpaceType fxSpace;
+
+    public DataExType() {
+    }
 
     public BlockSpaceType getBlockSpace() {
         return this.blockSpace;

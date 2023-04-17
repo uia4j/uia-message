@@ -24,14 +24,16 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Element;
+import uia.xml.PropInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "Fx")
 public class FxType {
 
-    @Element(name = "Name")
+    @PropInfo(name = "Name")
     protected String name;
 
-    @Element(name = "Driver")
+    @PropInfo(name = "Driver")
     protected String driver;
 
     public String getName() {

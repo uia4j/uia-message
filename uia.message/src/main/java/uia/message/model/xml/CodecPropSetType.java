@@ -27,12 +27,21 @@ package uia.message.model.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.ElementList;
+import uia.xml.TagInfo;
+import uia.xml.TagListElem;
+import uia.xml.TagListInfo;
 
+@TagInfo(name = "CodecPropSet")
 public class CodecPropSetType {
 
-    @ElementList(entry = "Prop", inline = true, required = false)
+    @TagListInfo(
+            inline = true,
+            elems = { @TagListElem(name = "Prop", type = PropType.class) })
     protected ArrayList<PropType> prop;
+
+    public CodecPropSetType() {
+        this.prop = new ArrayList<PropType>();
+    }
 
     public List<PropType> getProp() {
         if (this.prop == null) {

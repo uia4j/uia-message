@@ -21,9 +21,8 @@ package uia.message;
 import java.io.File;
 import java.io.InputStream;
 
-import org.simpleframework.xml.core.Persister;
-
 import uia.message.model.xml.DataExType;
+import uia.xml.XObjectReader;
 
 /**
  * DataEx file codec.
@@ -33,17 +32,14 @@ import uia.message.model.xml.DataExType;
 final class DataExCodec {
 
     public static DataExType decode(File file) throws Exception {
-        Persister p = new Persister();
-        return p.read(DataExType.class, file);
+        return XObjectReader.run(DataExType.class, file);
     }
 
     public static DataExType decode(InputStream stream) throws Exception {
-        Persister p = new Persister();
-        return p.read(DataExType.class, stream);
+        return XObjectReader.run(DataExType.class, stream);
     }
 
     public static DataExType decode(String xmlContent) throws Exception {
-        Persister p = new Persister();
-        return p.read(DataExType.class, xmlContent);
+        return XObjectReader.run(DataExType.class, xmlContent);
     }
 }

@@ -24,16 +24,21 @@
 //
 package uia.message.model.xml;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Text;
+import uia.xml.AttrInfo;
+import uia.xml.ContentInfo;
+import uia.xml.TagInfo;
 
+@TagInfo(name = "Prop")
 public class PropType {
 
-    @Text
+    @ContentInfo
     protected String value;
 
-    @Attribute
+    @AttrInfo
     protected String name;
+
+    public PropType() {
+    }
 
     public String getValue() {
         return this.value;

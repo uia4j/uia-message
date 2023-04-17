@@ -27,12 +27,21 @@ package uia.message.model.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simpleframework.xml.ElementList;
+import uia.xml.TagInfo;
+import uia.xml.TagListElem;
+import uia.xml.TagListInfo;
 
+@TagInfo(name = "MessageSpace")
 public class MessageSpaceType {
 
-    @ElementList(entry = "Message", inline = true, required = false)
-    protected List<MessageType> message;
+    @TagListInfo(
+            inline = true,
+            elems = { @TagListElem(name = "Message", type = MessageType.class) })
+    protected ArrayList<MessageType> message;
+
+    public MessageSpaceType() {
+        this.message = new ArrayList<MessageType>();
+    }
 
     public List<MessageType> getMessage() {
         if (this.message == null) {
