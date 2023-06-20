@@ -36,7 +36,7 @@ public class BlockCodecSpaceType {
 
     @TagListInfo(
             inline = true,
-            elems = { @TagListElem(name = "", type = BlockCodecType.class) })
+            elems = { @TagListElem(name = "BlockCodec", type = BlockCodecType.class) })
     protected ArrayList<BlockCodecType> blockCodec;
 
     public BlockCodecSpaceType() {
