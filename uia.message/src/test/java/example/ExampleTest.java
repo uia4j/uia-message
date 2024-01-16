@@ -39,12 +39,12 @@ public class ExampleTest {
         };
         One one = DataExFactory.deserialize("cases", "Case1", data);
         Assert.assertEquals("Judy", one.getName());
-        Assert.assertEquals(0, one.getSex(), 0);
+        Assert.assertEquals(0, one.getGender(), 0);
         Assert.assertEquals("19920218", one.getBirthdayString("yyyyMMdd"));
 
         // serialize
         one.setName("Jack");
-        one.setSex(1);
+        one.setGender(1);
         byte[] result = DataExFactory.serialize("cases", "Case1", one);
         Assert.assertArrayEquals(
                 new byte[] {

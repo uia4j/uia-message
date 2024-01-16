@@ -25,13 +25,13 @@ public class One {
 
     private String name;
 
-    private int sex;
+    private int gender;
 
     private Date birthday;
 
     public One() {
         this.name = "Kyle";
-        this.sex = 1;
+        this.gender = 1;
         this.birthday = new Date();
     }
 
@@ -43,12 +43,12 @@ public class One {
         this.name = name;
     }
 
-    public int getSex() {
-        return this.sex;
+    public int getGender() {
+        return this.gender;
     }
 
-    public void setSex(int sex) {
-        this.sex = sex;
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 
     public Date getBirthday() {

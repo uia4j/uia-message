@@ -6,7 +6,7 @@
             <Desc>The first case.</Desc>
             <Body name="root" className="example.One">
                 <Block name="name" size="10" dataType="String" />
-                <Block name="sex" size="1" dataType="Int" />
+                <Block name="gender" size="1" dataType="Int" />
                 <Block name="birthday" size="8" dataType="DateTimeString">
                     <CodecPropSet>
                         <Prop name="format">yyyyMMdd</Prop>
