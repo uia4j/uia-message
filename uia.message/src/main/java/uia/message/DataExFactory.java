@@ -333,7 +333,7 @@ public class DataExFactory {
     public MessageDeserializer createDeserializer(String messageName) throws BlockCodecException {
         MessageType mt = this.messageSpace.get(messageName);
         if (mt == null) {
-            throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
+            throw new BlockCodecException("Message:" + messageName + " doesn't exist.");
         }
         return new MessageDeserializer(this, mt);
     }
@@ -348,7 +348,7 @@ public class DataExFactory {
     public MessageSerializer createSerializer(String messageName) throws BlockCodecException {
         MessageType mt = this.messageSpace.get(messageName);
         if (mt == null) {
-            throw new BlockCodecException("Mesage:" + messageName + " doesn't exist.");
+            throw new BlockCodecException("Message:" + messageName + " doesn't exist.");
         }
         return new MessageSerializer(this, mt);
     }
