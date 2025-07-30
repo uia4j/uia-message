@@ -55,7 +55,7 @@ public class RcvTest {
         DataExFactory factory = DataExFactory.getFactory("Test");
         Assert.assertEquals(11, factory.getMessageList().size(), 0);
         Assert.assertEquals(3, factory.getFxList().size(), 0);
-        Assert.assertEquals(19, factory.getCodecList().size(), 0);
+        Assert.assertEquals(20, factory.getCodecList().size(), 0);
     }
 
     @Test

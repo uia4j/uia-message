@@ -422,7 +422,8 @@ public class DataExFactory {
         this.codecSpace.put("Int", new IntegerCodec(false));
         this.codecSpace.put("IntL", new IntegerLSBCodec(false));
         this.codecSpace.put("IntString", new IntegerStringCodec());
-        this.codecSpace.put("Long", new LongCodec());
+        this.codecSpace.put("Long", new LongCodec(false));
+        this.codecSpace.put("ULong", new LongCodec(true));
         this.codecSpace.put("String", new StringCodec());
         this.codecSpace.put("UInt", new IntegerCodec(true));
         this.codecSpace.put("UIntL", new IntegerLSBCodec(true));

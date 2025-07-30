@@ -50,6 +50,14 @@ public class LongCodecTest {
     }
 
     @Test
+    public void testDecodeU() throws Exception {
+        LongCodec codec = new LongCodec();
+        codec.setUnsigned("y");
+        // 01111111
+        Assert.assertEquals(63, codec.decode(new byte[] { (byte) 0x7f }, 7), 0);
+    }
+
+    @Test
     public void testEncode() throws Exception {
         LongCodec codec = new LongCodec();
         // 01111111

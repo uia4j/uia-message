@@ -18,7 +18,9 @@
  *******************************************************************************/
 package uia.message.codec;
 
+import uia.utils.BooleanUtils;
 import uia.utils.ByteUtils;
+import uia.utils.StringUtils;
 
 /**
  * Convert data between long and byte array. <br>
@@ -26,6 +28,27 @@ import uia.utils.ByteUtils;
  * @author Kyle
  */
 public class LongCodec implements BlockCodec<Long> {
+
+    private boolean orig;
+
+    private boolean unsigned;
+
+    public LongCodec() {
+        this(false);
+    }
+
+    public LongCodec(boolean unsigned) {
+        this.unsigned = unsigned;
+        this.orig = this.unsigned;
+    }
+
+    public void setUnsigned(String yn) {
+        this.unsigned = StringUtils.bool(yn);
+    }
+
+    public String getUnsigned() {
+        return BooleanUtils.toYN(this.unsigned);
+    }
 
     @Override
     public Long zeroValue() {
@@ -35,7 +58,16 @@ public class LongCodec implements BlockCodec<Long> {
     @Override
     public Long decode(byte[] data, int bitLength) throws BlockCodecException {
         try {
-            return new Long(ByteUtils.longValue(data, bitLength));
+            if (this.unsigned) {
+                byte[] data2 = new byte[data.length + 1];
+                for (int i = 0; i < data.length; i++) {
+                    data2[i + 1] = data[i];
+                }
+                return new Long(ByteUtils.longValue(data2, bitLength + 8));
+            }
+            else {
+                return new Long(ByteUtils.longValue(data, bitLength));
+            }
         }
         catch (Exception ex) {
             throw new BlockCodecException("long decode failure. " + ex.getMessage(), ex);
@@ -71,7 +103,7 @@ public class LongCodec implements BlockCodec<Long> {
 
     @Override
     public void reset() {
-
+        this.unsigned = this.orig;
     }
 
     @Override
