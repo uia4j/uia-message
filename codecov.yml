@@ -1,2 +1,4 @@
 ignore:
   - "uia.message/src/main/java/uia/message/model/xml"
+codecov: 
+ token: 1dad5dbd-7ac6-4554-97c0-bdfe665170ca
